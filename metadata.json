@@ -1,10 +1,10 @@
 {
-  "name": "aursu-system",
+  "name": "aursu-lsys",
   "version": "0.1.0",
   "author": "aursu",
-  "summary": "Different puppet classes for basic system management",
+  "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
-  "source": "https://github.com/aursu/puppet-system",
+  "source": "https://github.com/aursu/puppet-lsys",
   "dependencies": [
 
   ],
