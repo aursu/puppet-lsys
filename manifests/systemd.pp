@@ -7,12 +7,9 @@
 # @example
 #   include lsys::systemd
 class lsys::systemd {
-    if ($::osfamily == 'RedHat' and versioncmp($::operatingsystemmajrelease, '7') == 0)
-    or ($::operatingsystem == 'Fedora') {
-        exec { 'systemd-reload':
-            command => 'systemctl daemon-reload',
-            path    => '/bin:/sbin:/usr/bin:/usr/sbin',
-            refreshonly => true,
-        }
+    exec { 'systemd-reload':
+        command => 'systemctl daemon-reload',
+        path    => '/bin:/sbin:/usr/bin:/usr/sbin',
+        refreshonly => true,
     }
 }
