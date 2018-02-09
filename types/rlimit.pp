@@ -1,4 +1,4 @@
 type Lsys::RLimit = Variant[
     Lsys::Numerical,
-    'unlimited'
+    Enum['unlimited' -1, 'infinity']
 ]
