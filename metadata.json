@@ -1,5 +1,5 @@
 {
-  "name": "aursu-lsys",
+  "name": "lsys",
   "version": "0.1.0",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
@@ -36,7 +36,9 @@
     {
       "operatingsystem": "Fedora",
       "operatingsystemrelease": [
-        "25"
+        "25",
+	"26",
+	"27"
       ]
     }
   ],
