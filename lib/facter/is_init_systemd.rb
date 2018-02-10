@@ -11,14 +11,18 @@
 #
 # Notes:
 #   None
+status = false
+
+osfamily = Facter.value(:osfamily).to_s
+osname = Facter.value(:operatingsystem).to_s
+osmaj = Facter.value(:operatingsystemmajrelease).to_i
+
+if osname.casecmp("Fedora") == 0 or (osfamily.casecmp("RedHat") == 0 and osmaj >= 7)
+    status = true
+end
+
 Facter.add(:is_init_systemd) do
-  setcode do
-    osfamily = Facter.value(:osfamily)
-    osname = Facter.value(:operatingsystem)
-    osmaj = Facter.value(:operatingsystemmajrelease)
-    if osname.casecmp("Fedora") == 0 or (osfamily.casecmp("RedHat") and osmaj.to_i >= 7)
-        true
+    setcode do
+        status
     end
-    false
-  end
 end
