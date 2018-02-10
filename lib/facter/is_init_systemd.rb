@@ -17,8 +17,8 @@ Facter.add(:is_init_systemd) do
     osname = Facter.value(:operatingsystem)
     osmaj = Facter.value(:operatingsystemmajrelease)
     if osname.casecmp("Fedora") == 0 or (osfamily.casecmp("RedHat") and osmaj.to_i >= 7)
-        return true
+        true
     end
-    return false
+    false
   end
 end
