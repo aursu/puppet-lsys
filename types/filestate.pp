@@ -1,1 +1,1 @@
-type Lsys::FileState = Enum['present', 'absent', 'file', 'directory', 'link']
+type Lsys::FileState  = Enum['present', 'absent', 'file', 'directory', 'link']

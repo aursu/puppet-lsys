@@ -1,4 +1,4 @@
-type Lsys::SrvEnsure = Variant[
+type Lsys::SrvEnsure  = Variant[
     Enum['stopped', 'running']
     Boolean
 ]
