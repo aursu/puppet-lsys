@@ -1,4 +1,4 @@
 type Lsys::SrvEnsure  = Variant[
-    Enum['stopped', 'running']
+    Enum['stopped', 'running'],
     Boolean
 ]
