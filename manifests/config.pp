@@ -87,8 +87,8 @@ define lsys::config(
                 key_val_separator => $key_val_separator
             } + $attributes;
             default: * => {
-                path   =>  $path,
                 ensure => present,
+                path   =>  $path,
             };
         }
     }

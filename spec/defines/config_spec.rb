@@ -1,9 +1,16 @@
 require 'spec_helper'
 
 describe 'lsys::config' do
-  let(:title) { 'namevar' }
+  let(:title) { '/etc/GeoIP.conf' }
   let(:params) do
-    {}
+    {
+      'data' => {
+        'LicenseKey' => '000000000000',
+	'UserId'     => '0',
+	'ProductIds' => 'GeoLite2-City GeoLite2-Country',
+      },
+      'key_val_separator' => ' '
+    }
   end
 
   on_supported_os.each do |os, os_facts|
