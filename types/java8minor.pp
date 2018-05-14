@@ -1,1 +1,1 @@
-type Lsys::Java8Minor  = Pattern[/^b\d+$/]
+type Lsys::Java8Minor = Pattern[/^b\d+$/]
