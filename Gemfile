@@ -31,7 +31,6 @@ group :development do
   gem "json", '<= 2.0.4',                              require: false if Gem::Version.new(RUBY_VERSION.dup) == Gem::Version.new('2.4.4')
   gem "puppet-module-posix-default-r#{minor_version}", require: false, platforms: [:ruby]
   gem "puppet-module-posix-dev-r#{minor_version}",     require: false, platforms: [:ruby]
-  gem "puppet-blacksmith", '~> 3.4',                   require: false, platforms: [:ruby]
 end
 
 puppet_version = ENV['PUPPET_GEM_VERSION']
