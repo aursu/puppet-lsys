@@ -1,0 +1,9 @@
+{
+    "errors": [
+        {
+            "code": "DENIED",
+            "message": "requested access to the resource is denied",
+            "detail": null
+        }
+    ]
+}

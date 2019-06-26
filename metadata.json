@@ -6,7 +6,30 @@
   "license": "Apache-2.0",
   "source": "https://github.com/aursu/puppet-lsys",
   "dependencies": [
-
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.1.0 < 7.0.0"
+    },
+    {
+      "name": "aursu/dockerinstall",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
+      "name": "puppet/nginx",
+      "version_requirement": ">= 0.1.0 < 2.0.0"
+    },
+    {
+      "name": "aursu/puppet",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
+      "name": "puppet/selinux",
+      "version_requirement": ">= 0.1.0 < 4.0.0"
+    },
+    {
+      "name": "aursu/tlsinfo",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    }
   ],
   "operatingsystem_support": [
     {

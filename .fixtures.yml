@@ -3,4 +3,29 @@
 ---
 fixtures:
   forge_modules:
-     inifile: "puppetlabs/inifile"
+    apt:
+      repo: "puppetlabs/apt"
+      ref: "7.0.1"
+    concat:
+      repo: "puppetlabs/concat"
+      ref: "6.0.0"
+    inifile:
+      repo: "puppetlabs/inifile"
+      ref: "3.0.0"
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "6.0.0"
+    puppet_agent:
+      repo: "puppetlabs/puppet_agent"
+      ref: "2.1.2"
+  repositories:
+    dockerinstall: "https://github.com/aursu/puppet-dockerinstall.git"
+    nginx:
+      repo: "https://github.com/aursu/puppet-nginx.git"
+      ref: "origin/optional-settings"
+    puppet: "https://github.com/aursu/puppet-puppet.git"
+    tlsinfo: "https://github.com/aursu/puppet-tlsinfo.git"
+    yumrepo_core:
+      repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
+      puppet_version: ">= 6.0.0"
+

@@ -2,6 +2,32 @@
 #
 # Facts specified here will override the values provided by rspec-puppet-facts.
 ---
-ipaddress: "172.16.254.254"
-is_pe: false
-macaddress: "AA:AA:AA:AA:AA:AA"
+puppet_sslpaths:
+  privatedir:
+    path: /etc/puppetlabs/puppet/ssl/private
+    path_exists: true
+  privatekeydir:
+    path: /etc/puppetlabs/puppet/ssl/private_keys
+    path_exists: true
+  publickeydir:
+    path: /etc/puppetlabs/puppet/ssl/public_keys
+    path_exists: true
+  certdir:
+    path: /etc/puppetlabs/puppet/ssl/certs
+    path_exists: true
+  requestdir:
+    path: /etc/puppetlabs/puppet/ssl/certificate_requests
+    path_exists: true
+  hostcrl:
+    path: /etc/puppetlabs/puppet/ssl/crl.pem
+    path_exists: true
+
+# requires fact for dockerinstall::params
+docker_swarm:
+  NodeID: "qoe8gpifamlvps90y7zhykz66"
+  LocalNodeState: "active"
+  ControlAvailable: true
+  Managers: 3
+  JoinTokens:
+    Worker: "SWMTKN-1-2pt66je5c3fejw4adu8kcsoeid4rkk9fdy1s1bibm9plzuq8d0-ebcr22sn5z7cf9f76098v3gef"
+    Manager: "SWMTKN-1-2pt66je5c3fejw4adu8kcsoeid4rkk9fdy1s1bibm9plzuq8d0-ch26mhdxkas5eci9ai80yb67m"
