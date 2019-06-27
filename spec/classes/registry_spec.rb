@@ -10,8 +10,6 @@ describe 'lsys::registry' do
 
   let(:pre_condition) do
     <<-PRECOND
-    class {'dockerinstall': }
-    class {'dockerinstall::params': }
     tlsinfo::certificate { 'f1453246': }
     PRECOND
   end
