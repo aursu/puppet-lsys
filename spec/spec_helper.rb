@@ -43,6 +43,8 @@ RSpec.configure do |c|
     # set to strictest setting for testing
     # by default Puppet runs at warning level
     Puppet.settings[:strict] = :warning
+    # Puppet::Util::Log.level = :debug
+    # Puppet::Util::Log.newdestination(:console)
   end
   c.filter_run_excluding(bolt: true) unless ENV['GEM_BOLT']
   c.after(:suite) do
