@@ -57,6 +57,8 @@ class lsys::registry (
   # we use Hiera for certificate/private key storage
   tlsinfo::certpair { $server_name:
     identity => true,
+    # in case of self signed CA
+    strict   => false,
   }
 
   # get certificate data from Hiera
