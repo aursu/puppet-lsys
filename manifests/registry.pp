@@ -10,6 +10,11 @@ class lsys::registry (
   Boolean $ssl_client_ca_auth  = true,
   Optional[Array[Stdlib::Fqdn]]
           $ssl_client_ca_certs = undef,
+  # TLS data
+  Optional[String]
+          $ssl_cert            = undef,
+  Optional[String]
+          $ssl_key             = undef,
 )
 {
   include tlsinfo
@@ -57,16 +62,24 @@ class lsys::registry (
   # we use Hiera for certificate/private key storage
   tlsinfo::certpair { $server_name:
     identity => true,
+    cert     => $ssl_cert,
+    pkey     => $ssl_key,
     # in case of self signed CA
     strict   => false,
   }
 
   # get certificate data from Hiera
-  $certdata = tlsinfo::lookup($server_name)
+  if $ssl_cert {
+    $certdata = $ssl_cert
+  }
+  else {
+    $certdata = tlsinfo::lookup($server_name)
+  }
+
   # we use default locations for certificate and key storage - get
   # these locations
-  $ssl_cert = tlsinfo::certpath($certdata)
-  $ssl_key = tlsinfo::keypath($certdata)
+  $ssl_cert_path = tlsinfo::certpath($certdata)
+  $ssl_key_path = tlsinfo::keypath($certdata)
 
   class { 'lsys::registry::nginx':
     server_name           => $server_name,
@@ -78,8 +91,8 @@ class lsys::registry (
     web_server_user_home  => $web_server_user_home,
     web_server_user_shell => $web_server_user_shell,
     ssl                   => true,
-    ssl_cert              => $ssl_cert,
-    ssl_key               => $ssl_key,
+    ssl_cert              => $ssl_cert_path,
+    ssl_key               => $ssl_key_path,
     ssl_client_ca_auth    => $ssl_client_ca_auth,
   }
 
