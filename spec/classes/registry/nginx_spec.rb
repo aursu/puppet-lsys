@@ -6,7 +6,7 @@ describe 'lsys::registry::nginx' do
       let(:facts) { os_facts }
       let(:params) do
         {
-          'server_name' => 'registry.domain.tld',
+          'server_name' => 'registry.domain.tld'
         }
       end
 

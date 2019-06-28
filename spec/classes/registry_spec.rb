@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe 'lsys::registry' do
-
   let(:facts) do
     {
-      'stype' => 'web',
+      'stype' => 'web'
     }
   end
 
@@ -22,7 +21,7 @@ describe 'lsys::registry' do
 
       let(:params) do
         {
-          'server_name' => 'registry.domain.tld',
+          'server_name' => 'registry.domain.tld'
         }
       end
 
