@@ -43,7 +43,7 @@ describe 'lsys::pxe::dhcp' do
       context 'check DHCP option 150 setup with default parameters' do
         it {
           is_expected.to contain_concat__fragment('dhcp-conf-header')
-            .with_content(%r{^option tftp-server-address code 150 = ip-address;$})
+            .with_content(%r{^option voip-tftp-server code 150 = ip-address;$})
         }
       end
 

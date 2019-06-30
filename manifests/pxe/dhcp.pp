@@ -44,13 +44,16 @@ class lsys::pxe::dhcp (
 
     # option 150 - TFTP server address
     # https://www.iana.org/assignments/bootp-dhcp-parameters/bootp-dhcp-parameters.xhtml
-    option_code150_label => 'tftp-server-address',
+    option_code150_label => 'voip-tftp-server',
     option_code150_value => 'ip-address',
+
+    dhcp_conf_pxe        => template('lsys/pxe/dhcpd.conf.pxe.erb'),
   }
 
   $default_subnet.each | String $name, $parameters | {
     $subnet_broadcast_address = $parameters['broadcast']
     $dhcp_pool_gateway        = $parameters['routers']
+
     $dhcp_pool_parameters     = $parameters - ['broadcast', 'routers']
 
     $option_broadcast_address = $subnet_broadcast_address ? {
