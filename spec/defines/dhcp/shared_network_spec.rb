@@ -22,7 +22,7 @@ describe 'lsys::dhcp::shared_network' do
       context 'with different network name' do
         let(:params) do
           super().merge(
-            network_name: "os-web-nfs",
+            network_name: 'os-web-nfs',
           )
         end
 
@@ -61,7 +61,7 @@ describe 'lsys::dhcp::shared_network' do
       context 'with custom options' do
         let(:params) do
           super().merge(
-            options: [ 'tftp-server-name "10.55.156.10"', 'bootfile-name "boot/grub/i386-pc/core.0"' ],
+            options: ['tftp-server-name "10.55.156.10"', 'bootfile-name "boot/grub/i386-pc/core.0"'],
           )
         end
 
@@ -75,7 +75,7 @@ describe 'lsys::dhcp::shared_network' do
       context 'with custom parameters' do
         let(:params) do
           super().merge(
-            parameters: [ 'dynamic-bootp-lease-length 600', 'boot-unknown-clients off' ],
+            parameters: ['dynamic-bootp-lease-length 600', 'boot-unknown-clients off'],
           )
         end
 
@@ -98,7 +98,7 @@ describe 'lsys::dhcp::shared_network' do
                 domain_name: 'os.domain.tld',
                 nameservers: ['8.8.8.8', '8.8.4.4', '1.1.1.1'],
                 range: {
-                  low_address: '10.55.156.32',
+                  low_address: '10.55.156.32'
                 }
               }
             },
@@ -145,7 +145,7 @@ describe 'lsys::dhcp::shared_network' do
                 mask: '255.255.255.0',
                 range: {
                   low_address: '10.55.156.32',
-                  dynamic_bootp: true,
+                  dynamic_bootp: true
                 }
               }
             },
