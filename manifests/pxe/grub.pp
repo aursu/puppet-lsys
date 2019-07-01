@@ -1,6 +1,6 @@
-# A description of what this class does
+# Setup GRUB2 for booting over network
 #
-# @summary A short summary of the purpose of this class
+# @summary Setup GRUB2 for booting over network
 #
 # @example
 #   include lsys::pxe::grub
