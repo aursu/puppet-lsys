@@ -5,8 +5,8 @@
 # @example
 #   include lsys::pxe::tftp
 class lsys::pxe::tftp (
-  Boolean $tftp_service_enable = true,
-  Boolean $tftp_verbose        = false,
+  Boolean $service_enable = true,
+  Boolean $verbose        = false,
 ){
 
   # Install the xinetd service, that manages the tftpd service

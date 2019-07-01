@@ -10,8 +10,8 @@ service tftp
 	wait			= yes
 	user			= root
 	server			= /usr/sbin/in.tftpd
-	server_args		= -s /var/lib/tftpboot<% if @tftp_verbose %> --verbose<% end %>
-<% if @tftp_service_enable -%>
+	server_args		= -s /var/lib/tftpboot<% if @verbose %> --verbose<% end %>
+<% if @service_enable -%>
 	disable			= no
 <% else -%>
 	disable			= yes

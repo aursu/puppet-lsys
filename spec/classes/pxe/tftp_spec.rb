@@ -20,7 +20,7 @@ describe 'lsys::pxe::tftp' do
       context 'when tftp server disabled' do
         let(:params) do
           {
-            tftp_service_enable: false,
+            service_enable: false,
           }
         end
 
@@ -33,14 +33,14 @@ describe 'lsys::pxe::tftp' do
       context 'when tftp server disabled' do
         let(:params) do
           {
-            tftp_verbose: true,
+            verbose: true,
           }
         end
 
         it {
-        is_expected.to contain_file('/etc/xinetd.d/tftp')
-          .with_content(%r{^\s+server_args\s+=\s+-s /var/lib/tftpboot --verbose$})
-      }
+          is_expected.to contain_file('/etc/xinetd.d/tftp')
+            .with_content(%r{^\s+server_args\s+=\s+-s /var/lib/tftpboot --verbose$})
+        }
       end
     end
   end
