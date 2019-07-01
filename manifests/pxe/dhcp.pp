@@ -1,12 +1,11 @@
-# A description of what this class does
+# ISC DHCPD daemon setup as a bootp service
 #
-# @summary A short summary of the purpose of this class
+# @summary ISC DHCPD daemon setup as a bootp service
 #
 # @example
 #   include lsys::pxe::dhcp
 class lsys::pxe::dhcp (
-  # instruct DHCP daemon to listen on all available
-  # network interfaces
+  # instruct DHCP daemon to listen on all available network interfaces
   Array[String[1]]
           $dhcp_interfaces    = [],
 
@@ -24,14 +23,7 @@ class lsys::pxe::dhcp (
   # see "dhcp::pool" defined type from https://github.com/voxpupuli/puppet-dhcp
   Hash[
     String,
-    Struct[{
-      network               => Stdlib::IP::Address::V4,
-      mask                  => Stdlib::IP::Address::V4,
-      Optional[routers]     => String,                  # see "option routers" on https://kb.isc.org/docs/isc-dhcp-44-manual-pages-dhcp-options
-      Optional[domain_name] => Stdlib::Fqdn,            # see "option domain-name"
-      Optional[nameservers] => Array[Stdlib::Host],     # see "option domain-name-servers"
-      Optional[broadcast]   => Stdlib::IP::Address::V4, # see "option broadcast-address"
-    }]
+    Lsys::Dhcp::Subnet
   ]       $default_subnet     = {},
 )
 {
