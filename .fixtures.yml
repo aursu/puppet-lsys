@@ -18,9 +18,6 @@ fixtures:
     puppet_agent:
       repo: "puppetlabs/puppet_agent"
       ref: "2.1.2"
-    dhcp:
-      repo: "puppet/dhcp"
-      ref: "3.3.0"
   repositories:
     dockerinstall: "https://github.com/aursu/puppet-dockerinstall.git"
     nginx:
@@ -31,4 +28,7 @@ fixtures:
     yumrepo_core:
       repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
       puppet_version: ">= 6.0.0"
+    dhcp:
+      repo: https://github.com/voxpupuli/puppet-dhcp.git
+      ref: "tags/v3.4.0"
 
