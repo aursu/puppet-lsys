@@ -95,7 +95,7 @@ describe 'lsys::dhcp::group' do
         context 'when host declaration in use as client hostname' do
           let(:params) do
             super().merge(
-              pxe_filename: "boot/grub/i386-pc/core.0",
+              pxe_filename: 'boot/grub/i386-pc/core.0',
             )
           end
 
@@ -118,7 +118,7 @@ describe 'lsys::dhcp::group' do
                 host_name: 'web-dev-005.domain.tld',
                 filename: '/pxelinux.0'
               }
-            }
+            },
           )
         end
 
