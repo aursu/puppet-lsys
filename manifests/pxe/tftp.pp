@@ -4,7 +4,9 @@
 #
 # @example
 #   include lsys::pxe::tftp
-class lsys::pxe::tftp {
+class lsys::pxe::tftp (
+  Boolean $tftp_service_enable = true,
+){
 
   # Install the xinetd service, that manages the tftpd service
   package { 'xinetd':
@@ -18,5 +20,18 @@ class lsys::pxe::tftp {
   file { '/var/lib/tftpboot':
     ensure  => directory,
     require => Package['tftp-server'],
+  }
+
+  file { '/etc/xinetd.d/tftp':
+    ensure  => file,
+    content => template('lsys/pxe/xinetd.tftp.erb'),
+    require => Package['tftp-server'],
+    notify  => Service['xinetd'],
+  }
+
+  service { 'xinetd':
+    ensure  => running,
+    enable  => true,
+    require => Package['xinetd'],
   }
 }
