@@ -10,13 +10,13 @@ service tftp
 	wait			= yes
 	user			= root
 	server			= /usr/sbin/in.tftpd
-	server_args		= -s /var/lib/tftpboot
+	server_args		= -s /var/lib/tftpboot<% if @tftp_verbose %> --verbose<% end %>
 <% if @tftp_service_enable -%>
 	disable			= no
 <% else -%>
 	disable			= yes
 <% end -%>
 	per_source		= 11
-	cps			    = 100 2
+	cps				= 100 2
 	flags			= IPv4
 }

@@ -6,6 +6,42 @@ describe 'lsys::pxe::tftp' do
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
+
+      it {
+        is_expected.to contain_file('/etc/xinetd.d/tftp')
+          .with_content(%r{^\s+disable\s+=\s+no$})
+      }
+
+      it {
+        is_expected.to contain_file('/etc/xinetd.d/tftp')
+          .with_content(%r{^\s+server_args\s+=\s+-s /var/lib/tftpboot$})
+      }
+
+      context 'when tftp server disabled' do
+        let(:params) do
+          {
+            tftp_service_enable: false,
+          }
+        end
+
+        it {
+          is_expected.to contain_file('/etc/xinetd.d/tftp')
+            .with_content(%r{^\s+disable\s+=\s+yes$})
+        }
+      end
+
+      context 'when tftp server disabled' do
+        let(:params) do
+          {
+            tftp_verbose: true,
+          }
+        end
+
+        it {
+        is_expected.to contain_file('/etc/xinetd.d/tftp')
+          .with_content(%r{^\s+server_args\s+=\s+-s /var/lib/tftpboot --verbose$})
+      }
+      end
     end
   end
 end
