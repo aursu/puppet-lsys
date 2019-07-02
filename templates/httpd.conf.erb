@@ -84,16 +84,6 @@ AllowEncodedSlashes <%= @allow_encoded_slashes %>
     Require all granted
 </Directory>
 
-<IfModule mime_module>
-    TypesConfig /etc/mime.types
-    AddType application/x-compress .Z
-    AddType application/x-gzip .gz .tgz
-</IfModule>
-
-<IfModule mime_magic_module>
-    MIMEMagicFile conf/magic
-</IfModule>
-
 Include <%= @mod_load_dir %>/*.load
 <% if @mod_load_dir != @confd_dir and @mod_load_dir != @vhost_load_dir -%>
 Include <%= @mod_load_dir %>/*.conf
