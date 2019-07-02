@@ -18,6 +18,7 @@ class lsys::pxe::server (
     $storage_directory,
     "${storage_directory}/centos",
     "${storage_directory}/configs",
+    "${storage_directory}/configs/assets",
     "${storage_directory}/exec" ]:
     ensure => directory,
   }
