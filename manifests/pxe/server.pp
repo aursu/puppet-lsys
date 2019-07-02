@@ -33,7 +33,9 @@ class lsys::pxe::server (
     manage_user  => $manage_web_user,
   }
 
-  include apache::mod::cgi
+  class { 'apache::mod::cgi':
+    notify => Class['Apache::Service'],
+  }
 
   apache::custom_config { 'diskless':
     content => template('lsys/pxe/httpd.conf.diskless.erb'),
@@ -51,5 +53,6 @@ class lsys::pxe::server (
   file { "${storage_directory}/exec/move.cgi":
     ensure  => file,
     content => file('lsys/pxe/scripts/copy.cgi'),
+    mode    => '0755',
   }
 }
