@@ -38,6 +38,11 @@ class lsys::pxe::grub {
     require => Package['grub2-pc-modules'],
   }
 
+  # install directory for per-server GRUB config files
+  file { [ '/var/lib/tftpboot/boot', '/var/lib/tftpboot/boot/install' ]:
+    ensure  => directory,
+  }
+
   # GRUB configuration files
   # MAC: 00:50:56:8e:5b:30
   # IP: 10.55.156.40 (hex: 0A.37.9C.28)

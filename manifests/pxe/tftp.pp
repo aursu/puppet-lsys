@@ -18,11 +18,6 @@ class lsys::pxe::tftp (
     ensure => present,
   }
 
-  file { '/var/lib/tftpboot':
-    ensure  => directory,
-    require => Package['tftp-server'],
-  }
-
   file { '/etc/xinetd.d/tftp':
     ensure  => file,
     content => template('lsys/pxe/xinetd.tftp.erb'),
@@ -34,5 +29,11 @@ class lsys::pxe::tftp (
     ensure  => running,
     enable  => true,
     require => Package['xinetd'],
+  }
+
+  # TFTP content
+  file { '/var/lib/tftpboot':
+    ensure  => directory,
+    require => Package['tftp-server'],
   }
 }
