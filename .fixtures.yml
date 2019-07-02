@@ -18,6 +18,9 @@ fixtures:
     puppet_agent:
       repo: "puppetlabs/puppet_agent"
       ref: "2.1.2"
+    apache:
+      repo: "puppetlabs/apache"
+      ref: "5.0.0"
   repositories:
     dockerinstall: "https://github.com/aursu/puppet-dockerinstall.git"
     nginx:
