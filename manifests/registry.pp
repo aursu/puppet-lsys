@@ -6,15 +6,16 @@
 #   include lsys::registry
 class lsys::registry (
   String  $server_name,
-  Boolean $manage_nginx_core   = true,
-  Boolean $ssl_client_ca_auth  = true,
+  Boolean $manage_nginx_core      = true,
+  Boolean $manage_web_server_user = true,
+  Boolean $ssl_client_ca_auth     = true,
   Optional[Array[Stdlib::Fqdn]]
-          $ssl_client_ca_certs = undef,
+          $ssl_client_ca_certs    = undef,
   # TLS data
   Optional[String]
-          $ssl_cert            = undef,
+          $ssl_cert               = undef,
   Optional[String]
-          $ssl_key             = undef,
+          $ssl_key                = undef,
 )
 {
   include tlsinfo
@@ -84,6 +85,7 @@ class lsys::registry (
   class { 'lsys::registry::nginx':
     server_name           => $server_name,
     manage_service        => $manage_nginx_core,
+    manage_user           => $manage_web_server_user,
     daemon_user           => $web_server_user,
     daemon_user_id        => $web_server_user_id,
     daemon_group          => $web_server_group,

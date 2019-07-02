@@ -7,6 +7,7 @@
 class lsys::registry::nginx  (
     String  $server_name,
     Boolean $manage_service        = true,
+    Boolean $manage_user           = true,
     String  $daemon_user           = 'www-data',
     Integer $daemon_user_id        = 33,
     String  $daemon_group          = 'www-data',
@@ -35,6 +36,7 @@ class lsys::registry::nginx  (
 
   if $manage_service {
     class { 'lsys::nginx':
+      manage_user           => $manage_user,
       daemon_user           => $daemon_user,
       daemon_user_id        => $daemon_user_id,
       daemon_group          => $daemon_group,
