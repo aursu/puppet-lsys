@@ -1,0 +1,8 @@
+<% if @kernel -%>
+set kernel='<%= @kernel %>'
+<% end -%>
+<% if @initimg -%>
+set initimg='<%= @initimg %>'
+<% end -%>
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/chap-anaconda-boot-options
+set options='<% if @use_dhcp %>ip=dhcp ksdevice= <% end %>inst.ks=http://<%= @install_server %>/ks/<%= @kickstart_filename %><% if @disable_biosdevname %> net.ifnames=0 biosdevname=0<% end %>'
