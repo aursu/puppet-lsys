@@ -23,7 +23,7 @@ define lsys::pxe::client_config(
 {
   # $hostname should match DHCP option host-name or the host declaration name
   # (if one) if use-host-decl-names is on
-  file { "/var/lib/tftpboot/boot/install/${hostname}.cfg":
+  file { "/var/lib/pxe/${hostname}.cfg":
     ensure  => file,
     content => template('lsys/pxe/host.cfg.erb'),
   }

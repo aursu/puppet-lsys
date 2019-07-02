@@ -46,4 +46,10 @@ class lsys::pxe::server (
     ensure  => file,
     content => template($default_kickstart_template),
   }
+
+  # CGI trigger for host installation
+  file { "${storage_directory}/exec/move.cgi":
+    ensure  => file,
+    content => file('lsys/pxe/scripts/copy.cgi'),
+  }
 }

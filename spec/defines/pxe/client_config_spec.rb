@@ -15,7 +15,7 @@ describe 'lsys::pxe::client_config' do
       it { is_expected.to compile }
 
       it {
-        is_expected.to contain_file('/var/lib/tftpboot/boot/install/namevar.cfg')
+        is_expected.to contain_file('/var/lib/pxe/namevar.cfg')
           .with_content(%r{^set options='ip=dhcp ksdevice= inst.ks=http://bsys.domain.tld/ks/default.cfg net.ifnames=0 biosdevname=0'$})
       }
     end
