@@ -1,6 +1,6 @@
-# A description of what this class does
+# PXE server setup
 #
-# @summary A short summary of the purpose of this class
+# @summary PXE server setup
 #
 # @example
 #   include lsys::pxe::server
@@ -8,12 +8,14 @@ class lsys::pxe::server (
   Stdlib::Fqdn
           $server_name,
   Stdlib::Port
-          $web_port        = 80,
-  Boolean $manage_web_user = true,
+          $web_port                   = 80,
+  Boolean $manage_web_user            = true,
   Stdlib::Unixpath
-          $storage_directory = '/diskless',
+          $storage_directory          = '/diskless',
+  String  $default_kickstart_template = 'lsys/pxe/default-ks.cfg.erb',
 )
 {
+  # Storage
   file { [
     $storage_directory,
     "${storage_directory}/centos",
@@ -23,6 +25,7 @@ class lsys::pxe::server (
     ensure => directory,
   }
 
+  # Web service
   class { 'lsys::httpd':
     listen_port  => $web_port,
     servername   => $server_name,
@@ -34,5 +37,13 @@ class lsys::pxe::server (
 
   apache::custom_config { 'diskless':
     content => template('lsys/pxe/httpd.conf.diskless.erb'),
+  }
+
+  # Default asstes
+  # Kickstart http://<install-server>/ks/default.cfg (CentOS 7 installation)
+  $install_server = $server_name
+  file{ "${storage_directory}/configs/default.cfg":
+    ensure  => file,
+    content => template($default_kickstart_template),
   }
 }
