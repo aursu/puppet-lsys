@@ -71,6 +71,7 @@ if grep -q '200 OK' headers; then
 fi
 
 # install Puppet repository GPG key
+# https://puppet.com/docs/puppet/5.5/puppet_platform.html
 # https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
 curl http://<%= @install_server %>/ks/assets/RPM-GPG-KEY-puppet5-release -Dheaders -odata -s
 if grep -q '200 OK' headers; then
