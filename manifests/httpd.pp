@@ -8,6 +8,8 @@ class lsys::httpd (
   Stdlib::Port
           $listen_port = 80,
   String  $servername  = 'localhost',
+  Boolean $manage_group = true,
+  Boolean $manage_user  = true,
 )
 {
     class { 'apache':
@@ -30,6 +32,8 @@ class lsys::httpd (
         conf_template          => 'lsys/httpd.conf.erb',
         mime_types_additional  => undef,
         service_restart        => true,
+        manage_group           => $manage_group,
+        manage_user            => $manage_user,
     }
 
     class { 'apache::mod::prefork':
