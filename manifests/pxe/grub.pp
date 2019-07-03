@@ -18,14 +18,6 @@ class lsys::pxe::grub {
     ;
   }
 
-  # GRUB configuration
-  file { [
-    '/var/lib/tftpboot/boot',
-    '/var/lib/tftpboot/boot/install',
-    '/var/lib/pxe' ]:
-    ensure  => directory,
-  }
-
   # GRUB2 TFTP data
   exec { 'grub2-mknetdir --net-directory=/var/lib/tftpboot --subdir=boot/grub -d /usr/lib/grub/x86_64-efi':
     path    => '/usr/bin:/bin',
