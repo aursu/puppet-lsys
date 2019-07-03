@@ -55,4 +55,11 @@ class lsys::pxe::storage
       ensure => link,
       target => $c7_current_version,
   }
+
+  unless $storage_directory == '/diskless' {
+    file { '/diskless':
+      ensure => link,
+      target => $storage_directory,
+    }
+  }
 }

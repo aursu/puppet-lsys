@@ -17,7 +17,8 @@ class lsys::pxe::server (
   include lsys::pxe::params
 
   $storage_directory = $lsys::pxe::params::storage_directory
-  $c7_current_version = $lsys::pxe::params::c7_current_version
+  $centos_version    = $lsys::pxe::params::c7_current_version
+  $install_server    = $server_name
 
   # Web service
   class { 'lsys::httpd':
@@ -36,9 +37,7 @@ class lsys::pxe::server (
   }
 
   # Default asstes
-  # Kickstart http://<install-server>/ks/default.cfg (CentOS 7 installation)
-  $install_server = $server_name
-  $centos_version = $c7_current_version
+  # Default kickstart http://<install-server>/ks/default.cfg (CentOS 7 installation)
   file{ "${storage_directory}/configs/default.cfg":
     ensure  => file,
     content => template($default_kickstart_template),
@@ -51,26 +50,28 @@ class lsys::pxe::server (
     mode    => '0755',
   }
 
+  # /usr/bin/nmap required for repository installation and update scripts
   package { 'nmap':
     ensure => present,
   }
 
-  file { '/root/bin/update-7-x86_64.sh':
-    ensure  => file,
-    content => file('lsys/pxe/scripts/update.sh'),
-    mode    => '0500',
+  # create /root/bin directory if not existing
+  exec { 'mkdir -p /root/bin':
+    path    => '/usr/bin:/bin',
+    creates => '/root/bin',
   }
 
+  # repository installation script
   file { '/root/bin/install-7-x86_64.sh':
     ensure  => file,
     content => file('lsys/pxe/scripts/install.sh'),
     mode    => '0500',
   }
 
-  unless $storage_directory == '/diskless' {
-    file { '/diskless':
-      ensure => link,
-      target => $storage_directory,
-    }
+  # repository update script (including EPEL and rpmforge)
+  file { '/root/bin/update-7-x86_64.sh':
+    ensure  => file,
+    content => file('lsys/pxe/scripts/update.sh'),
+    mode    => '0500',
   }
 }
