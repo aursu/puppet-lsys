@@ -21,6 +21,7 @@ class lsys::registry::nginx  (
             $ssl_key               = undef,
     Boolean $ssl_client_ca_auth    = false,
     Boolean $manage_document_root  = true,
+    Boolean $global_ssl_redirect   = true,
 )
 {
   include lsys::registry::params
@@ -45,7 +46,7 @@ class lsys::registry::nginx  (
       web_server_user_shell => $web_server_user_shell,
       nginx_lib_directory   => '/var/lib/nginx',
       manage_document_root  => $manage_document_root,
-      global_ssl_redirect   => true,
+      global_ssl_redirect   => $global_ssl_redirect,
       http_raw_prepend      => [
         # Set a variable to help us decide if we need to add the
         # 'Docker-Distribution-Api-Version' header.

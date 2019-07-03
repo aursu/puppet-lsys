@@ -16,6 +16,7 @@ class lsys::registry (
           $ssl_cert               = undef,
   Optional[String]
           $ssl_key                = undef,
+  Boolean $global_ssl_redirect    = true,
 )
 {
   include tlsinfo
@@ -96,6 +97,7 @@ class lsys::registry (
     ssl_cert              => $ssl_cert_path,
     ssl_key               => $ssl_key_path,
     ssl_client_ca_auth    => $ssl_client_ca_auth,
+    global_ssl_redirect   => $global_ssl_redirect,
   }
 
   if $manage_nginx_core {
