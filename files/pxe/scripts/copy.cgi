@@ -22,11 +22,11 @@ INSTCONF="$TFTPROOT/$CONFDIR/$CONFNAME"
 
 if [ -f $INSTCONF ]; then
     rm $INSTCONF
-    echo "ON"
+    echo "OFF"
     echo "Removed \"${INSTCONF}\" with status: $?" >&2
 elif [ -f $HOSTCONF ]; then
     cp $HOSTCONF $INSTCONF
-    echo "OFF"
+    echo "ON"
     echo "Copied \"${HOSTCONF}\" to \"${INSTCONF}\" with status: $?" >&2
 else
     echo "Configuration file for host \"$QUERY_STRING\" does not exist" >&2
