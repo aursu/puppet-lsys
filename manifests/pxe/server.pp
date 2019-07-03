@@ -11,6 +11,10 @@ class lsys::pxe::server (
           $web_port                   = 80,
   Boolean $manage_web_user            = true,
   String  $default_kickstart_template = 'lsys/pxe/default-ks.cfg.erb',
+  Optional[String]
+          $root_authorized_keys       = undef,
+  Optional[String]
+          $puppet_local_config        = undef,
 )
 {
   include lsys::pxe::storage
@@ -73,5 +77,37 @@ class lsys::pxe::server (
     ensure  => file,
     content => file('lsys/pxe/scripts/update.sh'),
     mode    => '0500',
+  }
+
+  # install Puppet repository
+  file { "${storage_directory}/configs/assets/puppet5.repo":
+    ensure  => file,
+    content => file('lsys/pxe/assets/puppet5.repo'),
+    mode    => '0644',
+  }
+
+  # install Puppet repository GPG key
+  # https://puppet.com/docs/puppet/5.5/puppet_platform.html
+  # https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
+  file { "${storage_directory}/configs/assets/RPM-GPG-KEY-puppet5-release":
+    ensure  => file,
+    content => file('lsys/pxe/assets/RPM-GPG-KEY-puppet5-release'),
+    mode    => '0644',
+  }
+
+  if $root_authorized_keys {
+    file { "${storage_directory}/configs/assets/root.authorized_keys":
+      ensure  => file,
+      content => file($root_authorized_keys),
+      mode    => '0644',
+    }
+  }
+
+  if $puppet_local_config {
+    file { "${storage_directory}/configs/assets/puppet.conf":
+      ensure  => file,
+      content => file($puppet_local_config),
+      mode    => '0644',
+    }
   }
 }
