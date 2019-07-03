@@ -18,6 +18,8 @@ class lsys::pxe::storage
   file { [
     $storage_directory,
     "${storage_directory}/centos",
+    "${storage_directory}/centos/${c6_current_version}",
+    "${storage_directory}/centos/${c7_current_version}",
     "${storage_directory}/configs",
     "${storage_directory}/configs/assets",
     "${storage_directory}/exec" ]:
@@ -25,6 +27,8 @@ class lsys::pxe::storage
     owner  => $user,
     mode   => '0511',
   }
+
+
 
   # GRUB configuration
   file {
@@ -44,12 +48,12 @@ class lsys::pxe::storage
   }
 
   # General URL
-  file { '/var/lib/tftpboot/boot/centos/6':
+  file { [ '/var/lib/tftpboot/boot/centos/6', "${storage_directory}/centos/6" ]:
       ensure => link,
       target => $c6_current_version,
   }
 
-  file { '/var/lib/tftpboot/boot/centos/7':
+  file { [ '/var/lib/tftpboot/boot/centos/7', "${storage_directory}/centos/7" ]:
       ensure => link,
       target => $c7_current_version,
   }
