@@ -28,8 +28,6 @@ class lsys::pxe::storage
     mode   => '0511',
   }
 
-
-
   # GRUB configuration
   file {
     default:
