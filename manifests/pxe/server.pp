@@ -51,6 +51,10 @@ class lsys::pxe::server (
     mode    => '0755',
   }
 
+  package { 'nmap':
+    ensure => present,
+  }
+
   file { '/root/bin/update-7-x86_64.sh':
     ensure  => file,
     content => file('lsys/pxe/scripts/update-7-x86_64.sh'),
