@@ -17,6 +17,7 @@ class lsys::pxe::server (
   include lsys::pxe::params
 
   $storage_directory = $lsys::pxe::params::storage_directory
+  $c7_current_version = $lsys::pxe::params::c7_current_version
 
   # Web service
   class { 'lsys::httpd':
@@ -37,6 +38,7 @@ class lsys::pxe::server (
   # Default asstes
   # Kickstart http://<install-server>/ks/default.cfg (CentOS 7 installation)
   $install_server = $server_name
+  $centos_version = $c7_current_version
   file{ "${storage_directory}/configs/default.cfg":
     ensure  => file,
     content => template($default_kickstart_template),
