@@ -8,7 +8,7 @@ osv="7"
 osa="x86_64"
 
 # sync os data
-centos=(os updates)
+centos=(os updates extras)
 for r in "${centos[@]}"; do
     repo=$r
     mirrors='http://mirrorlist.centos.org/?release='$osv'&arch='$osa'&repo='$r
@@ -61,7 +61,6 @@ while read u; do
         fi
     fi
 done
-
 
 # rpm forge
 repo=rpmforge
