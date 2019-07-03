@@ -10,25 +10,13 @@ class lsys::pxe::server (
   Stdlib::Port
           $web_port                   = 80,
   Boolean $manage_web_user            = true,
-  Stdlib::Unixpath
-          $storage_directory          = '/diskless',
   String  $default_kickstart_template = 'lsys/pxe/default-ks.cfg.erb',
 )
 {
-  include apache::params
-  $user = $apache::params::user
+  include lsys::pxe::storage
+  include lsys::pxe::params
 
-  # Storage
-  file { [
-    $storage_directory,
-    "${storage_directory}/centos",
-    "${storage_directory}/configs",
-    "${storage_directory}/configs/assets",
-    "${storage_directory}/exec" ]:
-    ensure => directory,
-    owner  => $user,
-    mode   => '0511',
-  }
+  $storage_directory = $lsys::pxe::params::storage_directory
 
   # Web service
   class { 'lsys::httpd':
@@ -40,19 +28,6 @@ class lsys::pxe::server (
 
   class { 'apache::mod::cgi':
     notify => Class['Apache::Service'],
-  }
-
-  # GRUB configuration
-  file {
-    default:
-      ensure => directory,
-    ;
-    '/var/lib/tftpboot/boot':
-      mode => '0711',
-    ;
-    [ '/var/lib/tftpboot/boot/install', '/var/lib/pxe' ]:
-      owner => $user,
-      mode  => '0751',
   }
 
   apache::custom_config { 'diskless':
