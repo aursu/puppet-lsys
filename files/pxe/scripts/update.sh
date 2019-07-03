@@ -28,7 +28,7 @@ for r in "${centos[@]}"; do
         fi
         if [ ! -z "$url" ]; then
             echo $url
-            rsync -avkSH --delete $url --exclude drpms $dst
+            rsync -avkSH --delete $url --exclude drpms --chown=0:0 --chmod=F0644,D2755 $dst
             if [ $? -eq 0 ]; then
                 break
             fi
@@ -55,7 +55,7 @@ while read u; do
     fi
     if [ ! -z "$url" ]; then
         echo $url
-        rsync -avkSH --delete --exclude repodata --exclude repoview --exclude debug  $url $dst/
+        rsync -avkSH --delete --exclude repodata --exclude repoview --exclude debug --chown=0:0 --chmod=F0644,D2755 $url $dst/
         if [ $? -eq 0 ]; then
             break
         fi
@@ -85,7 +85,7 @@ while [ -z "$url" ]; do
             status=
             for r in "${rpmforge[@]}"; do
                 echo ${url}/$r
-                rsync -avkSH --delete --exclude repodata --exclude repoview ${url}/$r $dst/
+                rsync -avkSH --delete --exclude repodata --exclude repoview --chown=0:0 --chmod=F0644,D2755 ${url}/$r $dst/
                 status=$?
             done
             if [ "${status}x" == "0x" ]; then

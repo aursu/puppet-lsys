@@ -28,7 +28,7 @@ for r in "${centos[@]}"; do
         fi
         if [ ! -z "$url" ]; then
             echo $url
-            rsync -avkSH --delete $url --exclude drpms $dst
+            rsync -avkSH --delete $url --exclude drpms --chown=0:0 --chmod=F0644,D2755 $dst
             if [ $? -eq 0 ]; then
                 break
             fi
