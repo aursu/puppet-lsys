@@ -4,7 +4,22 @@
 #
 # @example
 #   include lsys::pxe::grub
-class lsys::pxe::grub {
+class lsys::pxe::grub (
+  Boolean $c6_download = true,
+  Boolean $c7_download = true,
+){
+
+  include lsys::pxe::params
+  $c6_current_version = $lsys::pxe::params::c6_current_version
+  $c7_current_version = $lsys::pxe::params::c7_current_version
+
+  if $c6_download {
+    lsys::pxe::centos { $c6_current_version: }
+  }
+
+  if $c7_download {
+    lsys::pxe::centos { $c7_current_version: }
+  }
 
   # GRUB2 Modules installation
   package {
@@ -63,8 +78,12 @@ class lsys::pxe::grub {
   #
   # cat boot/grub/i386-pc/grub.cfg
   # source boot/grub/grub.cfg
+
+  $default_kernel = "/boot/centos/${c7_current_version}/os/x86_64/images/pxeboot/vmlinuz"
+  $default_initimg = "/boot/centos/${c7_current_version}/os/x86_64/images/pxeboot/initrd.img"
+
   file { '/var/lib/tftpboot/boot/grub/grub.cfg':
     ensure  => file,
-    content => file('lsys/pxe/grub.cfg'),
+    content => template('lsys/pxe/grub.cfg.erb'),
   }
 }
