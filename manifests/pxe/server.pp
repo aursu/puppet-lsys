@@ -57,7 +57,13 @@ class lsys::pxe::server (
 
   file { '/root/bin/update-7-x86_64.sh':
     ensure  => file,
-    content => file('lsys/pxe/scripts/update-7-x86_64.sh'),
+    content => file('lsys/pxe/scripts/update.sh'),
+    mode    => '0500',
+  }
+
+  file { '/root/bin/install-7-x86_64.sh':
+    ensure  => file,
+    content => file('lsys/pxe/scripts/install.sh'),
     mode    => '0500',
   }
 
