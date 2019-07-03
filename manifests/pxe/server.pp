@@ -50,4 +50,10 @@ class lsys::pxe::server (
     content => file('lsys/pxe/scripts/copy.cgi'),
     mode    => '0755',
   }
+
+  file { '/root/bin/getrepo-7-x86_64.sh':
+    ensure  => file,
+    content => file('lsys/pxe/scripts/getrepo-7-x86_64.sh'),
+    mode    => '0500',
+  }
 }
