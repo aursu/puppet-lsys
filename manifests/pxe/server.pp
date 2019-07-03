@@ -56,4 +56,11 @@ class lsys::pxe::server (
     content => file('lsys/pxe/scripts/update-7-x86_64.sh'),
     mode    => '0500',
   }
+
+  unless $storage_directory == '/diskless' {
+    file { '/diskless':
+      ensure => link,
+      target => $storage_directory,
+    }
+  }
 }
