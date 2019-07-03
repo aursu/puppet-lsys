@@ -36,7 +36,7 @@ define lsys::pxe::centos(
   $distro_base_directory = "${storage_directory}/centos/${real_version}"
 
   case $real_version {
-    $c6_current_version, $c7_current_version, '8': {
+    $c6_current_version, $c7_current_version: {
       $centos_url = "http://mirror.centos.org/centos/${real_version}/os/${arch}"
     }
     default: {
