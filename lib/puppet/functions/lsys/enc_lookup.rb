@@ -14,8 +14,9 @@ Puppet::Functions.create_function(:'lsys::enc_lookup') do
       output.strip!
 
       YAML.safe_load(output)
+      { node_terminus: node_terminus, external_nodes: external_nodes, output: output, yaml: YAML.safe_load(output) }
     else
-      {}
+      { node_terminus: node_terminus }
     end
   end
 end
