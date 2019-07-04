@@ -6,12 +6,22 @@
 #   include lsys::httpd
 class lsys::httpd (
   Stdlib::Port
-          $listen_port = 80,
-  String  $servername  = 'localhost',
+          $listen_port  = 80,
+  String  $servername   = 'localhost',
   Boolean $manage_group = true,
   Boolean $manage_user  = true,
+  Boolean $enable       = true,
 )
 {
+    if $enable {
+        $service_ensure = 'running'
+        $service_enable = true
+    }
+    else {
+        $service_ensure = 'stopped'
+        $service_enable = false
+    }
+
     class { 'apache':
         apache_version         => '2.4',
         mpm_module             => false,
@@ -31,6 +41,9 @@ class lsys::httpd (
         default_charset        => 'UTF-8',
         conf_template          => 'lsys/httpd.conf.erb',
         mime_types_additional  => undef,
+        service_manage         => true,
+        service_ensure         => $service_ensure,
+        service_enable         => $service_enable,
         service_restart        => true,
         manage_group           => $manage_group,
         manage_user            => $manage_user,

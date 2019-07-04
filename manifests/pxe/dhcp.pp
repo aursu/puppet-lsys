@@ -25,8 +25,24 @@ class lsys::pxe::dhcp (
     String,
     Lsys::Dhcp::Subnet
   ]       $default_subnet     = {},
+  Boolean  $enable            = true,
 )
 {
+  if $enable {
+    $manage_service = true
+  }
+  else {
+    $manage_service = false
+
+    include dhcp::params
+    $servicename = $dhcp::params::servicename
+
+    service { $servicename:
+      ensure => stopped,
+      enable => false,
+    }
+  }
+
   # ISC DHCP
   class { 'dhcp':
     service_ensure       => running,
@@ -40,6 +56,7 @@ class lsys::pxe::dhcp (
     option_code150_value => 'ip-address',
 
     dhcp_conf_pxe        => template('lsys/pxe/dhcpd.conf.pxe.erb'),
+    manage_service       => $manage_service,
   }
 
   $default_subnet.each | String $name, $parameters | {

@@ -15,6 +15,7 @@ class lsys::pxe::server (
           $root_authorized_keys       = undef,
   Optional[String]
           $puppet_local_config        = undef,
+  Boolean $enable                     = true,
 )
 {
   include lsys::pxe::storage
@@ -30,6 +31,7 @@ class lsys::pxe::server (
     servername   => $server_name,
     manage_group => $manage_web_user,
     manage_user  => $manage_web_user,
+    enable       => $enable,
   }
 
   class { 'apache::mod::cgi':

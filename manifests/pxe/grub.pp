@@ -4,20 +4,27 @@
 #
 # @example
 #   include lsys::pxe::grub
+#
+# @param enable
+#   Boolean. Default is true. If set to false then TFTP and default
+#   distributions files (CentOS 6 and CentOS 7) will not be managed
+#   by Puppet (therefore could be removed)
+#
 class lsys::pxe::grub (
   Boolean $c6_download = true,
   Boolean $c7_download = true,
+  Boolean $enable      = true,
 ){
 
   include lsys::pxe::params
   $c6_current_version = $lsys::pxe::params::c6_current_version
   $c7_current_version = $lsys::pxe::params::c7_current_version
 
-  if $c6_download {
+  if $c6_download and $enable {
     lsys::pxe::centos { $c6_current_version: }
   }
 
-  if $c7_download {
+  if $c7_download and $enable {
     lsys::pxe::centos { $c7_current_version: }
   }
 
@@ -34,23 +41,25 @@ class lsys::pxe::grub (
   }
 
   # GRUB2 TFTP data
-  exec { 'grub2-mknetdir --net-directory=/var/lib/tftpboot --subdir=boot/grub -d /usr/lib/grub/x86_64-efi':
-    path    => '/usr/bin:/bin',
-    creates => '/var/lib/tftpboot/boot/grub/x86_64-efi/core.efi',
-    require => Package['grub2-efi-x64-modules'],
-  }
+  if $enable {
+    exec { 'grub2-mknetdir --net-directory=/var/lib/tftpboot --subdir=boot/grub -d /usr/lib/grub/x86_64-efi':
+      path    => '/usr/bin:/bin',
+      creates => '/var/lib/tftpboot/boot/grub/x86_64-efi/core.efi',
+      require => Package['grub2-efi-x64-modules'],
+    }
 
-  exec { 'grub2-mknetdir --net-directory=/var/lib/tftpboot --subdir=boot/grub -d /usr/lib/grub/i386-pc':
-    path    => '/usr/bin:/bin',
-    creates => '/var/lib/tftpboot/boot/grub/i386-pc/core.0',
-    require => Package['grub2-pc-modules'],
-    before  => File['/var/lib/tftpboot/boot/grub/grub.cfg']
-  }
+    exec { 'grub2-mknetdir --net-directory=/var/lib/tftpboot --subdir=boot/grub -d /usr/lib/grub/i386-pc':
+      path    => '/usr/bin:/bin',
+      creates => '/var/lib/tftpboot/boot/grub/i386-pc/core.0',
+      require => Package['grub2-pc-modules'],
+      before  => File['/var/lib/tftpboot/boot/grub/grub.cfg']
+    }
 
-  exec { 'grub2-mknetdir --net-directory=/var/lib/tftpboot --subdir=boot/grub -d /usr/lib/grub/i386-efi':
-    path    => '/usr/bin:/bin',
-    creates => '/var/lib/tftpboot/boot/grub/i386-efi/core.efi',
-    require => Package['grub2-pc-modules'],
+    exec { 'grub2-mknetdir --net-directory=/var/lib/tftpboot --subdir=boot/grub -d /usr/lib/grub/i386-efi':
+      path    => '/usr/bin:/bin',
+      creates => '/var/lib/tftpboot/boot/grub/i386-efi/core.efi',
+      require => Package['grub2-pc-modules'],
+    }
   }
 
   # GRUB configuration files
