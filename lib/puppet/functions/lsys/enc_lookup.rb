@@ -13,10 +13,13 @@ Puppet::Functions.create_function(:'lsys::enc_lookup') do
       output = Puppet::Util::Execution.execute("#{external_nodes} #{hostname}", failonfail: false)
       output.strip!
 
+      if output.empty?
+        return {}
+      end
+
       YAML.safe_load(output)
-      { node_terminus: node_terminus, external_nodes: external_nodes, output: output, yaml: YAML.safe_load(output) }
     else
-      { node_terminus: node_terminus }
+      {}
     end
   end
 end
