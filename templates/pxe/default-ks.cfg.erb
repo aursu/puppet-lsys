@@ -13,7 +13,7 @@ keyboard --vckeymap=us --xlayouts='us'
 timezone America/New_York --isUtc --nontp
 bootloader --append=" crashkernel=auto rhgb quiet net.ifnames=0 biosdevname=0" --location=mbr --boot-drive=sda
 
-network --onboot yes --device eth0 --mtu=1500 --bootproto dhcp --ipv6=auto
+network --onboot yes --device eth0 --bootproto dhcp --ipv6=auto
 network --onboot yes --device eth1 --bootproto dhcp --noipv6
 
 rootpw  --iscrypted $6$EX.H/gc0I9luGJq8$/..qkeNnzg4o.5SzaG./bbOfWJyaHg0.zBoyQjFnVXA1aZtzs9Ih9HsdfHsNhU1RyGjRL0W8uDQt2ue2XPG301
