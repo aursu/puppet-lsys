@@ -7,7 +7,7 @@ Puppet::Functions.create_function(:'lsys::enc_lookup') do
 
   def enc_lookup(hostname)
     node_terminus = Puppet.settings[:node_terminus]
-    if node_terminus == 'exec'
+    if node_terminus.to_s == 'exec'
       external_nodes = Puppet.settings[:external_nodes]
 
       output = Puppet::Util::Execution.execute("#{external_nodes} #{hostname}", failonfail: false)
