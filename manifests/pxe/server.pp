@@ -112,7 +112,4 @@ class lsys::pxe::server (
       mode    => '0644',
     }
   }
-
-  $settings = lsys::enc_lookup('host1.domain.tld')
-  notify { $settings: }
 }
