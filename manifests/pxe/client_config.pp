@@ -22,7 +22,7 @@ define lsys::pxe::client_config(
   # Kickstart settings
   Boolean $centos               = true,
   Optional[Lsys::Pxe::Centos]
-          $os_version           = undef,
+          $centos_version       = undef,
   Enum['x86_64', 'i386']
           $arch                 = 'x86_64',
   Optional[String]
@@ -33,8 +33,8 @@ define lsys::pxe::client_config(
   $centos7_current_version = $lsys::pxe::params::centos7_current_version
   $centos6_current_version = $lsys::pxe::params::centos6_current_version
 
-  if $centos and $os_version {
-    $major_version = $os_version ? {
+  if $centos and $centos_version {
+    $major_version = $centos_version ? {
       /^6/ => 6,
       /^7/ => 7,
     }
@@ -46,13 +46,13 @@ define lsys::pxe::client_config(
   if $kickstart_filename {
     $ks_filename = $kickstart_filename
   }
-  elsif $os_version {
-    $ks_filename = "${os_version}-${arch}" ? {
+  elsif $centos_version {
+    $ks_filename = "${centos_version}-${arch}" ? {
       '6-x86_64'                          => 'default-6-x86_64.cfg',
       "${centos6_current_version}-x86_64" => 'default-6-x86_64.cfg',
       '7-x86_64'                          => 'default.cfg',
       "${centos7_current_version}-x86_64" => 'default.cfg',
-      default                             => "default-${os_version}-${arch}",
+      default                             => "default-${centos_version}-${arch}",
     }
   }
   else {
