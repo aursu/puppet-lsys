@@ -10,7 +10,6 @@ class lsys::pxe::server (
   Stdlib::Port
           $web_port                   = 80,
   Boolean $manage_web_user            = true,
-  String  $default_kickstart_template = 'lsys/pxe/default-ks.cfg.erb',
   Optional[String]
           $root_authorized_keys       = undef,
   Optional[String]
@@ -22,7 +21,8 @@ class lsys::pxe::server (
   include lsys::pxe::params
 
   $storage_directory = $lsys::pxe::params::storage_directory
-  $centos_version    = $lsys::pxe::params::c7_current_version
+  $centos_version    = $lsys::pxe::params::centos7_current_version
+  $centos6_version   = $lsys::pxe::params::centos6_current_version
   $install_server    = $server_name
 
   # Web service
@@ -44,9 +44,15 @@ class lsys::pxe::server (
 
   # Default asstes
   # Default kickstart http://<install-server>/ks/default.cfg (CentOS 7 installation)
+  # python -c 'import crypt,getpass;pw=getpass.getpass();print(crypt.crypt(pw) if (pw==getpass.getpass("Confirm: ")) else exit())'
   file{ "${storage_directory}/configs/default.cfg":
     ensure  => file,
-    content => template($default_kickstart_template),
+    content => template('lsys/pxe/default-centos-7-x86_64-ks.cfg.erb'),
+  }
+
+  file{ "${storage_directory}/configs/default-6-x86_64.cfg":
+    ensure  => file,
+    content => template('lsys/pxe/default-centos-6-x86_64-ks.cfg.erb'),
   }
 
   # CGI trigger for host installation

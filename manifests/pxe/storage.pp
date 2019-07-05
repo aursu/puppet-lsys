@@ -11,15 +11,15 @@ class lsys::pxe::storage
 
   include lsys::pxe::params
   $storage_directory  = $lsys::pxe::params::storage_directory
-  $c6_current_version = $lsys::pxe::params::c6_current_version
-  $c7_current_version = $lsys::pxe::params::c7_current_version
+  $centos6_current_version = $lsys::pxe::params::centos6_current_version
+  $centos7_current_version = $lsys::pxe::params::centos7_current_version
 
   # Storage
   file { [
     $storage_directory,
     "${storage_directory}/centos",
-    "${storage_directory}/centos/${c6_current_version}",
-    "${storage_directory}/centos/${c7_current_version}",
+    "${storage_directory}/centos/${centos6_current_version}",
+    "${storage_directory}/centos/${centos7_current_version}",
     "${storage_directory}/configs",
     "${storage_directory}/configs/assets",
     "${storage_directory}/exec" ]:
@@ -35,8 +35,8 @@ class lsys::pxe::storage
     ;
     [ '/var/lib/tftpboot/boot',
       '/var/lib/tftpboot/boot/centos',
-      "/var/lib/tftpboot/boot/centos/${c6_current_version}",
-      "/var/lib/tftpboot/boot/centos/${c7_current_version}" ]:
+      "/var/lib/tftpboot/boot/centos/${centos6_current_version}",
+      "/var/lib/tftpboot/boot/centos/${centos7_current_version}" ]:
       mode => '0711',
     ;
     [ '/var/lib/tftpboot/boot/install', '/var/lib/pxe' ]:
@@ -48,12 +48,12 @@ class lsys::pxe::storage
   # General URL
   file { [ '/var/lib/tftpboot/boot/centos/6', "${storage_directory}/centos/6" ]:
       ensure => link,
-      target => $c6_current_version,
+      target => $centos6_current_version,
   }
 
   file { [ '/var/lib/tftpboot/boot/centos/7', "${storage_directory}/centos/7" ]:
       ensure => link,
-      target => $c7_current_version,
+      target => $centos7_current_version,
   }
 
   unless $storage_directory == '/diskless' {

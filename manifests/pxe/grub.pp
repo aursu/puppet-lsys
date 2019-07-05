@@ -17,15 +17,15 @@ class lsys::pxe::grub (
 ){
 
   include lsys::pxe::params
-  $c6_current_version = $lsys::pxe::params::c6_current_version
-  $c7_current_version = $lsys::pxe::params::c7_current_version
+  $centos6_current_version = $lsys::pxe::params::centos6_current_version
+  $centos7_current_version = $lsys::pxe::params::centos7_current_version
 
   if $c6_download and $enable {
-    lsys::pxe::centos { $c6_current_version: }
+    lsys::pxe::centos { $centos6_current_version: }
   }
 
   if $c7_download and $enable {
-    lsys::pxe::centos { $c7_current_version: }
+    lsys::pxe::centos { $centos7_current_version: }
   }
 
   # GRUB2 Modules installation
@@ -88,8 +88,8 @@ class lsys::pxe::grub (
   # cat boot/grub/i386-pc/grub.cfg
   # source boot/grub/grub.cfg
 
-  $default_kernel = "/boot/centos/${c7_current_version}/os/x86_64/images/pxeboot/vmlinuz"
-  $default_initimg = "/boot/centos/${c7_current_version}/os/x86_64/images/pxeboot/initrd.img"
+  $default_kernel = "/boot/centos/${centos7_current_version}/os/x86_64/images/pxeboot/vmlinuz"
+  $default_initimg = "/boot/centos/${centos7_current_version}/os/x86_64/images/pxeboot/initrd.img"
 
   file { '/var/lib/tftpboot/boot/grub/grub.cfg':
     ensure  => file,

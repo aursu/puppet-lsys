@@ -14,15 +14,15 @@ define lsys::pxe::centos(
   include lsys::pxe::storage
 
   include lsys::pxe::params
-  $c6_current_version = $lsys::pxe::params::c6_current_version
-  $c7_current_version = $lsys::pxe::params::c7_current_version
+  $centos6_current_version = $lsys::pxe::params::centos6_current_version
+  $centos7_current_version = $lsys::pxe::params::centos7_current_version
   $storage_directory  = $lsys::pxe::params::storage_directory
 
   $real_version = $version ? {
-    '6'     => $c6_current_version,
-    '7'     => $c7_current_version,
+    '6'     => $centos6_current_version,
+    '7'     => $centos7_current_version,
     # Jul 3, 2019 - CentOS 8 is on Build Loop 1 (use CentOS 7 instead)
-    '8'     => $c7_current_version,
+    '8'     => $centos7_current_version,
     default => $version
   }
 
@@ -36,7 +36,7 @@ define lsys::pxe::centos(
   $distro_base_directory = "${storage_directory}/centos/${real_version}"
 
   case $real_version {
-    $c6_current_version, $c7_current_version: {
+    $centos6_current_version, $centos7_current_version: {
       $centos_url = "http://mirror.centos.org/centos/${real_version}/os/${arch}"
     }
     default: {
