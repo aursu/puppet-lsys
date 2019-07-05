@@ -1,4 +1,4 @@
-type Lsys::Pxe::Centos = Variant[
+type Lsys::Pxe::Centos_version = Variant[
   Enum[
     '6',
     '6.10',

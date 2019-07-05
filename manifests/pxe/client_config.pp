@@ -21,7 +21,7 @@ define lsys::pxe::client_config(
 
   # Kickstart settings
   Boolean $centos               = true,
-  Optional[Lsys::Pxe::Centos]
+  Optional[Lsys::Pxe::Centos_version]
           $centos_version       = undef,
   Enum['x86_64', 'i386']
           $arch                 = 'x86_64',

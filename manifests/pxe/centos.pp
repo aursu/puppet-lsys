@@ -5,7 +5,7 @@
 # @example
 #   lsys::pxe::centos { 'namevar': }
 define lsys::pxe::centos(
-  Lsys::Pxe::Centos
+  Lsys::Pxe::Centos_version
           $version  = $name,
   Enum['x86_64', 'i386']
           $arch     = 'x86_64',
