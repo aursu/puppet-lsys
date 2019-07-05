@@ -84,5 +84,13 @@ define lsys::pxe::client_config(
   file { "/var/lib/pxe/${hostname}.cfg":
     ensure  => file,
     content => template('lsys/pxe/host.cfg.erb'),
+    notify  => Exec["/var/lib/tftpboot/boot/install/${hostname}.cfg"],
+  }
+
+  exec { "/var/lib/tftpboot/boot/install/${hostname}.cfg":
+    command     => "rm -f /var/lib/tftpboot/boot/install/${hostname}.cfg",
+    refreshonly => true,
+    path        => '/usr/bin:/bin',
+    onlyif      => "test -f /var/lib/tftpboot/boot/install/${hostname}.cfg",
   }
 }
