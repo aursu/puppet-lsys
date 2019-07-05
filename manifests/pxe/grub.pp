@@ -11,8 +11,8 @@
 #   by Puppet (therefore could be removed)
 #
 class lsys::pxe::grub (
-  Boolean $c6_download = true,
-  Boolean $c7_download = true,
+  Boolean $centos6_download = true,
+  Boolean $centos7_download = true,
   Boolean $enable      = true,
 ){
 
@@ -20,11 +20,11 @@ class lsys::pxe::grub (
   $centos6_current_version = $lsys::pxe::params::centos6_current_version
   $centos7_current_version = $lsys::pxe::params::centos7_current_version
 
-  if $c6_download and $enable {
+  if $centos6_download and $enable {
     lsys::pxe::centos { $centos6_current_version: }
   }
 
-  if $c7_download and $enable {
+  if $centos7_download and $enable {
     lsys::pxe::centos { $centos7_current_version: }
   }
 
