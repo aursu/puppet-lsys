@@ -69,6 +69,14 @@ EnableSendfile <%= @sendfile %>
 AllowEncodedSlashes <%= @allow_encoded_slashes %>
 <%- end -%>
 
+<Directory "/var/www/cgi-bin">
+    AllowOverride None
+    Options None
+    Require all granted
+</Directory>
+
+Include <%= @mod_load_dir %>/*.load
+
 <IfModule log_config_module>
     LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
     LogFormat "%h %l %u %t \"%r\" %>s %b" common
@@ -78,13 +86,6 @@ AllowEncodedSlashes <%= @allow_encoded_slashes %>
     CustomLog "logs/access_log" combined
 </IfModule>
 
-<Directory "/var/www/cgi-bin">
-    AllowOverride None
-    Options None
-    Require all granted
-</Directory>
-
-Include <%= @mod_load_dir %>/*.load
 <% if @mod_load_dir != @confd_dir and @mod_load_dir != @vhost_load_dir -%>
 Include <%= @mod_load_dir %>/*.conf
 <% end -%>
