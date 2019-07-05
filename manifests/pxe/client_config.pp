@@ -27,6 +27,9 @@ define lsys::pxe::client_config(
           $arch                 = 'x86_64',
   Optional[String]
           $kickstart_filename   = undef,
+  # Only applicable to CentOS 6 systems
+  Optional[String]
+          $ks_device            = 'eth0',
 )
 {
   include lsys::pxe::params
