@@ -23,7 +23,7 @@ describe 'lsys::pxe::client_config' do
         context "with CentOS version #{centos}" do
           let(:params) do
             super().merge(
-              centos_version: centos
+              centos_version: centos,
             )
           end
 
@@ -40,7 +40,7 @@ describe 'lsys::pxe::client_config' do
         context "with CentOS version #{centos}" do
           let(:params) do
             super().merge(
-              centos_version: centos
+              centos_version: centos,
             )
           end
 
