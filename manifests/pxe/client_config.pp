@@ -34,13 +34,13 @@ define lsys::pxe::client_config(
   $centos6_current_version = $lsys::pxe::params::centos6_current_version
 
   if $centos and $centos_version {
-    $real_version = $centos_version ? {
-      /^6/ => $centos6_current_version,
-      /^7/ => $centos7_current_version,
+    $major_version = $centos_version ? {
+      /^6/ => 6,
+      /^7/ => 7,
     }
   }
   else {
-    $real_version = undef
+    $major_version = undef
   }
 
   if $kickstart_filename {
@@ -62,8 +62,8 @@ define lsys::pxe::client_config(
   if $kernel {
     $boot_kernel = $kernel
   }
-  elsif $centos and $real_version {
-    $boot_kernel = "/var/lib/tftpboot/boot/centos/${real_version}/os/${arch}/images/pxeboot/vmlinuz"
+  elsif $centos and $major_version {
+    $boot_kernel = "/boot/centos/${major_version}/os/${arch}/images/pxeboot/vmlinuz"
   }
   else {
     $boot_kernel = undef
@@ -72,8 +72,8 @@ define lsys::pxe::client_config(
   if $initimg {
     $boot_initimg = $initimg
   }
-  elsif $centos and $real_version {
-    $boot_initimg = "/var/lib/tftpboot/boot/centos/${real_version}/os/${arch}/images/pxeboot/initrd.img"
+  elsif $centos and $major_version {
+    $boot_initimg = "/boot/centos/${major_version}/os/${arch}/images/pxeboot/initrd.img"
   }
   else {
     $boot_initimg = undef
