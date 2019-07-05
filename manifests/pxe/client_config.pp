@@ -52,7 +52,7 @@ define lsys::pxe::client_config(
       "${centos6_current_version}-x86_64" => 'default-6-x86_64.cfg',
       '7-x86_64'                          => 'default.cfg',
       "${centos7_current_version}-x86_64" => 'default.cfg',
-      default                             => "default-${centos_version}-${arch}",
+      default                             => "default-${centos_version}-${arch}.cfg",
     }
   }
   else {
