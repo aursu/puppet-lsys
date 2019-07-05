@@ -31,7 +31,7 @@ describe 'lsys::pxe::client_config' do
 
           it {
             is_expected.to contain_file('/var/lib/pxe/namevar.cfg')
-              .with_content(%r{^set kernel='/var/lib/tftpboot/boot/centos/6/os/x86_64/images/pxeboot/vmlinuz'$})
+              .with_content(%r{^set kernel='/var/lib/tftpboot/boot/centos/6.10/os/x86_64/images/pxeboot/vmlinuz'$})
           }
         end
       end
@@ -48,7 +48,7 @@ describe 'lsys::pxe::client_config' do
 
           it {
             is_expected.to contain_file('/var/lib/pxe/namevar.cfg')
-              .with_content(%r{^set kernel='/var/lib/tftpboot/boot/centos/7/os/x86_64/images/pxeboot/vmlinuz'$})
+              .with_content(%r{^set kernel='/var/lib/tftpboot/boot/centos/7.6.1810/os/x86_64/images/pxeboot/vmlinuz'$})
           }
         end
       end
