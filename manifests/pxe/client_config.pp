@@ -14,52 +14,60 @@ define lsys::pxe::client_config(
           $kernel               = undef,
   Optional[Stdlib::Unixpath]
           $initimg              = undef,
-
-  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-disabling_consistent_network_device_naming
-  # https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
-  Boolean $disable_biosdevname  = true,
-
-  # Kickstart settings
-  Boolean $centos               = true,
-  Optional[Lsys::Pxe::Centos_version]
-          $centos_version       = undef,
   Enum['x86_64', 'i386']
           $arch                 = 'x86_64',
   Optional[String]
-          $kickstart_filename   = undef,
+          $autofile             = undef,
+  Optional[String]
+          $osrelease            = undef,
   # Only applicable to CentOS 6 systems
   Optional[String]
-          $ks_device            = 'eth0',
+          $interface            = 'eth0',
+  # Kickstart settings
+  Boolean $centos               = true,
+  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-disabling_consistent_network_device_naming
+  # https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
+  Boolean $disable_biosdevname  = true,
 )
 {
   include lsys::pxe::params
   $centos7_current_version = $lsys::pxe::params::centos7_current_version
   $centos6_current_version = $lsys::pxe::params::centos6_current_version
 
-  if $centos and $centos_version {
-    $major_version = $centos_version ? {
-      /^6/ => 6,
-      /^7/ => 7,
-    }
-  }
-  else {
-    $major_version = undef
-  }
+  if $centos {
+    if $osrelease {
+      $centos_version = $osrelease ? {
+        Lsys::Pxe::Centos_version => $osrelease,
+        default                   => fail('Illegal value for $osrelease parameter'),
+      }
 
-  if $kickstart_filename {
-    $ks_filename = $kickstart_filename
-  }
-  elsif $centos_version {
-    $ks_filename = "${centos_version}-${arch}" ? {
-      '6-x86_64'                          => 'default-6-x86_64.cfg',
-      "${centos6_current_version}-x86_64" => 'default-6-x86_64.cfg',
-      '7-x86_64'                          => 'default.cfg',
-      "${centos7_current_version}-x86_64" => 'default.cfg',
-      default                             => "default-${centos_version}-${arch}.cfg",
+      $major_version = $centos_version ? {
+        /^5/ => 5,
+        /^6/ => 6,
+        /^7/ => 7,
+        /^8/ => 8,
+      }
     }
-  }
-  else {
-    $ks_filename = 'default.cfg'
+    else {
+      $centos_version = undef
+      $major_version = undef
+    }
+
+    if $autofile {
+      $ks_filename = $autofile
+    }
+    elsif $centos_version {
+      $ks_filename = "${centos_version}-${arch}" ? {
+        '6-x86_64'                          => 'default-6-x86_64.cfg',
+        "${centos6_current_version}-x86_64" => 'default-6-x86_64.cfg',
+        '7-x86_64'                          => 'default.cfg',
+        "${centos7_current_version}-x86_64" => 'default.cfg',
+        default                             => "default-${centos_version}-${arch}.cfg",
+      }
+    }
+    else {
+      $ks_filename = 'default.cfg'
+    }
   }
 
   if $kernel {
