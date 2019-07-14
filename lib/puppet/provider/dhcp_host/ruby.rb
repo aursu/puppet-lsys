@@ -60,7 +60,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
     # read ENC data
     Dir.glob('/var/lib/pxe/enc/*.{eyaml,yaml,yml}').each do |name|
-      hostname = %r{(?<hostname>[^/]+)e?ya?ml$}.match(name)[:hostname]
+      hostname = %r{(?<hostname>[^/]+)\.e?ya?ml$}.match(name)[:hostname]
       data = File.read(name)
 
       enc = YAML.safe_load(data).map { |k, v| [k.to_sym, v] }.to_h
