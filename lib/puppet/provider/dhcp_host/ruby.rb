@@ -119,12 +119,12 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     ip       = pxe[:ip]
     hostname = pxe[:hostname]
 
-    ERB.new(<<~EOF).result(binding)
-    host <%= name %> {
-      hardware ethernet <%= mac %>;
-      fixed-address <%= ip %>;
-      option host-name "<%= hostname %>";
-    }
-    EOF
+    ERB.new(<<-EOF).result(binding)
+  host <%= name %> {
+    hardware ethernet <%= mac %>;
+    fixed-address <%= ip %>;
+    option host-name "<%= hostname %>";
+  }
+  EOF
   end
 end
