@@ -97,7 +97,10 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     pxe.reject! { |k, v| !dhcp_keys.include?(k) || v.nil? }
 
     pxe[:content] = generate_content(pxe)
-    warning _("Information about host: #{pxe}")
+
+    if pxe[:content]
+      warning _("Information about host: #{pxe}")
+    end
 
     pxe[:provider] = name
 
