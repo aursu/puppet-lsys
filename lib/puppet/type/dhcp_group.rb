@@ -151,23 +151,23 @@ Puppet::Type.newtype(:dhcp_group) do
 
     @generated_content = ERB.new(<<-EOF).result(binding)
   group {
-  <%- if host_decl_names -%>
+  <% if host_decl_names %>
     use-host-decl-names on;
-  <%- end -%>
-  <%- if pxe_settings -%>
+  <% end %>
+  <% if pxe_settings %>
     if ( substring (option vendor-class-identifier, 0, 9) = "PXEClient" ) {
-  <%-   if next_server -%>
+  <%   if next_server %>
       next-server <%= next_server %>;
-  <%-     if tftp_server_name -%>
+  <%     if tftp_server_name %>
       option tftp-server-name "<%= next_server %>";
-  <%-     end -%>
-  <%-   end -%>
-  <%-   if pxe_filename -%>
+  <%     end %>
+  <%   end %>
+  <%   if pxe_filename %>
       filename "<%= pxe_filename %>";
-  <%-   end -%>
+  <%   end %>
     }
 
-  <%- end -%>
+  <% end %>
     <%= hosts %>
   }
   EOF
