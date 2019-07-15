@@ -1,7 +1,4 @@
-require 'puppet/type/file/owner'
-require 'puppet/type/file/group'
-require 'puppet/type/file/mode'
-require 'puppet/util/checksums'
+require 'erb'
 
 Puppet::Type.newtype(:dhcp_group) do
   @doc = <<-DOC
@@ -144,7 +141,36 @@ Puppet::Type.newtype(:dhcp_group) do
     sorted = content_fragments.sort_by { |a| a[0] }
 
     newline = Puppet::Util::Platform.windows? ? "\r\n" : "\n"
-    @generated_content = sorted.map { |cf| cf[1] }.join(newline)
+    hosts = sorted.map { |cf| cf[1] }.join(newline)
+
+    host_decl_names = false
+    pxe_settings = false
+    next_server = nil
+    tftp_server_name = true
+    pxe_filename = nil
+
+    @generated_content = ERB.new(<<-EOF).result(binding)
+  group {
+  <%- if host_decl_names -%>
+    use-host-decl-names on;
+  <%- end -%>
+  <%- if pxe_settings -%>
+    if ( substring (option vendor-class-identifier, 0, 9) = "PXEClient" ) {
+  <%-   if next_server -%>
+      next-server <%= next_server %>;
+  <%-     if tftp_server_name -%>
+      option tftp-server-name "<%= next_server %>";
+  <%-     end -%>
+  <%-   end -%>
+  <%-   if pxe_filename -%>
+      filename "<%= pxe_filename %>";
+  <%-   end -%>
+    }
+
+  <%- end -%>
+    <%= hosts %>
+  }
+  EOF
 
     @generated_content
   end
@@ -169,5 +195,9 @@ Puppet::Type.newtype(:dhcp_group) do
     end
 
     [Puppet::Type.type(:concat_fragment).new(concat_fragment_opts)]
+  end
+
+  def eval_generate
+    [catalog.resource("Concat_fragment[dhcp_group_#{title}]")]
   end
 end
