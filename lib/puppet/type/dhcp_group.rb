@@ -117,23 +117,23 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   def fragments
-    # @fragments ||= catalog.resources.map { |resource|
-    #   next unless resource.is_a?(Puppet::Type.type(:dhcp_host))
+    @catalog_fragments ||= catalog.resources.map { |resource|
+      next unless resource.is_a?(Puppet::Type.type(:dhcp_host))
 
-    #   if resource[:group] == self[:name] || resource[:group] == title ||
-    #      (title == 'default' && resource[:group].nil?)
-    #     resource
-    #   end
-    # }.compact
+      if resource[:group] == self[:name] || resource[:group] == title ||
+         (title == 'default' && resource[:group].nil?)
+        resource
+      end
+    }.compact
 
     @fragments ||= Puppet::Type.type(:dhcp_host).instances.
+      reject { |r| catalog.resource_refs.include? r.ref }.
       select { |resource|
-      hg = resource[:group]
-      hn = resource[:name]
-      warning "Dhcp_host with group '#{hg}' and name '#{hn}' found"
         resource[:group] == self[:name] || resource[:group] == title ||
           (title == 'default' && resource[:group].nil?)
       }
+
+    @catalog_fragments + @fragments
   end
 
   def should_content
