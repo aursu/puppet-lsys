@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Puppet::Type.type(:dhcp_host) do
+describe Puppet::Type.type(:dhcp_group) do
   let(:catalog) { Puppet::Resource::Catalog.new }
 
   it 'check with default parameters list' do

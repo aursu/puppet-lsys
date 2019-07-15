@@ -2,7 +2,7 @@ Puppet::Type.newtype(:dhcp_host) do
   @doc = 'DHCP host declaration for PXE'
 
   newparam(:name, namevar: true) do
-     desc 'DHCP host declaration name'
+    desc 'DHCP host declaration name'
   end
 
   newproperty(:mac) do
