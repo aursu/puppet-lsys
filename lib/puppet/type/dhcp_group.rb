@@ -103,6 +103,10 @@ Puppet::Type.newtype(:dhcp_group) do
     found = catalog.resources.select do |resource|
       next unless resource.is_a?(Puppet::Type.type(:dhcp_host))
 
+      rn = resource[:name]
+      rg = resource[:group]
+      warning "Dhcp_host with name '#{rn}' and group '#{rg}' found in the catalog"
+
       resource[:group] == self[:name] || resource[:group] == title ||
         (title == 'default' && resource[:group].nil?)
     end
