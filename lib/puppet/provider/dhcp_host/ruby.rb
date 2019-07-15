@@ -1,10 +1,6 @@
 require 'erb'
 
 Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
-  def initialize(value = {})
-    super(value)
-    @property_flush = {}
-  end
 
   # Need this to create getter/setter methods automagically
   # This command creates methods that return @property_hash[:value]
@@ -67,7 +63,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       enc[:hostname] = hostname
 
       pxe = merge_host_data(enc, dhcp_hosts[hostname])
-      if pxe[:mac] && pxe[:ip]
+      if pxe[:content]
         instances << new(pxe)
       end
     end
