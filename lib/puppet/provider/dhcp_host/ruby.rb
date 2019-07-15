@@ -14,56 +14,47 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   # to gather the 'is' values for a resource. The downside here is that
   # populating this instance variable for every resource on the system
   # takes time and front-loads your Puppet run.
-  def self.prefetch(resources)
-    instances.each do |prov|
-      if (resource = resources[prov.name])
-        resource.provider = prov
-      end
+  # def self.prefetch(resources)
+  #   instances.each do |prov|
+  #     if (resource = resources[prov.name])
+  #       resource.provider = prov
+  #     end
+  #   end
+  # end
+
+  # Does the given ENC PXE settings already exist?
+  #
+  # @api public
+  # @return [Boolean]
+  def exists?
+    @property_hash[:ensure] == :present
+  end
+
+  def enc_data(file_name)
+    return @enc if @enc
+
+    hostname = @resource[:name]
+
+    Dir.glob("/var/lib/pxe/enc/#{hostname}.{eyaml,yaml,yml}").each do |file_name|
+      @enc ||= self.class.enc_data(file_name)
     end
+
+    @enc
+  end
+
+  def pxe_data(enc)
+    @pxe ||= self.class.pxe_data(pxe)
   end
 
   def self.instances
     instances = []
 
-    # DHCP data
-    dhcp_hosts = {}
-    host = {}
-    if File.exist?('/etc/dhcp/dhcpd.pools')
-      File.open('/etc/dhcp/dhcpd.pools').each do |line|
-        line.strip!
-        # rubocop:disable Performance/RegexpMatch
-        if %r{^host (?<name>\S+) \{$} =~ line
-          host = { name: name }
-          next
-        end
-
-        next unless host.include?(:name)
-
-        if %r{^hardware ethernet (?<mac>\S+);$} =~ line
-          host[:mac] = mac
-        elsif %r{^fixed-address (?<ip>\S+);$} =~ line
-          host[:ip] = ip
-        elsif %r{^option host-name "(?<hostname>\S+)";$} =~ line
-          host[:hostname] = hostname
-        elsif %r{^\}$} =~ line
-          dhcp_hosts[host[:hostname]] = host if host.include?(:hostname)
-          host = {}
-        end
-        # rubocop:enable Performance/RegexpMatch
-      end
-    end
-
     # read ENC data
-    Dir.glob('/var/lib/pxe/enc/*.{eyaml,yaml,yml}').each do |name|
-      hostname = %r{(?<hostname>[^/]+)\.e?ya?ml$}.match(name)[:hostname]
-      data = File.read(name)
-
-      enc = YAML.safe_load(data).map { |k, v| [k.to_sym, v] }.to_h
-      enc[:hostname] = hostname
-
-      pxe = merge_host_data(enc, dhcp_hosts[hostname])
-      if pxe[:content]
-        instances << new(pxe)
+    Dir.glob('/var/lib/pxe/enc/*.{eyaml,yaml,yml}').each do |file_name|
+      instance_hash = pxe_data(enc_data)
+      if instance_hash[:content]
+        instance_hash[:provider] = name
+        instances << new(instance_hash)
       end
     end
 
@@ -72,13 +63,20 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
   private
 
+  def self.enc_data(file_name)
+    data = File.read(file_name)
+    enc = YAML.safe_load(data).map { |k, v| [k.to_sym, v] }.to_h
+
+    enc[:hostname] = %r{(?<hostname>[^/]+)\.e?ya?ml$}.match(file_name)[:hostname]
+
+    enc
+  end
+
   # @param enc [Hash] host data from ENC catalog
-  # @param dhcp [Hash] host data from DHCPd config
   # @return [Hash] hash of host parameters for dhcp_host resource initialization
   #                or an empty hash if we failed to parse
   # @api private
-  def self.merge_host_data(enc, dhcp)
-    dhcp = {} if dhcp.nil?
+  def self.pxe_data(enc)
     dhcp_keys = [:mac, :ip, :name, :hostname, :group]
 
     # mac  and ip are  mandatory parameters in ENC
@@ -91,23 +89,22 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
 
-    pxe[:name] = dhcp[:name] || enc[:hostname]
+    pxe[:name] = enc[:hostname]
     pxe[:hostname] = enc[:hostname]
 
     pxe.reject! { |k, v| !dhcp_keys.include?(k) || v.nil? }
 
-    pxe[:content] = generate_content(pxe)
+    pxe[:content] = host_content(pxe)
 
     if pxe[:content]
+      pxe[:ensure] = :present
       warning _("Information about host: #{pxe}")
     end
-
-    pxe[:provider] = name
 
     pxe
   end
 
-  def self.generate_content(pxe)
+  def self.host_content(pxe)
     [:name, :mac, :ip, :hostname].each do |k|
       return nil unless pxe.include?(k)
     end
@@ -118,11 +115,11 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     hostname = pxe[:hostname]
 
     ERB.new(<<-EOF).result(binding)
-host <%= name %> {
-  hardware ethernet <%= mac %>;
-  fixed-address <%= ip %>;
-  option host-name "<%= hostname %>";
-}
+  host <%= name %> {
+    hardware ethernet <%= mac %>;
+    fixed-address <%= ip %>;
+    option host-name "<%= hostname %>";
+  }
 EOF
   end
 end
