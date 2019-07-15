@@ -128,10 +128,8 @@ Puppet::Type.newtype(:dhcp_group) do
 
     @fragments ||= Puppet::Type.type(:dhcp_host).instances.
       select { |resource|
-        if resource[:group] == self[:name] || resource[:group] == title ||
+        resource[:group] == self[:name] || resource[:group] == title ||
           (title == 'default' && resource[:group].nil?)
-          resource
-        end
       }
   end
 
