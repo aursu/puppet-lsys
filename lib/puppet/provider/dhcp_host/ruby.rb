@@ -1,7 +1,6 @@
 require 'erb'
 
 Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
-
   # Need this to create getter/setter methods automagically
   # This command creates methods that return @property_hash[:value]
   mk_resource_methods
