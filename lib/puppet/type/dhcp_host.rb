@@ -20,7 +20,7 @@ Puppet::Type.newtype(:dhcp_host) do
   newparam(:group) do
     desc 'Name of DHCP group which host belongs to'
 
-    defaultto 'general'
+    defaultto 'default'
   end
 
   newproperty(:content) do
