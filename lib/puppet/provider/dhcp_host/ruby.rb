@@ -75,7 +75,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   # @param enc [Hash] host data from ENC catalog
   # @param dhcp [Hash] host data from DHCPd config
   # @return [Hash] hash of host parameters for dhcp_host resource initialization
-  # or an empty hash if we failed to parse
+  #                or an empty hash if we failed to parse
   # @api private
   def self.merge_host_data(enc, dhcp)
     dhcp = {} if dhcp.nil?
@@ -97,7 +97,10 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     pxe.reject! { |k, v| !dhcp_keys.include?(k) || v.nil? }
 
     pxe[:content] = generate_content(pxe)
-    warning _("Information about host: #{pxe}")
+
+    if pxe[:content]
+      warning _("Information about host: #{pxe}")
+    end
 
     pxe[:provider] = name
 
