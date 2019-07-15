@@ -128,6 +128,9 @@ Puppet::Type.newtype(:dhcp_group) do
 
     @fragments ||= Puppet::Type.type(:dhcp_host).instances.
       select { |resource|
+      hg = resource[:group]
+      hn = resource[:name]
+      warning "Dhcp_host with group '#{hg}' and name '#{hn}' found"
         resource[:group] == self[:name] || resource[:group] == title ||
           (title == 'default' && resource[:group].nil?)
       }
