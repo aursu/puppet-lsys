@@ -13,6 +13,10 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @property_hash[:ensure] == :present
   end
 
+
+  # Read ENC data from given
+  # @api public
+  # @return [Hash]
   def enc_data
     return @enc if @enc
 
@@ -31,8 +35,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   end
 
   def self.instances
-    warning _("#{caller}")
-
     instances = []
 
     # read ENC data
