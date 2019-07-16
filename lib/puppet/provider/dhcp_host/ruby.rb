@@ -51,7 +51,8 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
     # read ENC data
     Dir.glob('/var/lib/pxe/enc/*.{eyaml,yaml,yml}').each do |file_name|
-      instance_hash = pxe_data(enc_data)
+      enc = enc_data(file_name)
+      instance_hash = pxe_data(enc)
       if instance_hash[:content]
         instance_hash[:provider] = name
         instances << new(instance_hash)

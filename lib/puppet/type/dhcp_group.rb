@@ -136,7 +136,7 @@ Puppet::Type.newtype(:dhcp_group) do
     @catalog_fragments + @fragments
   end
 
-  def group_content
+  def should_content
     return @generated_content if @generated_content
 
     @generated_content = ''
@@ -190,7 +190,7 @@ EOF
       name: "dhcp_group_#{title}",
       target: self[:target],
       order: self[:order],
-      content: group_content
+      content: should_content
     }
 
     metaparams = Puppet::Type.metaparams
