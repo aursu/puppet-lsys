@@ -23,7 +23,7 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto 'default'
   end
 
-  newproperty(:content) do
+  newparam(:content) do
     desc 'DHCP host declaration content (read only)'
   end
 
