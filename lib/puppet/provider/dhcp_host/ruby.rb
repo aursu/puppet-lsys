@@ -1,6 +1,69 @@
 require 'erb'
 
 Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
+
+  def create
+    @property_hash[:ensure] = :present
+  end
+
+  def destroy
+    @property_hash[:ensure] = :absent
+  end
+
+  def exists?
+    @property_hash[:ensure] == :present
+  end
+
+  def enc
+    return @enc if @enc
+
+    hostname = @resource[:name]
+    # read ENC data
+    Dir.glob("/var/lib/pxe/enc/#{hostname}.{eyaml,yaml,yml}").each do |name|
+      data = File.read(name)
+
+      @enc = YAML.safe_load(data).map { |k, v| [k.to_sym, v] }.to_h
+      @enc[:hostname] = hostname
+    end
+
+    @enc
+  end
+
+  def pxe
+    return @pxe if @pxe
+
+    dhcp_keys = [:mac, :ip, :name, :hostname, :group]
+
+    # mac  and ip are  mandatory parameters in ENC
+    pxe = {}
+    if enc.include?(:pxe)
+      pxe = enc[:pxe].map { |k, v| [k.to_sym, v] }.to_h
+    end
+
+    # allow to use direct mac, ip parameters
+    pxe[:mac] ||= enc[:mac]
+    pxe[:ip] ||= enc[:ip]
+
+    pxe[:name] = enc[:hostname]
+    pxe[:hostname] = enc[:hostname]
+
+    pxe.reject! { |k, v| !dhcp_keys.include?(k) || v.nil? }
+
+    pxe[:content] = generate_content(@pxe)
+
+    if pxe[:content]
+      pxe[:ensure] = :present
+      warning _("Information about host: #{pxe}")
+    end
+
+    @pxe = pxe.dup
+    @pxe
+  end
+
+  def generate_content(pxe)
+    self.class.generate_content(pxe)
+  end
+
   # Need this to create getter/setter methods automagically
   # This command creates methods that return @property_hash[:value]
   mk_resource_methods
@@ -91,7 +154,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
 
-    pxe[:name] = dhcp[:name] || enc[:hostname]
+    pxe[:name] = enc[:hostname] || dhcp[:name]
     pxe[:hostname] = enc[:hostname]
 
     pxe.reject! { |k, v| !dhcp_keys.include?(k) || v.nil? }
@@ -99,6 +162,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     pxe[:content] = generate_content(pxe)
 
     if pxe[:content]
+      pxe[:ensure] = :present
       warning _("Information about host: #{pxe}")
     end
 
