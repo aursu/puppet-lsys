@@ -127,7 +127,7 @@ Puppet::Type.newtype(:dhcp_group) do
     }.compact
 
     @fragments ||= Puppet::Type.type(:dhcp_host).instances.
-#      reject { |r| catalog.resource_refs.include? r.ref }.
+      reject { |r| catalog.resource_refs.include? r.ref }.
       select { |resource|
         resource[:group] == self[:name] || resource[:group] == title ||
           (title == 'default' && resource[:group].nil?)
