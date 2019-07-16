@@ -34,7 +34,7 @@ Puppet::Type.newtype(:dhcp_host) do
   newproperty(:content) do
     desc 'DHCP host declaration content (read only)'
 
-    defaultto { provider.pxe_data[:content] }
+    defaultto { provider.pxe_data[:content] || resource.host_content }
 
     munge do |value|
       return nil if @resource[:ensure] == :absent
@@ -44,5 +44,14 @@ Puppet::Type.newtype(:dhcp_host) do
 
   autorequire(:vcsrepo) do
     ['/var/lib/pxe/enc']
+  end
+
+  def host_content
+    provider.host_content(
+      mac: self[:mac],
+      ip: self[:ip],
+      name: self[:name],
+      hostname: self[:hostname],
+    )
   end
 end

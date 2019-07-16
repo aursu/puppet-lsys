@@ -41,6 +41,10 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @pxe ||= self.class.pxe_data(enc_data)
   end
 
+  def host_content(pxe)
+    self.class.host_content(pxe)
+  end
+
   def self.instances
     instances = []
 
@@ -94,7 +98,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
     if pxe[:content]
       pxe[:ensure] = :present
-      warning _("Information about host: #{pxe}")
     end
 
     pxe
