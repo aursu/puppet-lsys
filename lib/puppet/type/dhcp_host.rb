@@ -9,10 +9,27 @@ Puppet::Type.newtype(:dhcp_host) do
 
   newproperty(:mac) do
     desc 'MAC address to send to the host'
+
+    defaultto {
+      warning _("newproperty :mac defaultto: #{caller}")
+      provider.mac
+    }
+
+    def retrieve
+      warning _("newproperty :mac retrieve: #{caller}")
+      super
+    end
+
+    def insync?(is)
+      warning _("newproperty :mac insync?(is=#{is}): #{caller}")
+      super(is)
+    end
   end
 
   newproperty(:ip) do
     desc 'IP address corresponded to mac field'
+
+    defaultto { provider.ip }
   end
 
   newproperty(:hostname) do
