@@ -1,4 +1,5 @@
 require 'erb'
+require 'ipaddr'
 
 Puppet::Type.newtype(:dhcp_group) do
   @doc = <<-DOC
@@ -8,7 +9,6 @@ Puppet::Type.newtype(:dhcp_group) do
     @example
 
       dhcp_group { 'vlan400':
-        host_decl_names  => true,
         pxe_settings     => true,
         next_server      => '10.100.20.10',
         tftp_server_name => false,
@@ -19,14 +19,8 @@ Puppet::Type.newtype(:dhcp_group) do
         group => 'vlan400',
       }
 
-    @param host_decl_names
-      Whether to add dhcpd parameter 'use-host-decl-names on' into group. Valid
-      values are `true`, `false`. Default to `false`.
-      See "The use-host-decl-names statement" on
-      https://kb.isc.org/docs/isc-dhcp-41-manual-pages-dhcpdconf
-
     @param pxe_settings
-      Whether to enable DHCPD PXE settings for group. Valid values are `true`,
+      Whether to enable DHCPd PXE settings for group. Valid values are `true`,
       `false`. Default to `false`.
 
     @param next_server
@@ -99,6 +93,46 @@ Puppet::Type.newtype(:dhcp_group) do
     end
   end
 
+  newparam(:pxe_settings, boolean: true, parent: Puppet::Parameter::Boolean) do
+    desc "Whether to enable DHCPd PXE settings for group."
+
+    defaultto :false
+  end
+
+  newparam(:next_server) do
+    desc <<-DOC
+      Whether to add dhcp parameter "next-server" into group PXE setings. Default
+      to undef
+    DOC
+
+    nodefault
+
+    validate do |val|
+      resource.validate_ip(val)
+    end
+  end
+
+  newparam(:tftp_server_name, boolean: true, parent: Puppet::Parameter::Boolean) do
+    desc <<-DOC
+      If set to true will add DHCP option "tftp-server-name" additionally to
+      parameter "next-server".
+    DOC
+
+    defaultto :true
+  end
+
+  newparam(:pxe_filename) do
+    desc <<-DOC
+      Whether to add dhcp parameter "filename" into group PXE setings.
+    DOC
+
+    nodefault
+
+    validate do |val|
+      raise Puppet::ParseError, _('$pxe_filename is not a string.') unless val.is_a?(String)
+    end
+  end
+
   autorequire(:dhcp_host) do
     found = catalog.resources.select do |resource|
       next unless resource.is_a?(Puppet::Type.type(:dhcp_host))
@@ -153,10 +187,10 @@ Puppet::Type.newtype(:dhcp_group) do
     newline = Puppet::Util::Platform.windows? ? "\r\n" : "\n"
     hosts = sorted.map { |cf| cf[1] }.join(newline)
 
-    pxe_settings = false
-    next_server = nil
-    tftp_server_name = true
-    pxe_filename = nil
+    pxe_settings = self[:pxe_settings]
+    next_server = self[:next_server]
+    tftp_server_name = self[:tftp_server_name]
+    pxe_filename = self[:pxe_filename]
 
     @generated_content = ERB.new(<<-EOF).result(binding).strip
 group {
@@ -205,5 +239,11 @@ EOF
 
   def eval_generate
     [catalog.resource("Concat_fragment[dhcp_group_#{title}]")]
+  end
+
+  def validate_ip(ip)
+    IPAddr.new(ip) if ip
+  rescue ArgumentError
+    self.fail Puppet::Error, _("%{ip} is an invalid IP address") % { ip: ip }, $!
   end
 end
