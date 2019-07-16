@@ -54,15 +54,15 @@ Puppet::Type.newtype(:dhcp_host) do
   newproperty(:content) do
     desc 'DHCP host declaration content (read only)'
 
-    defaultto { provider.pxe_data[:content] || resource.host_content }
+    defaultto { resource.host_content || provider.pxe_data[:content] }
 
     munge do |value|
       return nil if @resource[:ensure] == :absent
       value
     end
 
-    def retrieve
-      provider.dhcp_data[:content]
+    def insync?(is) # rubocop:disable Lint/UnusedMethodArgument
+      true
     end
   end
 
