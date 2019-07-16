@@ -14,13 +14,13 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   # to gather the 'is' values for a resource. The downside here is that
   # populating this instance variable for every resource on the system
   # takes time and front-loads your Puppet run.
-  # def self.prefetch(resources)
-  #   instances.each do |prov|
-  #     if (resource = resources[prov.name])
-  #       resource.provider = prov
-  #     end
-  #   end
-  # end
+  def self.prefetch(resources)
+    instances.each do |prov|
+      if resource = resources[prov.name]
+        resource.provider = prov
+      end
+    end
+  end
 
   # Does the given ENC PXE settings already exist?
   #
