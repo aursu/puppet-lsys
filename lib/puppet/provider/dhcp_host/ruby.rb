@@ -96,6 +96,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       enc = enc_data(file_name)
       instance_hash = pxe_data(enc)
       if instance_hash[:content]
+        instance_hash[:ensure] = :present
         instance_hash[:provider] = name
         instances << new(instance_hash)
       end
@@ -138,10 +139,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     pxe.reject! { |k, v| !dhcp_keys.include?(k) || v.nil? }
 
     pxe[:content] = host_content(pxe)
-
-    if pxe[:content]
-      pxe[:ensure] = :present
-    end
 
     pxe
   end
