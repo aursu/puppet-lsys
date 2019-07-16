@@ -22,7 +22,8 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       @enc ||= self.class.enc_data(file_name)
     end
 
-    @enc
+    # if file does not exists - set to empty Hash and return
+    @enc ||= {}
   end
 
   def pxe_data
