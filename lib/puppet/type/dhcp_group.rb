@@ -132,8 +132,8 @@ Puppet::Type.newtype(:dhcp_group) do
 
           hg = resource[:group]
           hn = resource[:name]
-          hc = resource[:content]
-          warning "Dhcp_host with group '#{hg}' and name '#{hn}' and content '#{hc}' found"
+          hc = resource[:ip]
+          warning "Dhcp_host with group '#{hg}' and name '#{hn}' and ip '#{hc}' found"
 
         resource[:group] == self[:name] || resource[:group] == title ||
           (title == 'default' && resource[:group].nil?)
