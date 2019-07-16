@@ -13,7 +13,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @property_hash[:ensure] == :present
   end
 
-  def enc_data(file_name)
+  def enc_data
     return @enc if @enc
 
     hostname = @resource[:name]
@@ -25,8 +25,8 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @enc
   end
 
-  def pxe_data(enc)
-    @pxe ||= self.class.pxe_data(pxe)
+  def pxe_data
+    @pxe ||= self.class.pxe_data(enc_data)
   end
 
   def self.instances
