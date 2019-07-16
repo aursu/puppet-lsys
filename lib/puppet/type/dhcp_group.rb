@@ -153,17 +153,13 @@ Puppet::Type.newtype(:dhcp_group) do
     newline = Puppet::Util::Platform.windows? ? "\r\n" : "\n"
     hosts = sorted.map { |cf| cf[1] }.join(newline)
 
-    host_decl_names = false
     pxe_settings = false
     next_server = nil
     tftp_server_name = true
     pxe_filename = nil
 
-    @generated_content = ERB.new(<<-EOF).result(binding)
+    @generated_content = ERB.new(<<-EOF).result(binding).strip
 group {
-<% if host_decl_names %>
-  use-host-decl-names on;
-<% end %>
 <% if pxe_settings %>
   if ( substring (option vendor-class-identifier, 0, 9) = "PXEClient" ) {
 <%   if next_server %>
