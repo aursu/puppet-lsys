@@ -13,6 +13,13 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @property_hash[:ensure] == :present
   end
 
+  def create
+    @property_hash[:ensure] = :present
+  end
+
+  def destroy
+    @property_hash[:ensure] = :absent
+  end
 
   # Read ENC data from given
   # @api public
