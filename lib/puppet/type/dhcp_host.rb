@@ -1,7 +1,15 @@
 Puppet::Type.newtype(:dhcp_host) do
   @doc = 'DHCP host declaration for PXE'
 
-  ensurable
+  ensurable do
+    defaultvalues
+
+    def retrieve
+      return :present if provider.dhcp_data[:hostname] == self[:name] ||
+        provider.dhcp_data[:name] == self[:name]
+      :absent
+    end
+  end
 
   newparam(:name, namevar: true) do
     desc 'DHCP host declaration name'
@@ -40,6 +48,12 @@ Puppet::Type.newtype(:dhcp_host) do
       return nil if @resource[:ensure] == :absent
       value
     end
+  end
+
+  newparam(:target) do
+    desc 'Path to DHCP file where configuration should be located'
+
+    defaultto '/etc/dhcp/dhcpd.hosts'
   end
 
   autorequire(:vcsrepo) do
