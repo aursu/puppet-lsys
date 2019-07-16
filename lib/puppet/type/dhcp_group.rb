@@ -127,7 +127,7 @@ Puppet::Type.newtype(:dhcp_group) do
     }.compact
 
     @fragments ||= Puppet::Type.type(:dhcp_host).instances.
-      reject { |r| catalog.resource_refs.include? r.ref }.
+#      reject { |r| catalog.resource_refs.include? r.ref }.
       select { |resource|
         resource[:group] == self[:name] || resource[:group] == title ||
           (title == 'default' && resource[:group].nil?)
@@ -136,7 +136,7 @@ Puppet::Type.newtype(:dhcp_group) do
     @catalog_fragments + @fragments
   end
 
-  def group_content
+  def should_content
     return @generated_content if @generated_content
 
     @generated_content = ''
@@ -190,7 +190,7 @@ EOF
       name: "dhcp_group_#{title}",
       target: self[:target],
       order: self[:order],
-      content: group_content
+      content: should_content
     }
 
     metaparams = Puppet::Type.metaparams
