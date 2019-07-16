@@ -60,6 +60,10 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     target = @resource[:target] || '/etc/dhcp/dhcpd.hosts'
     hostname = @resource[:name]
 
+    dhcp_config = dhcp_config_data(target)
+
+    warning _("DHCP data from \"#{target}\": \"#{dhcp_config}\"")
+
     # lookup Hash for entities with :name or :hostname equal to
     # current @resource[:name]
     dhcp = dhcp_config_data(target).
