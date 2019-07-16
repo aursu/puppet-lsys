@@ -9,10 +9,14 @@ Puppet::Type.newtype(:dhcp_host) do
 
   newproperty(:mac) do
     desc 'MAC address to send to the host'
+
+    defaultto { provider.pxe_data[:mac] }
   end
 
   newproperty(:ip) do
     desc 'IP address corresponded to mac field'
+
+    defaultto { provider.pxe_data[:ip] }
   end
 
   newproperty(:hostname) do
@@ -29,6 +33,13 @@ Puppet::Type.newtype(:dhcp_host) do
 
   newproperty(:content) do
     desc 'DHCP host declaration content (read only)'
+
+    defaultto { provider.pxe_data[:content] }
+
+    munge do |value|
+      return nil if @resource[:ensure] == :absent
+      value
+    end
   end
 
   autorequire(:vcsrepo) do

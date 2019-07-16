@@ -5,23 +5,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   # This command creates methods that return @property_hash[:value]
   mk_resource_methods
 
-  # Prefetching is necessary to use @property_hash inside any setter methods.
-  # self.prefetch uses self.instances to gather an array of pxe_dhcp instances
-  # on the system, and then populates the @property_hash instance variable
-  # with attribute data for the specific instance in question (i.e. it
-  # gathers the 'is' values of the resource into the @property_hash instance
-  # variable so you don't have to read from the system every time you need
-  # to gather the 'is' values for a resource. The downside here is that
-  # populating this instance variable for every resource on the system
-  # takes time and front-loads your Puppet run.
-  # def self.prefetch(resources)
-  #   instances.each do |prov|
-  #     if (resource = resources[prov.name])
-  #       resource.provider = prov
-  #     end
-  #   end
-  # end
-
   # Does the given ENC PXE settings already exist?
   #
   # @api public
@@ -30,7 +13,11 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @property_hash[:ensure] == :present
   end
 
-  def enc_data(file_name)
+
+  # Read ENC data from given
+  # @api public
+  # @return [Hash]
+  def enc_data
     return @enc if @enc
 
     hostname = @resource[:name]
@@ -39,11 +26,12 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       @enc ||= self.class.enc_data(file_name)
     end
 
-    @enc
+    # if file does not exists - set to only-hostname Hash and return
+    @enc ||= { hostname: hostname }
   end
 
-  def pxe_data(enc)
-    @pxe ||= self.class.pxe_data(pxe)
+  def pxe_data
+    @pxe ||= self.class.pxe_data(enc_data)
   end
 
   def self.instances
