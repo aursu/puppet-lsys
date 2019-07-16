@@ -62,12 +62,12 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
     dhcp_config = dhcp_config_data(target)
 
-    warning _("DHCP data from \"#{target}\": \"#{dhcp_config}\"")
+    warning _("DHCP data from \"#{target}\" (resource target \"#{@resource[:target]}\"): \"#{dhcp_config}\"")
 
     # lookup Hash for entities with :name or :hostname equal to
     # current @resource[:name]
     dhcp = dhcp_config_data(target).
-      map { |k, v| [v, k, v[:hostname]] }.
+      map { |k, v| [v, v[:name], v[:hostname]] }.
       select { |d| d.include?(hostname) }.
       map {|d| [hostname, d[0]] }.to_h
 
