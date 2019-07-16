@@ -1,14 +1,10 @@
 Puppet::Type.newtype(:dhcp_host) do
   @doc = 'DHCP host declaration for PXE'
 
-  ensurable do
-    defaultvalues
+  ensurable
 
-    def retrieve
-      return :present if provider.dhcp_data[:hostname] == @resource[:name] ||
-        provider.dhcp_data[:name] == @resource[:name]
-      :absent
-    end
+  def exists?
+    [:hostname, :name].select { |k| provider.dhcp_data[k] == self[:name] }.any?
   end
 
   newparam(:name, namevar: true) do

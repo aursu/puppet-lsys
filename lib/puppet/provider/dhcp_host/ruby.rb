@@ -5,14 +5,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   # This command creates methods that return @property_hash[:value]
   mk_resource_methods
 
-  # Does the given ENC PXE settings already exist?
-  #
-  # @api public
-  # @return [Boolean]
-  def exists?
-    @property_hash[:ensure] == :present
-  end
-
   def create
     @property_hash[:ensure] = :present
   end
