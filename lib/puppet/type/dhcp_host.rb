@@ -5,6 +5,12 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultvalues
 
     def retrieve
+
+      dhcp_hostname = provider.dhcp_data[:hostname]
+      rsource_name = @resource[:name]
+      dhcp_name = provider.dhcp_data[:name]
+      warning _("retrieve ensure status based on DHCP hostname \"#{dhcp_hostname}\", resource name \"#{rsource_name}\" and DHCP name \"#{dhcp_name}\"")
+
       return :present if provider.dhcp_data[:hostname] == @resource[:name] ||
         provider.dhcp_data[:name] == @resource[:name]
       :absent

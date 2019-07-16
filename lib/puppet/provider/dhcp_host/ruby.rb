@@ -54,6 +54,26 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @dhcp_hosts
   end
 
+  def dhcp_data
+    return @dhcp if @dhcp
+
+    target = @resource[:target] || '/etc/dhcp/dhcpd.hosts'
+    hostname = @resource[:name]
+
+    # lookup Hash for entities with :name or :hostname equal to
+    # current @resource[:name]
+    dhcp = dhcp_config_data(target).
+      map { |k, v| [v, k, v[:hostname]] }.
+      select { |d| d.include?(hostname) }.
+      map {|d| [hostname, d[0]] }.to_h
+
+    warning _("DHCP data from \"#{target}\" about \"#{hostname}\": \"#{dhcp}\"")
+
+    # return empty Hash if nothing found in DHCP config file
+    return @dhcp = {} if dhcp.empty?
+    @dhcp = dhcp[hostname]
+  end
+
   # Read ENC data from given
   # @api public
   # @return [Hash]
@@ -72,24 +92,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
   def pxe_data
     @pxe ||= self.class.pxe_data(enc_data)
-  end
-
-  def dhcp_data
-    return @dhcp if @dhcp
-
-    target = @resource[:target] || '/etc/dhcp/dhcpd.hosts'
-    hostname = @resource[:name]
-
-    # lookup Hash for entities with :name or :hostname equal to
-    # current @resource[:name]
-    dhcp = dhcp_config_data(target).
-      map { |k, v| [v, k, v[:hostname]] }.
-      select { |d| d.include?(hostname) }.
-      map {|d| [hostname, d[0]] }.to_h
-
-    # return empty Hash if nothing found in DHCP config file
-    return @dhcp = {} if dhcp.empty?
-    @dhcp = dhcp[hostname]
   end
 
   def host_content(pxe)
