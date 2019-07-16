@@ -5,12 +5,6 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultvalues
 
     def retrieve
-
-      dhcp_hostname = provider.dhcp_data[:hostname]
-      rsource_name = @resource[:name]
-      dhcp_name = provider.dhcp_data[:name]
-      warning _("retrieve ensure status based on DHCP hostname \"#{dhcp_hostname}\", resource name \"#{rsource_name}\" and DHCP name \"#{dhcp_name}\"")
-
       return :present if provider.dhcp_data[:hostname] == @resource[:name] ||
         provider.dhcp_data[:name] == @resource[:name]
       :absent
@@ -25,18 +19,30 @@ Puppet::Type.newtype(:dhcp_host) do
     desc 'MAC address to send to the host'
 
     defaultto { provider.pxe_data[:mac] }
+
+    def retrieve
+      provider.dhcp_data[:mac]
+    end
   end
 
   newproperty(:ip) do
     desc 'IP address corresponded to mac field'
 
     defaultto { provider.pxe_data[:ip] }
+
+    def retrieve
+      provider.dhcp_data[:ip]
+    end
   end
 
   newproperty(:hostname) do
     desc 'DHCP option host-name'
 
     defaultto { @resource[:name] }
+
+    def retrieve
+      provider.dhcp_data[:hostname]
+    end
   end
 
   newparam(:group) do
@@ -53,6 +59,10 @@ Puppet::Type.newtype(:dhcp_host) do
     munge do |value|
       return nil if @resource[:ensure] == :absent
       value
+    end
+
+    def retrieve
+      provider.dhcp_data[:content]
     end
   end
 

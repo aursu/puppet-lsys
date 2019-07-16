@@ -60,18 +60,12 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     target = @resource[:target] || '/etc/dhcp/dhcpd.hosts'
     hostname = @resource[:name]
 
-    dhcp_config = dhcp_config_data(target)
-
-    warning _("DHCP data from \"#{target}\" (resource target \"#{@resource[:target]}\"): \"#{dhcp_config}\"")
-
     # lookup Hash for entities with :name or :hostname equal to
     # current @resource[:name]
     dhcp = dhcp_config_data(target).
       map { |k, v| [v, v[:name], v[:hostname]] }.
       select { |d| d.include?(hostname) }.
       map {|d| [hostname, d[0]] }.to_h
-
-    warning _("DHCP data from \"#{target}\" about \"#{hostname}\": \"#{dhcp}\"")
 
     # return empty Hash if nothing found in DHCP config file
     return @dhcp = {} if dhcp.empty?
