@@ -142,9 +142,11 @@ Puppet::Type.newtype(:dhcp_group) do
     @generated_content = ''
 
     content_fragments = []
-    fragments.each do |r|
-      content_fragments << [r[:name], r[:content]]
-    end
+    fragments.
+      reject { |r| r[:content].nil? || r[:content].empty? }.
+      each do |r|
+        content_fragments << [r[:name], r[:content]]
+      end
 
     sorted = content_fragments.sort_by { |a| a[0] }
 
