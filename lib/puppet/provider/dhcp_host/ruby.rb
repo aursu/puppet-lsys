@@ -21,6 +21,39 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @property_hash[:ensure] = :absent
   end
 
+  def dhcp_config_data(file_name)
+    return @dhcp_hosts if @dhcp_hosts
+
+    @dhcp_hosts = {}
+
+    host = {}
+    if File.exist?(file_name)
+      File.open(file_name).each do |line|
+        line.strip!
+        # rubocop:disable Performance/RegexpMatch
+        if %r{^host (?<name>\S+) \{$} =~ line
+          host = { name: name }
+          next
+        end
+
+        next unless host.include?(:name)
+
+        if %r{^hardware ethernet (?<mac>\S+);$} =~ line
+          host[:mac] = mac
+        elsif %r{^fixed-address (?<ip>\S+);$} =~ line
+          host[:ip] = ip
+        elsif %r{^option host-name "(?<hostname>\S+)";$} =~ line
+          host[:hostname] = hostname
+        elsif %r{^\}$} =~ line
+          @dhcp_hosts[host[:hostname]] = host if host.include?(:hostname)
+          host = {}
+        end
+        # rubocop:enable Performance/RegexpMatch
+      end
+    end
+    @dhcp_hosts
+  end
+
   # Read ENC data from given
   # @api public
   # @return [Hash]
@@ -39,6 +72,24 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
   def pxe_data
     @pxe ||= self.class.pxe_data(enc_data)
+  end
+
+  def dhcp_data
+    return @dhcp if @dhcp
+
+    target = @resource[:target] || '/etc/dhcp/dhcpd.hosts'
+    hostname = @resource[:name]
+
+    # lookup Hash for entities with :name or :hostname equal to
+    # current @resource[:name]
+    dhcp = dhcp_config_data(target).
+      map { |k, v| [v, k, v[:hostname]] }.
+      select { |d| d.include?(hostname) }.
+      map {|d| [hostname, d[0]] }.to_h
+
+    # return empty Hash if nothing found in DHCP config file
+    return @dhcp = {} if dhcp.empty?
+    @dhcp = dhcp[hostname]
   end
 
   def host_content(pxe)

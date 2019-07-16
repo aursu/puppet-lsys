@@ -71,11 +71,11 @@ Puppet::Type.newtype(:dhcp_group) do
 
   newparam(:target) do
     desc <<-DOC
-      Optional. Default is /etc/dhcp/dhcpd.pools. Specifies the destination file of the
+      Optional. Default is/etc/dhcp/dhcpd.hosts. Specifies the destination file of the
       generated Contact_fragment resources.
     DOC
 
-    defaultto '/etc/dhcp/dhcpd.pools'
+    defaultto '/etc/dhcp/dhcpd.hosts'
 
     validate do |value|
       raise ArgumentError, _('Target must be a full path') unless Puppet::Util.absolute_path?(value)
