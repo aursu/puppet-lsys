@@ -5,8 +5,8 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultvalues
 
     def retrieve
-      return :present if provider.dhcp_data[:hostname] == self[:name] ||
-        provider.dhcp_data[:name] == self[:name]
+      return :present if provider.dhcp_data[:hostname] == @resource[:name] ||
+        provider.dhcp_data[:name] == @resource[:name]
       :absent
     end
   end
