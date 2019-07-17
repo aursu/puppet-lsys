@@ -170,7 +170,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     ip_map = []
     if pxe[:mac] && pxe[:ip]
       # default DHCP group for PXE interface
-      pxe[:group] = 'pxe' unless pxe.include?(:group)
+      pxe[:group] ||= 'pxe'
 
       # it is required to support IP mapping
       # pxe key could contain mapping for up to 9 network interfaces, e.g.
@@ -187,7 +187,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
         # other mac<N+1> or ip<N+1>
         break unless next_map[:mac] && next_map[:ip]
 
-        next_map[:group] = 'default' unless next_map[:group]
+        next_map[:group] ||= 'default'
 
         hostname, _domain = pxe[:name].split('.', 2)
         next_map[:name] = "#{hostname}-eth#{i}"
@@ -208,17 +208,20 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
   def self.host_content(pxe)
     [:name, :mac, :ip].each do |k|
-      return nil if pxe[k].nil? || !pxe.include?(k)
+      return nil unless pxe[k]
     end
-    return nil if pxe[:group] == 'pxe' && pxe[:hostname].nil?
 
-    name     = pxe[:name]
-    mac      = pxe[:mac]
-    ip       = pxe[:ip]
-    hostname = pxe[:hostname]
+    if pxe[:group] == 'pxe'
+      return nil unless pxe[:hostname]
+    end
 
-    ERB.new(<<-EOF).result(binding).strip
-host <%= name %> {
+    block_name = pxe[:name]
+    mac        = pxe[:mac]
+    ip         = pxe[:ip]
+    hostname   = pxe[:hostname]
+
+    ERB.new(<<-EOF, nil, '<>').result(binding).strip
+host <%= block_name %> {
   hardware ethernet <%= mac %>;
   fixed-address <%= ip %>;
 <% if hostname %>
