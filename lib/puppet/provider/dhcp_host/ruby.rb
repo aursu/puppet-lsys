@@ -66,7 +66,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @dhcp = dhcp[hostname]
   end
 
-  # Read ENC data from given
+  # Read ENC data for given hostname
   # @api public
   # @return [Hash]
   def enc_data
@@ -82,10 +82,16 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @enc ||= { hostname: hostname }
   end
 
+  # Generate PXE data based on read ENC data
+  # @api public
+  # @return [Hash]
   def pxe_data
     @pxe ||= self.class.pxe_data(enc_data)
   end
 
+  # Generate DHCP host declaration based on provided PXE data
+  # @api public
+  # @return [String]
   def host_content(pxe)
     self.class.host_content(pxe)
   end
@@ -124,7 +130,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
   # @param enc [Hash] host data from ENC catalog
   # @return [Hash] hash of host parameters for dhcp_host resource initialization
-  #                or an empty hash if we failed to parse
+  #                or an empty hash if we failed to parse ENC
   # @api private
   def self.pxe_data(enc)
     # it is required to support IP mapping
