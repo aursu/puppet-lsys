@@ -57,7 +57,8 @@ Puppet::Type.newtype(:dhcp_host) do
       value
     end
 
-    def insync?(is) # rubocop:disable Lint/UnusedMethodArgument
+    # content property is autogenarated therefore always in sync
+    def insync?(_is)
       true
     end
   end
