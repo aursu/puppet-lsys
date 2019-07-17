@@ -1,6 +1,8 @@
 require 'erb'
 
 Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
+  DHCP_KEYS = [:mac, :ip, :name, :hostname, :group, :content].freeze
+
   # Need this to create getter/setter methods automagically
   # This command creates methods that return @property_hash[:value]
   mk_resource_methods
@@ -54,10 +56,10 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
     # lookup Hash for entities with :name or :hostname equal to
     # current @resource[:name]
-    dhcp = dhcp_config_data(target).
-      map { |k, v| [v, v[:name], v[:hostname]] }.
-      select { |d| d.include?(hostname) }.
-      map {|d| [hostname, d[0]] }.to_h
+    dhcp =  dhcp_config_data(target)
+            .map { |_k, v| [v, v[:name], v[:hostname]] }
+            .select { |d| d.include?(hostname) }
+            .map { |d| [hostname, d[0]] }.to_h
 
     # return empty Hash if nothing found in DHCP config file
     return @dhcp = {} if dhcp.empty?
@@ -94,12 +96,16 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     # read ENC data
     Dir.glob('/var/lib/pxe/enc/*.{eyaml,yaml,yml}').each do |file_name|
       enc = enc_data(file_name)
-      instance_hash = pxe_data(enc)
-      if instance_hash[:content]
-        instance_hash[:ensure] = :present
-        instance_hash[:provider] = name
-        instances << new(instance_hash)
-      end
+      pxe = pxe_data(enc)
+
+      instance_hash = pxe.select { |k, _v| DHCP_KEYS.include?(k) }
+
+      next unless instance_hash[:content]
+
+      instance_hash[:ensure] = :present
+      instance_hash[:provider] = name
+
+      instances << new(instance_hash)
     end
 
     instances
@@ -121,24 +127,37 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   #                or an empty hash if we failed to parse
   # @api private
   def self.pxe_data(enc)
-    dhcp_keys = [:mac, :ip, :name, :hostname, :group]
+    # it is required to support IP mapping
+    # pxe key could contain mapping for up to 9 network interfaces, e.g.
+    # pxe:
+    #   mac1: xx:xx:xx:xx:xx:xx
+    #   ip1: XX.XX.XX.XX
+    #   group1: vlanXXX
+    map_keys =  (1..9)
+                .map { |i| ["ip#{i}", "mac#{i}", "group#{i}"] }
+                .flatten
+                .map { |k| k.to_sym }
 
     # mac  and ip are  mandatory parameters in ENC
     pxe = {}
-    if enc.include?(:pxe)
+    if enc.include?(:pxe) && enc[:pxe].is_a?(Hash)
       pxe = enc[:pxe].map { |k, v| [k.to_sym, v] }.to_h
     end
 
-    # allow to use direct mac, ip parameters
+    ip_map = pxe.select { |k, _v| map_keys.include?(k) }
+
+    # allow to use direct mac, ip parameters (but once inside "pxe" section
+    # have higher priority).
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
 
     pxe[:name] = enc[:hostname]
     pxe[:hostname] = enc[:hostname]
 
-    pxe.reject! { |k, v| !dhcp_keys.include?(k) || v.nil? }
+    pxe.reject! { |k, v| !DHCP_KEYS.include?(k) || v.nil? }
 
     pxe[:content] = host_content(pxe)
+    pxe[:ip_map] = ip_map unless ip_map.empty?
 
     pxe
   end
