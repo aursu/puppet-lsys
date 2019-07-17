@@ -44,7 +44,7 @@ Puppet::Type.newtype(:dhcp_host) do
   newparam(:group) do
     desc 'Name of DHCP group which host belongs to'
 
-    defaultto 'default'
+    defaultto { provider.pxe_data[:group] }
   end
 
   newproperty(:content) do
@@ -78,6 +78,7 @@ Puppet::Type.newtype(:dhcp_host) do
       ip: self[:ip],
       name: self[:name],
       hostname: self[:hostname],
+      group: self[:group],
     )
   end
 end

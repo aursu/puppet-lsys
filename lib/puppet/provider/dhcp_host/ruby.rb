@@ -104,20 +104,36 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       enc = enc_data(file_name)
       pxe = pxe_data(enc)
 
-      instance_hash = pxe.select { |k, _v| DHCP_KEYS.include?(k) }
+      hash = instance_hash(pxe)
 
-      next unless instance_hash[:content]
+      next unless hash
 
-      instance_hash[:ensure] = :present
-      instance_hash[:provider] = name
+      instances << new(hash)
 
-      instances << new(instance_hash)
+      next unless pxe[:ip_map]
+
+      pxe[:ip_map]
+        .map { |m| instance_hash(m) }.compact
+        .each do |next_map|
+          instances << new(next_map)
+        end
     end
 
     instances
   end
 
   private
+
+  def self.instance_hash(pxe)
+    return nil unless pxe[:content]
+
+    hash = pxe.select { |k, _v| DHCP_KEYS.include?(k) }
+
+    hash[:ensure] = :present
+    hash[:provider] = name
+
+    hash
+  end
 
   def self.enc_data(file_name)
     data = File.read(file_name)
@@ -143,6 +159,9 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     # have higher priority).
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
+
+    pxe[:name] = enc[:hostname]
+    pxe[:hostname] = enc[:hostname]
 
     # IP mapping if any specified
     #
@@ -170,12 +189,14 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
         next_map[:group] = 'default' unless next_map[:group]
 
+        hostname, _domain = pxe[:name].split('.', 2)
+        next_map[:name] = "#{hostname}-eth#{i}"
+
+        next_map[:content] = host_content(next_map)
+
         ip_map[i] = next_map
       end
     end
-
-    pxe[:name] = enc[:hostname]
-    pxe[:hostname] = enc[:hostname]
 
     pxe.reject! { |k, v| !DHCP_KEYS.include?(k) || v.nil? }
 
@@ -186,9 +207,10 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   end
 
   def self.host_content(pxe)
-    [:name, :mac, :ip, :hostname].each do |k|
-      return nil unless pxe.include?(k)
+    [:name, :mac, :ip].each do |k|
+      return nil if pxe[k].nil? || !pxe.include?(k)
     end
+    return nil if pxe[:group] == 'pxe' && pxe[:hostname].nil?
 
     name     = pxe[:name]
     mac      = pxe[:mac]
@@ -199,7 +221,9 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 host <%= name %> {
   hardware ethernet <%= mac %>;
   fixed-address <%= ip %>;
+<% if hostname %>
   option host-name "<%= hostname %>";
+<% end %>
 }
 EOF
   end
