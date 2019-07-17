@@ -6,10 +6,9 @@ describe 'lsys::pxe::enc' do
       let(:facts) { os_facts }
       let(:params) do
         {
-          repo_source: 'https://github.com/aursu/control-enc.git',
+          repo_source: 'https://github.com/aursu/control-enc.git'
         }
       end
-
 
       it { is_expected.to compile }
     end
