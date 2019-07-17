@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'lsys::dhcp::group' do
   let(:pre_condition) do
     <<-PRECOND
-    include lsys::pxe::dhcp
+    class { 'lsys::pxe::dhcp': next_server => '10.55.156.10' }
     PRECOND
   end
 
