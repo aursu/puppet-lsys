@@ -133,29 +133,46 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   #                or an empty hash if we failed to parse ENC
   # @api private
   def self.pxe_data(enc)
-    # it is required to support IP mapping
-    # pxe key could contain mapping for up to 9 network interfaces, e.g.
-    # pxe:
-    #   mac1: xx:xx:xx:xx:xx:xx
-    #   ip1: XX.XX.XX.XX
-    #   group1: vlanXXX
-    map_keys =  (1..9)
-                .map { |i| ["ip#{i}", "mac#{i}", "group#{i}"] }
-                .flatten
-                .map { |k| k.to_sym }
-
     # mac  and ip are  mandatory parameters in ENC
     pxe = {}
     if enc.include?(:pxe) && enc[:pxe].is_a?(Hash)
       pxe = enc[:pxe].map { |k, v| [k.to_sym, v] }.to_h
     end
 
-    ip_map = pxe.select { |k, _v| map_keys.include?(k) }
-
-    # allow to use direct mac, ip parameters (but once inside "pxe" section
+    # allow to use direct mac, ip parameters (but those inside "pxe" section
     # have higher priority).
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
+
+    # IP mapping if any specified
+    #
+    # ip_map is Array of network MAC to IP mapping for DHCP client host
+    # Element with index 0 is PXE interface
+    ip_map = []
+    if pxe[:mac] && pxe[:ip]
+      # default DHCP group for PXE interface
+      pxe[:group] = 'pxe' unless pxe.include?(:group)
+
+      # it is required to support IP mapping
+      # pxe key could contain mapping for up to 9 network interfaces, e.g.
+      # pxe:
+      #   mac1: xx:xx:xx:xx:xx:xx
+      #   ip1: XX.XX.XX.XX
+      #   group1: vlanXXX
+      (0..9).each do |i|
+        j = (i > 0) ? i : nil # rubocop:disable Style/NumericPredicate
+        map_keys = ["mac#{j}", "ip#{j}", "group#{j}"].map(&:to_sym)
+        next_map = [:mac, :ip, :group].zip(map_keys.map { |k| pxe[k] }).to_h
+
+        # we are strict: if either mac<N> or ip<N> missed - ignore any
+        # other mac<N+1> or ip<N+1>
+        break unless next_map[:mac] && next_map[:ip]
+
+        next_map[:group] = 'default' unless next_map[:group]
+
+        ip_map[i] = next_map
+      end
+    end
 
     pxe[:name] = enc[:hostname]
     pxe[:hostname] = enc[:hostname]
