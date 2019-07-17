@@ -94,7 +94,7 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   newparam(:pxe_settings, boolean: true, parent: Puppet::Parameter::Boolean) do
-    desc "Whether to enable DHCPd PXE settings for group."
+    desc 'Whether to enable DHCPd PXE settings for group.'
 
     defaultto :false
   end
@@ -160,12 +160,13 @@ Puppet::Type.newtype(:dhcp_group) do
       end
     }.compact
 
-    @fragments ||= Puppet::Type.type(:dhcp_host).instances.
-      reject { |r| catalog.resource_refs.include? r.ref }.
-      select { |resource|
-        resource[:group] == self[:name] || resource[:group] == title ||
-          (title == 'default' && resource[:group].nil?)
-      }
+    @fragments ||=
+      Puppet::Type.type(:dhcp_host).instances
+                  .reject { |r| catalog.resource_refs.include? r.ref }
+                  .select do |resource|
+                    resource[:group] == self[:name] || resource[:group] == title ||
+                      (title == 'default' && resource[:group].nil?)
+                  end
 
     @catalog_fragments + @fragments
   end
@@ -176,9 +177,9 @@ Puppet::Type.newtype(:dhcp_group) do
     @generated_content = ''
 
     content_fragments = []
-    fragments.
-      reject { |r| r[:content].nil? || r[:content].empty? }.
-      each do |r|
+    fragments
+      .reject { |r| r[:content].nil? || r[:content].empty? }
+      .each do |r|
         content_fragments << [r[:name], r[:content]]
       end
 
@@ -244,6 +245,6 @@ EOF
   def validate_ip(ip)
     IPAddr.new(ip) if ip
   rescue ArgumentError
-    self.fail Puppet::Error, _("%{ip} is an invalid IP address") % { ip: ip }, $!
+    raise Puppet::Error, _('%{ip} is an invalid IP address') % { ip: ip }, $!
   end
 end
