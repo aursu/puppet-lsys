@@ -134,20 +134,20 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   autorequire(:dhcp_host) do
-    found = catalog.resources.select do |resource|
+    catalog.resources.select do |resource|
       next unless resource.is_a?(Puppet::Type.type(:dhcp_host))
 
       resource[:group] == self[:name] || resource[:group] == title ||
         (title == 'default' && resource[:group].nil?)
     end
-
-    if found.empty?
-      warning "Target Dhcp_host with group '#{title}' not found in the catalog"
-    end
   end
 
   autorequire(:concat_file) do
     [self[:target]]
+  end
+
+  autorequire(:vcsrepo) do
+    ['/var/lib/pxe/enc']
   end
 
   def fragments
