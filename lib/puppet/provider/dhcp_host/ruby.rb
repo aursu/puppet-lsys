@@ -221,13 +221,13 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     hostname   = pxe[:hostname]
 
     ERB.new(<<-EOF, nil, '<>').result(binding).strip
-host <%= block_name %> {
-  hardware ethernet <%= mac %>;
-  fixed-address <%= ip %>;
+  host <%= block_name %> {
+    hardware ethernet <%= mac %>;
+    fixed-address <%= ip %>;
 <% if hostname %>
-  option host-name "<%= hostname %>";
+    option host-name "<%= hostname %>";
 <% end %>
-}
+  }
 EOF
   end
 end
