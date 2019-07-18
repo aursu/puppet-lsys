@@ -118,3 +118,5 @@ Style/FrozenStringLiteralComment:
   EnforcedStyle: never
 Style/SpecialGlobalVars:
   EnforcedStyle: use_perl_names
+Performance/RegexpMatch:
+  Enabled: false

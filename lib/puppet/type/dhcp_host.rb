@@ -9,12 +9,30 @@ Puppet::Type.newtype(:dhcp_host) do
 
   newparam(:name, namevar: true) do
     desc 'DHCP host declaration name'
+
+    validate do |val|
+      raise Puppet::ParseError, _('dhcp_host :name must be a string') unless val.is_a?(String)
+      raise Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z]{2,}$} =~ val.downcase
+    end
+
+    munge do |val|
+      val.downcase
+    end
   end
 
   newproperty(:mac) do
     desc 'MAC address to send to the host'
 
     defaultto { provider.pxe_data[:mac] }
+
+    validate do |val|
+      raise Puppet::ParseError, _('dhcp_host :mac must be a string') unless val.is_a?(String)
+      raise Puppet::ParseError, _('dhcp_host :mac must be a valid MAC address') unless provider.validate_mac(val)
+    end
+
+    munge do |val|
+      val.downcase.tr('-', ':')
+    end
 
     def retrieve
       provider.dhcp_data[:mac]
@@ -26,6 +44,11 @@ Puppet::Type.newtype(:dhcp_host) do
 
     defaultto { provider.pxe_data[:ip] }
 
+    validate do |val|
+      raise Puppet::ParseError, _('dhcp_host :ip must be a string') unless val.is_a?(String)
+      raise Puppet::ParseError, _('dhcp_host :ip must be a valid IPv4 address') unless provider.validate_ip(val)
+    end
+
     def retrieve
       provider.dhcp_data[:ip]
     end
@@ -36,6 +59,17 @@ Puppet::Type.newtype(:dhcp_host) do
 
     defaultto { @resource[:name] }
 
+    validate do |val|
+      raise Puppet::ParseError, _('dhcp_host :name must be a string') unless val.is_a?(String)
+      raise Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z]{2,}$} =~ val.downcase
+    end
+
+    munge do |val|
+      # this is a trick - we accept only hostname in form of FQDN
+      return nil unless %r{^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$} =~ val.downcase
+      val.downcase
+    end
+
     def retrieve
       provider.dhcp_data[:hostname]
     end
@@ -45,6 +79,12 @@ Puppet::Type.newtype(:dhcp_host) do
     desc 'Name of DHCP group which host belongs to'
 
     defaultto { provider.pxe_data[:group] }
+
+    munge do |val|
+      # default group for wrong values is 'default'
+      return 'default' unless val.is_a?(String)
+      val.downcase.gsub(%r{[^a-z0-9]}, '_')
+    end
   end
 
   newproperty(:content) do
@@ -64,9 +104,13 @@ Puppet::Type.newtype(:dhcp_host) do
   end
 
   newparam(:target) do
-    desc 'Path to DHCP file where configuration should be located'
+    desc 'Path to DHCP file where configuration should be looked for'
 
     defaultto '/etc/dhcp/dhcpd.hosts'
+
+    validate do |value|
+      raise ArgumentError, _('Target must be a full path') unless Puppet::Util.absolute_path?(value)
+    end
   end
 
   autorequire(:vcsrepo) do

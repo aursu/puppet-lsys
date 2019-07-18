@@ -61,6 +61,15 @@ Puppet::Type.newtype(:dhcp_group) do
     desc <<-DOC
       Group name. By default is equal to Dhcp_group resource title
     DOC
+
+    validate do |val|
+      raise Puppet::ParseError, _('dhcp_group :name must be a string') unless val.is_a?(String)
+    end
+
+    munge do |val|
+      # rplace all non alphanumerical characters
+      val.downcase.gsub(%r{[^a-z0-9]}, '_')
+    end
   end
 
   newparam(:target) do
@@ -88,8 +97,8 @@ Puppet::Type.newtype(:dhcp_group) do
     end
 
     validate do |val|
-      raise Puppet::ParseError, _('$order is not a string or integer.') unless val.is_a?(String) || val.is_a?(Integer)
-      raise Puppet::ParseError, _('Order is not a numerical value') if val.to_s !~ %r{[0-9]+}
+      raise Puppet::ParseError, _(':order is not a string or integer.') unless val.is_a?(String) || val.is_a?(Integer)
+      raise Puppet::ParseError, _(':order is not a numerical value') unless val.to_s =~ %r{[0-9]+}
     end
   end
 
