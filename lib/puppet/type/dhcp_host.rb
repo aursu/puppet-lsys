@@ -12,7 +12,7 @@ Puppet::Type.newtype(:dhcp_host) do
 
     validate do |val|
       raise Puppet::ParseError, _('dhcp_host :name must be a string') unless val.is_a?(String)
-      raise Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z]{2,}$} =~ val.downcase
+      raise Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless provider.validate_hostname(val)
     end
 
     munge do |val|
@@ -61,12 +61,12 @@ Puppet::Type.newtype(:dhcp_host) do
 
     validate do |val|
       raise Puppet::ParseError, _('dhcp_host :hostname must be a string') unless val.is_a?(String)
-      raise Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z]{2,}$} =~ val.downcase
+      raise Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless provider.validate_hostname(val)
     end
 
     munge do |val|
       # this is a trick - we accept only hostname in form of FQDN
-      return nil unless %r{^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$} =~ val.downcase
+      return nil unless provider.validate_domain(val)
       val.downcase
     end
 

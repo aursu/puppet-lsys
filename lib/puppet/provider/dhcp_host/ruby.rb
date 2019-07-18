@@ -103,6 +103,14 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     self.class.validate_mac(mac)
   end
 
+  def validate_hostname(host)
+    self.class.validate_hostname(host)
+  end
+
+  def validate_domain(dom)
+    self.class.validate_domain(dom)
+  end
+
   def self.instances
     instances = []
 
@@ -260,5 +268,15 @@ EOF
   def self.validate_mac(mac)
     return nil unless mac
     %r{^([a-f0-9]{2}[:-]){5}[a-f0-9]{2}$} =~ mac.downcase
+  end
+
+  def self.validate_hostname(host)
+    return nil unless host
+    %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z0-9]{2,}$} =~ host.downcase
+  end
+
+  def self.validate_domain(dom)
+    return nil unless dom
+    %r{^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$} =~ dom.downcase
   end
 end
