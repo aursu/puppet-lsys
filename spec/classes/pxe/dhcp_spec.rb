@@ -6,6 +6,7 @@ describe 'lsys::pxe::dhcp' do
       let(:facts) { os_facts }
       let(:params) do
         {
+          next_server: '10.55.156.10'
         }
       end
 

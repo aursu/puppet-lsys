@@ -104,20 +104,36 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       enc = enc_data(file_name)
       pxe = pxe_data(enc)
 
-      instance_hash = pxe.select { |k, _v| DHCP_KEYS.include?(k) }
+      hash = instance_hash(pxe)
 
-      next unless instance_hash[:content]
+      next unless hash
 
-      instance_hash[:ensure] = :present
-      instance_hash[:provider] = name
+      instances << new(hash)
 
-      instances << new(instance_hash)
+      next unless pxe[:ip_map]
+
+      pxe[:ip_map]
+        .map { |m| instance_hash(m) }.compact
+        .each do |next_map|
+          instances << new(next_map)
+        end
     end
 
     instances
   end
 
   private
+
+  def self.instance_hash(pxe)
+    return nil unless pxe[:content]
+
+    hash = pxe.select { |k, _v| DHCP_KEYS.include?(k) }
+
+    hash[:ensure] = :present
+    hash[:provider] = name
+
+    hash
+  end
 
   def self.enc_data(file_name)
     data = File.read(file_name)
@@ -133,32 +149,54 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   #                or an empty hash if we failed to parse ENC
   # @api private
   def self.pxe_data(enc)
-    # it is required to support IP mapping
-    # pxe key could contain mapping for up to 9 network interfaces, e.g.
-    # pxe:
-    #   mac1: xx:xx:xx:xx:xx:xx
-    #   ip1: XX.XX.XX.XX
-    #   group1: vlanXXX
-    map_keys =  (1..9)
-                .map { |i| ["ip#{i}", "mac#{i}", "group#{i}"] }
-                .flatten
-                .map { |k| k.to_sym }
-
     # mac  and ip are  mandatory parameters in ENC
     pxe = {}
     if enc.include?(:pxe) && enc[:pxe].is_a?(Hash)
       pxe = enc[:pxe].map { |k, v| [k.to_sym, v] }.to_h
     end
 
-    ip_map = pxe.select { |k, _v| map_keys.include?(k) }
-
-    # allow to use direct mac, ip parameters (but once inside "pxe" section
+    # allow to use direct mac, ip parameters (but those inside "pxe" section
     # have higher priority).
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
 
     pxe[:name] = enc[:hostname]
     pxe[:hostname] = enc[:hostname]
+
+    # IP mapping if any specified
+    #
+    # ip_map is Array of network MAC to IP mapping for DHCP client host
+    # Element with index 0 is PXE interface
+    ip_map = []
+    if pxe[:mac] && pxe[:ip]
+      # default DHCP group for PXE interface
+      pxe[:group] ||= 'pxe'
+
+      # it is required to support IP mapping
+      # pxe key could contain mapping for up to 9 network interfaces, e.g.
+      # pxe:
+      #   mac1: xx:xx:xx:xx:xx:xx
+      #   ip1: XX.XX.XX.XX
+      #   group1: vlanXXX
+      (0..9).each do |i|
+        j = (i > 0) ? i : nil # rubocop:disable Style/NumericPredicate
+        map_keys = ["mac#{j}", "ip#{j}", "group#{j}"].map(&:to_sym)
+        next_map = [:mac, :ip, :group].zip(map_keys.map { |k| pxe[k] }).to_h
+
+        # we are strict: if either mac<N> or ip<N> missed - ignore any
+        # other mac<N+1> or ip<N+1>
+        break unless next_map[:mac] && next_map[:ip]
+
+        next_map[:group] ||= 'default'
+
+        hostname, _domain = pxe[:name].split('.', 2)
+        next_map[:name] = "#{hostname}-eth#{i}"
+
+        next_map[:content] = host_content(next_map)
+
+        ip_map[i] = next_map
+      end
+    end
 
     pxe.reject! { |k, v| !DHCP_KEYS.include?(k) || v.nil? }
 
@@ -169,21 +207,27 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   end
 
   def self.host_content(pxe)
-    [:name, :mac, :ip, :hostname].each do |k|
-      return nil unless pxe.include?(k)
+    [:name, :mac, :ip].each do |k|
+      return nil unless pxe[k]
     end
 
-    name     = pxe[:name]
-    mac      = pxe[:mac]
-    ip       = pxe[:ip]
-    hostname = pxe[:hostname]
+    if pxe[:group] == 'pxe'
+      return nil unless pxe[:hostname]
+    end
 
-    ERB.new(<<-EOF).result(binding).strip
-host <%= name %> {
-  hardware ethernet <%= mac %>;
-  fixed-address <%= ip %>;
-  option host-name "<%= hostname %>";
-}
+    block_name = pxe[:name]
+    mac        = pxe[:mac]
+    ip         = pxe[:ip]
+    hostname   = pxe[:hostname]
+
+    ERB.new(<<-EOF, nil, '<>').result(binding).strip
+  host <%= block_name %> {
+    hardware ethernet <%= mac %>;
+    fixed-address <%= ip %>;
+<% if hostname %>
+    option host-name "<%= hostname %>";
+<% end %>
+  }
 EOF
   end
 end

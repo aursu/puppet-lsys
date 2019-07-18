@@ -44,7 +44,7 @@ Puppet::Type.newtype(:dhcp_host) do
   newparam(:group) do
     desc 'Name of DHCP group which host belongs to'
 
-    defaultto 'default'
+    defaultto { provider.pxe_data[:group] }
   end
 
   newproperty(:content) do
@@ -57,7 +57,8 @@ Puppet::Type.newtype(:dhcp_host) do
       value
     end
 
-    def insync?(is) # rubocop:disable Lint/UnusedMethodArgument
+    # content property is autogenarated therefore always in sync
+    def insync?(_is)
       true
     end
   end
@@ -78,6 +79,7 @@ Puppet::Type.newtype(:dhcp_host) do
       ip: self[:ip],
       name: self[:name],
       hostname: self[:hostname],
+      group: self[:group],
     )
   end
 end

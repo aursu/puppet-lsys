@@ -5,6 +5,10 @@
 # @example
 #   include lsys::pxe::dhcp
 class lsys::pxe::dhcp (
+  # PXE server IP address
+  Stdlib::IP::Address::V4
+          $next_server,
+
   # instruct DHCP daemon to listen on all available network interfaces
   Array[String[1]]
           $dhcp_interfaces    = [],
@@ -76,5 +80,15 @@ class lsys::pxe::dhcp (
         options => $option_broadcast_address,
       } + $dhcp_pool_parameters;
     }
+  }
+
+  # Default DHCP group
+  dhcp_group { 'default': }
+
+  # Default PXE group
+  dhcp_group { 'pxe':
+    pxe_settings     => true,
+    next_server      => $next_server,
+    tftp_server_name => true,
   }
 }

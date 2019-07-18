@@ -93,6 +93,12 @@ Puppet::Type.newtype(:dhcp_group) do
     end
   end
 
+  newparam(:host_decl_names, boolean: true, parent: Puppet::Parameter::Boolean) do
+    desc "Whether to add dhcpd parameter 'use-host-decl-names on' into group"
+
+    defaultto :false
+  end
+
   newparam(:pxe_settings, boolean: true, parent: Puppet::Parameter::Boolean) do
     desc 'Whether to enable DHCPd PXE settings for group.'
 
@@ -134,20 +140,20 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   autorequire(:dhcp_host) do
-    found = catalog.resources.select do |resource|
+    catalog.resources.select do |resource|
       next unless resource.is_a?(Puppet::Type.type(:dhcp_host))
 
       resource[:group] == self[:name] || resource[:group] == title ||
         (title == 'default' && resource[:group].nil?)
     end
-
-    if found.empty?
-      warning "Target Dhcp_host with group '#{title}' not found in the catalog"
-    end
   end
 
   autorequire(:concat_file) do
     [self[:target]]
+  end
+
+  autorequire(:vcsrepo) do
+    ['/var/lib/pxe/enc']
   end
 
   def fragments
@@ -186,15 +192,19 @@ Puppet::Type.newtype(:dhcp_group) do
     sorted = content_fragments.sort_by { |a| a[0] }
 
     newline = Puppet::Util::Platform.windows? ? "\r\n" : "\n"
-    hosts = sorted.map { |cf| cf[1] }.join(newline)
+    hosts = sorted.map { |cf| cf[1] }.join(newline) + newline
 
+    host_decl_names = self[:host_decl_names]
     pxe_settings = self[:pxe_settings]
     next_server = self[:next_server]
     tftp_server_name = self[:tftp_server_name]
     pxe_filename = self[:pxe_filename]
 
-    @generated_content = ERB.new(<<-EOF).result(binding).strip
+    @generated_content = ERB.new(<<-EOF, nil, '<>').result(binding).strip + newline
 group {
+<% if host_decl_names %>
+  use-host-decl-names on;
+<% end %>
 <% if pxe_settings %>
   if ( substring (option vendor-class-identifier, 0, 9) = "PXEClient" ) {
 <%   if next_server %>
