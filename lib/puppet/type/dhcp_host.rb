@@ -60,8 +60,8 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto { @resource[:name] }
 
     validate do |val|
-      raise Puppet::ParseError, _('dhcp_host :name must be a string') unless val.is_a?(String)
-      raise Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z]{2,}$} =~ val.downcase
+      raise Puppet::ParseError, _('dhcp_host :hostname must be a string') unless val.is_a?(String)
+      raise Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z]{2,}$} =~ val.downcase
     end
 
     munge do |val|
