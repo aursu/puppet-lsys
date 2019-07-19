@@ -219,11 +219,12 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     ip_map = []
     if pxe[:mac] && pxe[:ip]
       # default DHCP group for PXE interface
+
       pxe[:group] ||= 'pxe'
 
       # translate
-      pxe[:mac].downcase!.tr!('-', ':')
-      pxe[:group].downcase!.gsub!(%r{[^a-z0-9]}, '_')
+      pxe[:mac] = pxe[:mac].downcase.tr('-', ':')
+      pxe[:group] = pxe[:group].downcase.gsub(%r{[^a-z0-9]}, '_')
 
       # it is required to support IP mapping
       # pxe key could contain mapping for up to 9 network interfaces, e.g.
@@ -242,8 +243,8 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
         break unless validate_mac(next_map[:mac]) && validate_ip(next_map[:ip])
 
         next_map[:group] ||= 'default'
-        next_map[:mac].downcase!.tr!('-', ':')
-        next_map[:group].downcase!.gsub!(%r{[^a-z0-9]}, '_')
+        next_map[:mac] = next_map[:mac].downcase.tr('-', ':')
+        next_map[:group] = next_map[:group].downcase.gsub(%r{[^a-z0-9]}, '_')
         next_map[:name] = "#{hostname}-eth#{i}"
         next_map[:content] = host_content(next_map)
 
