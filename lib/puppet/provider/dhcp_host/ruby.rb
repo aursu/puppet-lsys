@@ -161,8 +161,22 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     data = File.read(file_name)
     enc = YAML.safe_load(data).map { |k, v| [k.to_sym, v] }.to_h
 
-    enc[:hostname] = %r{(?<hostname>[^/]+)\.e?ya?ml$}.match(file_name)[:hostname]
+    # Added support for parameter hostname inside ENC file
+    # If this parameter is valid domain name (FQDN format) then file name could
+    # be arbitrary
+    hostname = enc[:hostname]
+    if hostname
+      enc.delete(:hostname) unless validate_domain(hostname)
+    end
 
+    # If ENC file name contains valid domain name (in form <hostname>.yaml)
+    # it would be used for PXE/DHCP settings but ENC parameter `hostname`
+    # has  higher priority
+    hostname = %r{(?<hostname>[^/]+)\.e?ya?ml$}.match(file_name.downcase)[:hostname]
+    enc[:hostname] ||= hostname if validate_domain(hostname)
+
+    # `hostname` is mandatory - ignore ENC if valid hostname not found
+    return nil unless enc[:hostname]
     enc
   end
 
@@ -171,13 +185,18 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   #                or an empty hash if we failed to parse ENC
   # @api private
   def self.pxe_data(enc)
-    # mac  and ip are  mandatory parameters in ENC
+
+    # return empty PXE data if ENC was not provided
+    return {} if enc.nil? || enc.empty?
+
     pxe = {}
+
+    # `mac` and `ip` are mandatory parameters for PXE
     if enc.include?(:pxe) && enc[:pxe].is_a?(Hash)
       pxe = enc[:pxe].map { |k, v| [k.to_sym, v] }.to_h
     end
 
-    # allow to use direct mac, ip parameters (but those inside "pxe" section
+    # allow to use direct `mac` and `ip` parameters (but those inside `pxe` section
     # have higher priority).
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
