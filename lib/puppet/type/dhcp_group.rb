@@ -166,7 +166,7 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   def fragments
-    @catalog_fragments ||= catalog.resources.map { |resource|
+    @catalog_resources ||= catalog.resources.map { |resource|
       next unless resource.is_a?(Puppet::Type.type(:dhcp_host))
 
       if resource[:group] == self[:name] || resource[:group] == title ||
@@ -175,15 +175,14 @@ Puppet::Type.newtype(:dhcp_group) do
       end
     }.compact
 
-    @fragments ||=
-      Puppet::Type.type(:dhcp_host).instances
-                  .reject { |r| catalog.resource_refs.include? r.ref }
-                  .select do |resource|
-                    resource[:group] == self[:name] || resource[:group] == title ||
-                      (title == 'default' && resource[:group].nil?)
-                  end
+    @type_instances ||= Puppet::Type.type(:dhcp_host).instances
+                .reject { |r| catalog.resource_refs.include? r.ref }
+                .select do |resource|
+                  resource[:group] == self[:name] || resource[:group] == title ||
+                    (title == 'default' && resource[:group].nil?)
+                end
 
-    @catalog_fragments + @fragments
+    @catalog_resources + @type_instances
   end
 
   def should_content

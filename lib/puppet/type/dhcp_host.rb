@@ -131,4 +131,37 @@ Puppet::Type.newtype(:dhcp_host) do
     return nil unless host
     %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z0-9]{2,}$} =~ host.downcase
   end
+
+  # Retrieves all known instances.
+  def self.instances
+    # Put the default provider first, then the rest of the suitable providers.
+    provider_instances = {}
+    providers_by_source.collect do |provider|
+      provider.instances.collect do |instance|
+        # We always want to use the "first" provider instance we find, unless the resource
+        # is already managed and has a different provider set
+        if other = provider_instances[instance.name]
+          Puppet.debug "%s %s found in both %s and %s; skipping the %s version" %
+            [self.name.to_s.capitalize, instance.name, other.class.name, instance.class.name, instance.class.name]
+          next
+        end
+        provider_instances[instance.name] = instance
+
+        result = new(:name => instance.name, :provider => instance)
+
+        properties.each do |prop_klass|
+
+          name = prop_klass.name
+          current = instance.send(name)
+
+          prop = result.newattr(prop_klass)
+
+          # initialize each property based on Provider's instance data
+          prop.value = current if current && (current != :absent || name == :ensure)
+        end
+
+        result
+      end
+    end.flatten.compact
+  end
 end
