@@ -16,37 +16,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @property_hash[:ensure] = :absent
   end
 
-  def dhcp_config_data(file_name)
-    return @dhcp_hosts if @dhcp_hosts
-
-    @dhcp_hosts = {}
-
-    host = {}
-    if File.exist?(file_name)
-      File.open(file_name).each do |line|
-        line.strip!
-        if %r{^host (?<name>\S+) \{$} =~ line
-          host = { name: name }
-          next
-        end
-
-        next unless host.include?(:name)
-
-        if %r{^hardware ethernet (?<mac>\S+);$} =~ line
-          host[:mac] = mac
-        elsif %r{^fixed-address (?<ip>\S+);$} =~ line
-          host[:ip] = ip
-        elsif %r{^option host-name "(?<hostname>\S+)";$} =~ line
-          host[:hostname] = hostname
-        elsif %r{^\}$} =~ line
-          @dhcp_hosts[host[:hostname]] = host if host.include?(:hostname)
-          host = {}
-        end
-      end
-    end
-    @dhcp_hosts
-  end
-
   def dhcp_data
     return @dhcp if @dhcp
 
@@ -103,12 +72,12 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     self.class.validate_mac(mac)
   end
 
-  def validate_hostname(host)
-    self.class.validate_hostname(host)
-  end
-
   def validate_domain(dom)
     self.class.validate_domain(dom)
+  end
+
+  def dhcp_config_data(file_name)
+    self.class.dhcp_config_data(file_name)
   end
 
   def self.instances
@@ -138,6 +107,44 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   end
 
   private
+
+  def self.dhcp_config_data(file_name)
+    return @dhcp_hosts[file_name] if @dhcp_hosts && @dhcp_hosts[file_name]
+
+    @dhcp_hosts = {} unless @dhcp_hosts
+    @dhcp_hosts[file_name] = {}
+
+    host = {}
+    if File.exist?(file_name)
+      File.open(file_name).each do |line|
+        line.strip!
+
+        if %r{^host (?<name>\S+) \{$} =~ line
+          host = { name: name }
+          next
+        end
+
+        next unless host.include?(:name)
+
+        if %r{^hardware ethernet (?<mac>\S+);$} =~ line
+          host[:mac] = mac
+        elsif %r{^fixed-address (?<ip>\S+);$} =~ line
+          host[:ip] = ip
+        elsif %r{^option host-name "(?<hostname>\S+)";$} =~ line
+          host[:hostname] = hostname
+        elsif %r{^\}$} =~ line
+          # hostname is more preferable then host declaration name
+          hostname = host[:hostname] || host[:name]
+          # store host record
+          @dhcp_hosts[file_name][hostname] = host
+          # reset loop
+          host = {}
+        end
+      end
+    end
+
+    @dhcp_hosts[file_name]
+  end
 
   def self.instance_hash(pxe)
     return nil unless pxe[:content]
@@ -268,11 +275,6 @@ EOF
   def self.validate_mac(mac)
     return nil unless mac
     %r{^([a-f0-9]{2}[:-]){5}[a-f0-9]{2}$} =~ mac.downcase
-  end
-
-  def self.validate_hostname(host)
-    return nil unless host
-    %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z0-9]{2,}$} =~ host.downcase
   end
 
   def self.validate_domain(dom)

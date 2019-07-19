@@ -12,7 +12,7 @@ Puppet::Type.newtype(:dhcp_host) do
 
     validate do |val|
       fail Puppet::ParseError, _('dhcp_host :name must be a string') unless val.is_a?(String)
-      fail Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless provider.validate_hostname(val)
+      fail Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless resource.validate_hostname(val)
     end
 
     munge do |val|
@@ -61,7 +61,7 @@ Puppet::Type.newtype(:dhcp_host) do
 
     validate do |val|
       fail Puppet::ParseError, _('dhcp_host :hostname must be a string') unless val.is_a?(String)
-      fail Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless provider.validate_hostname(val)
+      fail Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless resource.validate_hostname(val)
     end
 
     munge do |val|
@@ -125,5 +125,10 @@ Puppet::Type.newtype(:dhcp_host) do
       hostname: self[:hostname],
       group: self[:group],
     )
+  end
+
+  def validate_hostname(host)
+    return nil unless host
+    %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z0-9]{2,}$} =~ host.downcase
   end
 end
