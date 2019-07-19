@@ -11,8 +11,8 @@ Puppet::Type.newtype(:dhcp_host) do
     desc 'DHCP host declaration name'
 
     validate do |val|
-      raise Puppet::ParseError, _('dhcp_host :name must be a string') unless val.is_a?(String)
-      raise Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless provider.validate_hostname(val)
+      fail Puppet::ParseError, _('dhcp_host :name must be a string') unless val.is_a?(String)
+      fail Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless provider.validate_hostname(val)
     end
 
     munge do |val|
@@ -26,8 +26,8 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto { provider.pxe_data[:mac] }
 
     validate do |val|
-      raise Puppet::ParseError, _('dhcp_host :mac must be a string') unless val.is_a?(String)
-      raise Puppet::ParseError, _('dhcp_host :mac must be a valid MAC address') unless provider.validate_mac(val)
+      fail Puppet::ParseError, _('dhcp_host :mac must be a string') unless val.is_a?(String)
+      fail Puppet::ParseError, _('dhcp_host :mac must be a valid MAC address') unless provider.validate_mac(val)
     end
 
     munge do |val|
@@ -45,8 +45,8 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto { provider.pxe_data[:ip] }
 
     validate do |val|
-      raise Puppet::ParseError, _('dhcp_host :ip must be a string') unless val.is_a?(String)
-      raise Puppet::ParseError, _('dhcp_host :ip must be a valid IPv4 address') unless provider.validate_ip(val)
+      fail Puppet::ParseError, _('dhcp_host :ip must be a string') unless val.is_a?(String)
+      fail Puppet::ParseError, _('dhcp_host :ip must be a valid IPv4 address') unless provider.validate_ip(val)
     end
 
     def retrieve
@@ -60,8 +60,8 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto { @resource[:name] }
 
     validate do |val|
-      raise Puppet::ParseError, _('dhcp_host :hostname must be a string') unless val.is_a?(String)
-      raise Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless provider.validate_hostname(val)
+      fail Puppet::ParseError, _('dhcp_host :hostname must be a string') unless val.is_a?(String)
+      fail Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless provider.validate_hostname(val)
     end
 
     munge do |val|
