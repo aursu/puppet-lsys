@@ -208,7 +208,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       (0..9).each do |i|
         j = (i > 0) ? i : nil # rubocop:disable Style/NumericPredicate
         map_keys = ["mac#{j}", "ip#{j}", "group#{j}"].map(&:to_sym)
-        next_map = [:mac, :ip, :group].zip(map_keys.map { |k| pxe[k]&.downcase }).to_h
+        next_map = [:mac, :ip, :group].zip(map_keys.map { |k| pxe[k] }).to_h
         hostname, _domain = pxe[:name].split('.', 2)
 
         # we are strict: if either mac<N> or ip<N> missed - ignore any
@@ -216,8 +216,8 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
         break unless validate_mac(next_map[:mac]) && validate_ip(next_map[:ip])
 
         next_map[:group] ||= 'default'
-        next_map[:mac].tr!('-', ':')
-        next_map[:group].gsub!(%r{[^a-z0-9]}, '_')
+        next_map[:mac].downcase!.tr!('-', ':')
+        next_map[:group].downcase!.gsub!(%r{[^a-z0-9]}, '_')
         next_map[:name] = "#{hostname}-eth#{i}"
         next_map[:content] = host_content(next_map)
 
