@@ -241,7 +241,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       end
 
       unless validate_ip(host[:ip])
-        warning _("IP Address for #{fqdn} (%{ip}) is not valid (#{caller})") % { ip: host[:ip] } if host[:ip]
+        warning _("IP Address for #{fqdn} (%{ip}) is not valid") % { ip: host[:ip] } if host[:ip]
         break if i > 0
         return nil
       end
