@@ -185,7 +185,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   #                or an empty hash if we failed to parse ENC
   # @api private
   def self.pxe_data(enc)
-
     # return empty PXE data if ENC was not provided
     return {} if enc.nil? || enc.empty?
 
