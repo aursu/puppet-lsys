@@ -90,7 +90,8 @@ Puppet::Type.newtype(:dhcp_host) do
   newparam(:group) do
     desc 'Name of DHCP group which host belongs to'
 
-    defaultto { provider.pxe_data[:group] }
+    # defaultto { provider.pxe_data[:group] }
+    nodefault
 
     munge do |val|
       # default group for wrong values is 'default'
