@@ -152,7 +152,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   end
 
   def self.enc_data(file_name)
-    return @enc[file_name] if @enc and @enc.include?(file_name)
+    return @enc[file_name] if @enc && @enc.include?(file_name)
 
     @enc = {} unless @enc
     @enc[file_name] = nil
@@ -184,7 +184,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   #                or an empty hash if we failed to parse ENC
   # @api private
   def self.pxe_data(file_name)
-    return @pxe[file_name] if @pxe and @pxe.include?(file_name)
+    return @pxe[file_name] if @pxe && @pxe.include?(file_name)
 
     @pxe = {} unless @pxe
     @pxe[file_name] = nil
@@ -222,7 +222,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     #   ip1: XX.XX.XX.XX
     #   group1: vlanXXX
     (0..9).each do |i|
-      idx = (i > 0) ? i : nil # rubocop:disable Style/NumericPredicate
+      idx = (i > 0) ? i : nil
 
       # first pair by default is PXE interface if not specified otherwise
       group = (i > 0) ? 'default' : 'pxe'
