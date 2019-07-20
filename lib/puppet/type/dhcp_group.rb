@@ -61,6 +61,15 @@ Puppet::Type.newtype(:dhcp_group) do
     desc <<-DOC
       Group name. By default is equal to Dhcp_group resource title
     DOC
+
+    validate do |val|
+      raise Puppet::ParseError, _('dhcp_group :name must be a string') unless val.is_a?(String)
+    end
+
+    munge do |val|
+      # rplace all non alphanumerical characters
+      val.downcase.gsub(%r{[^a-z0-9]}, '_')
+    end
   end
 
   newparam(:target) do
@@ -88,8 +97,8 @@ Puppet::Type.newtype(:dhcp_group) do
     end
 
     validate do |val|
-      raise Puppet::ParseError, _('$order is not a string or integer.') unless val.is_a?(String) || val.is_a?(Integer)
-      raise Puppet::ParseError, _('Order is not a numerical value') if val.to_s !~ %r{[0-9]+}
+      raise Puppet::ParseError, _(':order is not a string or integer.') unless val.is_a?(String) || val.is_a?(Integer)
+      raise Puppet::ParseError, _(':order is not a numerical value') unless val.to_s =~ %r{[0-9]+}
     end
   end
 
@@ -157,7 +166,7 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   def fragments
-    @catalog_fragments ||= catalog.resources.map { |resource|
+    @catalog_resources ||= catalog.resources.map { |resource|
       next unless resource.is_a?(Puppet::Type.type(:dhcp_host))
 
       if resource[:group] == self[:name] || resource[:group] == title ||
@@ -166,15 +175,14 @@ Puppet::Type.newtype(:dhcp_group) do
       end
     }.compact
 
-    @fragments ||=
-      Puppet::Type.type(:dhcp_host).instances
-                  .reject { |r| catalog.resource_refs.include? r.ref }
-                  .select do |resource|
-                    resource[:group] == self[:name] || resource[:group] == title ||
-                      (title == 'default' && resource[:group].nil?)
-                  end
+    @type_instances ||= Puppet::Type.type(:dhcp_host).instances
+                .reject { |r| catalog.resource_refs.include? r.ref }
+                .select do |resource|
+                  resource[:group] == self[:name] || resource[:group] == title ||
+                    (title == 'default' && resource[:group].nil?)
+                end
 
-    @catalog_fragments + @fragments
+    @catalog_resources + @type_instances
   end
 
   def should_content

@@ -1,4 +1,5 @@
 require 'erb'
+require 'ipaddr'
 
 Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   DHCP_KEYS = [:mac, :ip, :name, :hostname, :group, :content].freeze
@@ -13,39 +14,6 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
   def destroy
     @property_hash[:ensure] = :absent
-  end
-
-  def dhcp_config_data(file_name)
-    return @dhcp_hosts if @dhcp_hosts
-
-    @dhcp_hosts = {}
-
-    host = {}
-    if File.exist?(file_name)
-      File.open(file_name).each do |line|
-        line.strip!
-        # rubocop:disable Performance/RegexpMatch
-        if %r{^host (?<name>\S+) \{$} =~ line
-          host = { name: name }
-          next
-        end
-
-        next unless host.include?(:name)
-
-        if %r{^hardware ethernet (?<mac>\S+);$} =~ line
-          host[:mac] = mac
-        elsif %r{^fixed-address (?<ip>\S+);$} =~ line
-          host[:ip] = ip
-        elsif %r{^option host-name "(?<hostname>\S+)";$} =~ line
-          host[:hostname] = hostname
-        elsif %r{^\}$} =~ line
-          @dhcp_hosts[host[:hostname]] = host if host.include?(:hostname)
-          host = {}
-        end
-        # rubocop:enable Performance/RegexpMatch
-      end
-    end
-    @dhcp_hosts
   end
 
   def dhcp_data
@@ -96,6 +64,22 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     self.class.host_content(pxe)
   end
 
+  def validate_ip(ip)
+    self.class.validate_ip(ip)
+  end
+
+  def validate_mac(mac)
+    self.class.validate_mac(mac)
+  end
+
+  def validate_domain(dom)
+    self.class.validate_domain(dom)
+  end
+
+  def dhcp_config_data(file_name)
+    self.class.dhcp_config_data(file_name)
+  end
+
   def self.instances
     instances = []
 
@@ -124,6 +108,44 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
   private
 
+  def self.dhcp_config_data(file_name)
+    return @dhcp_hosts[file_name] if @dhcp_hosts && @dhcp_hosts[file_name]
+
+    @dhcp_hosts = {} unless @dhcp_hosts
+    @dhcp_hosts[file_name] = {}
+
+    host = {}
+    if File.exist?(file_name)
+      File.open(file_name).each do |line|
+        line.strip!
+
+        if %r{^host (?<name>\S+) \{$} =~ line
+          host = { name: name }
+          next
+        end
+
+        next unless host.include?(:name)
+
+        if %r{^hardware ethernet (?<mac>\S+);$} =~ line
+          host[:mac] = mac
+        elsif %r{^fixed-address (?<ip>\S+);$} =~ line
+          host[:ip] = ip
+        elsif %r{^option host-name "(?<hostname>\S+)";$} =~ line
+          host[:hostname] = hostname
+        elsif %r{^\}$} =~ line
+          # hostname is more preferable then host declaration name
+          hostname = host[:hostname] || host[:name]
+          # store host record
+          @dhcp_hosts[file_name][hostname] = host
+          # reset loop
+          host = {}
+        end
+      end
+    end
+
+    @dhcp_hosts[file_name]
+  end
+
   def self.instance_hash(pxe)
     return nil unless pxe[:content]
 
@@ -139,8 +161,22 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     data = File.read(file_name)
     enc = YAML.safe_load(data).map { |k, v| [k.to_sym, v] }.to_h
 
-    enc[:hostname] = %r{(?<hostname>[^/]+)\.e?ya?ml$}.match(file_name)[:hostname]
+    # Added support for parameter hostname inside ENC file
+    # If this parameter is valid domain name (FQDN format) then file name could
+    # be arbitrary
+    hostname = enc[:hostname]
+    if hostname
+      enc.delete(:hostname) unless validate_domain(hostname)
+    end
 
+    # If ENC file name contains valid domain name (in form <hostname>.yaml)
+    # it would be used for PXE/DHCP settings but ENC parameter `hostname`
+    # has  higher priority
+    hostname = %r{(?<hostname>[^/]+)\.e?ya?ml$}.match(file_name.downcase)[:hostname]
+    enc[:hostname] ||= hostname if validate_domain(hostname)
+
+    # `hostname` is mandatory - ignore ENC if valid hostname not found
+    return nil unless enc[:hostname]
     enc
   end
 
@@ -149,19 +185,32 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   #                or an empty hash if we failed to parse ENC
   # @api private
   def self.pxe_data(enc)
-    # mac  and ip are  mandatory parameters in ENC
+
+    # return empty PXE data if ENC was not provided
+    return {} if enc.nil? || enc.empty?
+
     pxe = {}
+
+    # `mac` and `ip` are mandatory parameters for PXE
     if enc.include?(:pxe) && enc[:pxe].is_a?(Hash)
       pxe = enc[:pxe].map { |k, v| [k.to_sym, v] }.to_h
     end
 
-    # allow to use direct mac, ip parameters (but those inside "pxe" section
+    # allow to use direct `mac` and `ip` parameters (but those inside `pxe` section
     # have higher priority).
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
 
-    pxe[:name] = enc[:hostname]
-    pxe[:hostname] = enc[:hostname]
+    pxe[:name] = enc[:hostname].downcase
+    pxe[:hostname] = enc[:hostname].downcase
+
+    # validation
+    mac = pxe.delete(:mac) unless validate_mac(pxe[:mac])
+    ip = pxe.delete(:ip) unless validate_ip(pxe[:ip])
+    if ip || mac
+      warning _('IP Address (%{ip}) and/or MAC Address (%{mac}) are not valid') %
+              { ip: ip, mac: mac }
+    end
 
     # IP mapping if any specified
     #
@@ -170,7 +219,12 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     ip_map = []
     if pxe[:mac] && pxe[:ip]
       # default DHCP group for PXE interface
+
       pxe[:group] ||= 'pxe'
+
+      # translate
+      pxe[:mac] = pxe[:mac].downcase.tr('-', ':')
+      pxe[:group] = pxe[:group].downcase.gsub(%r{[^a-z0-9]}, '_')
 
       # it is required to support IP mapping
       # pxe key could contain mapping for up to 9 network interfaces, e.g.
@@ -182,16 +236,16 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
         j = (i > 0) ? i : nil # rubocop:disable Style/NumericPredicate
         map_keys = ["mac#{j}", "ip#{j}", "group#{j}"].map(&:to_sym)
         next_map = [:mac, :ip, :group].zip(map_keys.map { |k| pxe[k] }).to_h
+        hostname, _domain = pxe[:name].split('.', 2)
 
         # we are strict: if either mac<N> or ip<N> missed - ignore any
         # other mac<N+1> or ip<N+1>
-        break unless next_map[:mac] && next_map[:ip]
+        break unless validate_mac(next_map[:mac]) && validate_ip(next_map[:ip])
 
         next_map[:group] ||= 'default'
-
-        hostname, _domain = pxe[:name].split('.', 2)
+        next_map[:mac] = next_map[:mac].downcase.tr('-', ':')
+        next_map[:group] = next_map[:group].downcase.gsub(%r{[^a-z0-9]}, '_')
         next_map[:name] = "#{hostname}-eth#{i}"
-
         next_map[:content] = host_content(next_map)
 
         ip_map[i] = next_map
@@ -229,5 +283,22 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 <% end %>
   }
 EOF
+  end
+
+  def self.validate_ip(ip)
+    return nil unless ip
+    IPAddr.new(ip)
+  rescue ArgumentError
+    nil
+  end
+
+  def self.validate_mac(mac)
+    return nil unless mac
+    %r{^([a-f0-9]{2}[:-]){5}[a-f0-9]{2}$} =~ mac.downcase
+  end
+
+  def self.validate_domain(dom)
+    return nil unless dom
+    %r{^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$} =~ dom.downcase
   end
 end

@@ -9,12 +9,30 @@ Puppet::Type.newtype(:dhcp_host) do
 
   newparam(:name, namevar: true) do
     desc 'DHCP host declaration name'
+
+    validate do |val|
+      fail Puppet::ParseError, _('dhcp_host :name must be a string') unless val.is_a?(String)
+      fail Puppet::ParseError, _('dhcp_host :name must be a valid hostname') unless resource.validate_hostname(val)
+    end
+
+    munge do |val|
+      val.downcase
+    end
   end
 
   newproperty(:mac) do
     desc 'MAC address to send to the host'
 
     defaultto { provider.pxe_data[:mac] }
+
+    validate do |val|
+      fail Puppet::ParseError, _('dhcp_host :mac must be a string') unless val.is_a?(String)
+      fail Puppet::ParseError, _('dhcp_host :mac must be a valid MAC address') unless provider.validate_mac(val)
+    end
+
+    munge do |val|
+      val.downcase.tr('-', ':')
+    end
 
     def retrieve
       provider.dhcp_data[:mac]
@@ -26,6 +44,11 @@ Puppet::Type.newtype(:dhcp_host) do
 
     defaultto { provider.pxe_data[:ip] }
 
+    validate do |val|
+      fail Puppet::ParseError, _('dhcp_host :ip must be a string') unless val.is_a?(String)
+      fail Puppet::ParseError, _('dhcp_host :ip must be a valid IPv4 address') unless provider.validate_ip(val)
+    end
+
     def retrieve
       provider.dhcp_data[:ip]
     end
@@ -36,6 +59,17 @@ Puppet::Type.newtype(:dhcp_host) do
 
     defaultto { @resource[:name] }
 
+    validate do |val|
+      fail Puppet::ParseError, _('dhcp_host :hostname must be a string') unless val.is_a?(String)
+      fail Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless resource.validate_hostname(val)
+    end
+
+    munge do |val|
+      # this is a trick - we accept only hostname in form of FQDN
+      return nil unless provider.validate_domain(val)
+      val.downcase
+    end
+
     def retrieve
       provider.dhcp_data[:hostname]
     end
@@ -45,6 +79,12 @@ Puppet::Type.newtype(:dhcp_host) do
     desc 'Name of DHCP group which host belongs to'
 
     defaultto { provider.pxe_data[:group] }
+
+    munge do |val|
+      # default group for wrong values is 'default'
+      return 'default' unless val.is_a?(String)
+      val.downcase.gsub(%r{[^a-z0-9]}, '_')
+    end
   end
 
   newproperty(:content) do
@@ -64,9 +104,13 @@ Puppet::Type.newtype(:dhcp_host) do
   end
 
   newparam(:target) do
-    desc 'Path to DHCP file where configuration should be located'
+    desc 'Path to DHCP file where configuration should be looked for'
 
     defaultto '/etc/dhcp/dhcpd.hosts'
+
+    validate do |value|
+      raise ArgumentError, _('Target must be a full path') unless Puppet::Util.absolute_path?(value)
+    end
   end
 
   autorequire(:vcsrepo) do
@@ -81,5 +125,43 @@ Puppet::Type.newtype(:dhcp_host) do
       hostname: self[:hostname],
       group: self[:group],
     )
+  end
+
+  def validate_hostname(host)
+    return nil unless host
+    %r{^([a-z0-9]+(-[a-z0-9]+)*\.?)+[a-z0-9]{2,}$} =~ host.downcase
+  end
+
+  # Retrieves all known instances.
+  def self.instances
+    # Put the default provider first, then the rest of the suitable providers.
+    provider_instances = {}
+    providers_by_source.collect do |provider|
+      provider.instances.collect do |instance|
+        # We always want to use the "first" provider instance we find, unless the resource
+        # is already managed and has a different provider set
+        if other = provider_instances[instance.name]
+          Puppet.debug "%s %s found in both %s and %s; skipping the %s version" %
+            [self.name.to_s.capitalize, instance.name, other.class.name, instance.class.name, instance.class.name]
+          next
+        end
+        provider_instances[instance.name] = instance
+
+        result = new(:name => instance.name, :provider => instance)
+
+        properties.each do |prop_klass|
+
+          name = prop_klass.name
+          current = instance.send(name)
+
+          prop = result.newattr(prop_klass)
+
+          # initialize each property based on Provider's instance data
+          prop.value = current if current && (current != :absent || name == :ensure)
+        end
+
+        result
+      end
+    end.flatten.compact
   end
 end
