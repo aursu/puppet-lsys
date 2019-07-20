@@ -9,6 +9,7 @@ timezone --utc America/New_York
 bootloader --location=mbr --driveorder=sda --append="crashkernel=auto rhgb quiet"
 
 network --onboot yes --device eth0 --bootproto dhcp
+network --onboot yes --device eth1 --bootproto dhcp --nodns --noipv6
 
 rootpw  --iscrypted $6$hwntCZXQgRfMJejm$kUF6HdDjubqqR0myKLm4xu..MlGXDDPD0V.RQbbmQ//4aIlUGixc/a5XFd9fdID8fwzdX.1.D3JYJH5Vd4Vp40
 authconfig --enableshadow --passalgo=sha512
