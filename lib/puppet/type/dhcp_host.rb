@@ -87,16 +87,22 @@ Puppet::Type.newtype(:dhcp_host) do
     end
   end
 
-  newparam(:group) do
+  newproperty(:group) do
     desc 'Name of DHCP group which host belongs to'
 
-    # defaultto { provider.pxe_data[:group] }
     nodefault
 
     munge do |val|
       # default group for wrong values is 'default'
       return 'default' unless val.is_a?(String)
       val.downcase.gsub(%r{[^a-z0-9]}, '_')
+    end
+
+    # group is not a parameter. It could be declared in ENC
+    # But there is no group declaration names inside DHCP config
+    # Therefore always in sync
+    def insync?(_is)
+      true
     end
   end
 
