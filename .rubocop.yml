@@ -120,3 +120,5 @@ Style/SpecialGlobalVars:
   EnforcedStyle: use_perl_names
 Performance/RegexpMatch:
   Enabled: false
+Style/NumericPredicate:
+  Enabled: false
