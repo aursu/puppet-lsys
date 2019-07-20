@@ -34,27 +34,19 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     @dhcp = dhcp[hostname]
   end
 
-  # Read ENC data for given hostname
-  # @api public
-  # @return [Hash]
-  def enc_data
-    return @enc if @enc
-
-    hostname = @resource[:name]
-
-    Dir.glob("/var/lib/pxe/enc/#{hostname}.{eyaml,yaml,yml}").each do |file_name|
-      @enc ||= self.class.enc_data(file_name)
-    end
-
-    # if file does not exists - set to only-hostname Hash and return
-    @enc ||= { hostname: hostname }
-  end
-
   # Generate PXE data based on read ENC data
   # @api public
   # @return [Hash]
   def pxe_data
-    @pxe ||= self.class.pxe_data(enc_data)
+    return @pxe if @pxe
+
+    hostname = @resource[:name]
+
+    Dir.glob("/var/lib/pxe/enc/#{hostname}.{eyaml,yaml,yml}").each do |file_name|
+      @pxe ||= self.class.pxe_data(file_name)
+    end
+
+    @pxe ||= {}
   end
 
   # Generate DHCP host declaration based on provided PXE data
@@ -86,8 +78,9 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
     # read ENC data
     Dir.glob('/var/lib/pxe/enc/*.{eyaml,yaml,yml}').each do |file_name|
-      enc = enc_data(file_name)
-      pxe = pxe_data(enc)
+      pxe = pxe_data(file_name)
+
+      next unless pxe
 
       hash = instance_hash(pxe)
 
@@ -148,7 +141,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   end
 
   def self.instance_hash(pxe)
-    return nil unless pxe[:content]
+    return nil unless pxe && pxe[:content]
 
     hash = pxe.select { |k, _v| DHCP_KEYS.include?(k) }
 
@@ -159,6 +152,11 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   end
 
   def self.enc_data(file_name)
+    return @enc[file_name] if @enc and @enc.include?(file_name)
+
+    @enc = {} unless @enc
+    @enc[file_name] = nil
+
     data = File.read(file_name)
     enc = YAML.safe_load(data).map { |k, v| [k.to_sym, v] }.to_h
 
@@ -177,17 +175,24 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     enc[:hostname] ||= hostname if validate_domain(hostname)
 
     # `hostname` is mandatory - ignore ENC if valid hostname not found
-    return nil unless enc[:hostname]
-    enc
+    @enc[file_name] = enc if enc[:hostname]
+    @enc[file_name]
   end
 
   # @param enc [Hash] host data from ENC catalog
   # @return [Hash] hash of host parameters for dhcp_host resource initialization
   #                or an empty hash if we failed to parse ENC
   # @api private
-  def self.pxe_data(enc)
+  def self.pxe_data(file_name)
+    return @pxe[file_name] if @pxe and @pxe.include?(file_name)
+
+    @pxe = {} unless @pxe
+    @pxe[file_name] = nil
+
+    enc = enc_data(file_name)
+
     # return empty PXE data if ENC was not provided
-    return {} if enc.nil? || enc.empty?
+    return nil unless enc
 
     pxe = {}
 
@@ -232,13 +237,13 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
         warning _("MAC Address for #{fqdn} (%{mac}) is not valid") % { mac: host[:mac] } if host[:mac]
         break if i > 0
         # exit if parameters `ip` or `mac` are not provided
-        return {}
+        return nil
       end
 
       unless validate_ip(host[:ip])
         warning _("IP Address for #{fqdn} (%{ip}) is not valid (#{caller})") % { ip: host[:ip] } if host[:ip]
         break if i > 0
-        return {}
+        return nil
       end
 
       host[:group] ||= group
@@ -262,6 +267,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
 
     pxe[:dhcp] = dhcp.dup unless dhcp.empty?
 
+    @pxe[file_name] = pxe
     pxe
   end
 
