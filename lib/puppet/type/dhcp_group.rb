@@ -44,8 +44,9 @@ Puppet::Type.newtype(:dhcp_group) do
 
   ensurable do
     desc <<-DOC
-      Specifies whether the destination file should exist. Setting to 'absent' tells Puppet to delete the destination file if it exists, and
-      negates the effect of any other parameters.
+      Specifies whether the DHCP group should exist. Setting to 'absent' tells
+      Puppet to not generate Concat_fragment resource for DHCP group and negates
+      the effect of any other parameters.
     DOC
 
     defaultvalues
@@ -58,9 +59,7 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   newparam(:name, namevar: true) do
-    desc <<-DOC
-      Group name. By default is equal to Dhcp_group resource title
-    DOC
+    desc 'Group name. By default is equal to Dhcp_group resource title'
 
     validate do |val|
       raise Puppet::ParseError, _('dhcp_group :name must be a string') unless val.is_a?(String)
@@ -74,7 +73,7 @@ Puppet::Type.newtype(:dhcp_group) do
 
   newparam(:target) do
     desc <<-DOC
-      Optional. Default is/etc/dhcp/dhcpd.hosts. Specifies the destination file of the
+      Optional. Default is /etc/dhcp/dhcpd.hosts. Specifies the destination file of the
       generated Contact_fragment resources.
     DOC
 
@@ -86,9 +85,7 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   newparam(:order) do
-    desc <<-DOC
-      Order of generated Contact_fragment within the destination file.
-    DOC
+    desc 'Order of generated Contact_fragment within the destination file.'
 
     defaultto '20'
 
@@ -116,8 +113,8 @@ Puppet::Type.newtype(:dhcp_group) do
 
   newparam(:next_server) do
     desc <<-DOC
-      Whether to add dhcp parameter "next-server" into group PXE setings. Default
-      to undef
+      Whether to add dhcp parameter "next-server" into group PXE setings.
+      Default to undef
     DOC
 
     nodefault
@@ -137,9 +134,7 @@ Puppet::Type.newtype(:dhcp_group) do
   end
 
   newparam(:pxe_filename) do
-    desc <<-DOC
-      Whether to add dhcp parameter "filename" into group PXE setings.
-    DOC
+    desc 'Whether to add dhcp parameter "filename" into group PXE setings.'
 
     nodefault
 
