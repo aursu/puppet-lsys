@@ -168,7 +168,7 @@ Puppet::Type.newtype(:dhcp_host) do
           prop = result.newattr(prop_klass)
 
           # initialize each property based on Provider's instance data
-          prop.value = current if current && (current != :absent || prop_name == :ensure)
+          prop.value = current if current
         end
 
         result
