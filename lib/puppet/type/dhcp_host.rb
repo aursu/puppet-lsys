@@ -26,11 +26,13 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto { provider.pxe_data[:mac] }
 
     validate do |val|
+      return true if val == :absent
       raise Puppet::ParseError, _('dhcp_host :mac must be a string') unless val.is_a?(String)
       raise Puppet::ParseError, _('dhcp_host :mac must be a valid MAC address') unless provider.validate_mac(val)
     end
 
     munge do |val|
+      return nil if val == :absent
       val.downcase.tr('-', ':')
     end
 
@@ -45,8 +47,15 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto { provider.pxe_data[:ip] }
 
     validate do |val|
+      # alloe to use :absent value for the property
+      return true if val == :absent
       raise Puppet::ParseError, _('dhcp_host :ip must be a string') unless val.is_a?(String)
       raise Puppet::ParseError, _('dhcp_host :ip must be a valid IPv4 address') unless provider.validate_ip(val)
+    end
+
+    munge do |val|
+      return nil if val == :absent
+      val
     end
 
     def retrieve
@@ -60,11 +69,14 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto { @resource[:name] }
 
     validate do |val|
+      # alloe to use :absent value for the property
+      return true if val == :absent
       raise Puppet::ParseError, _('dhcp_host :hostname must be a string') unless val.is_a?(String)
       raise Puppet::ParseError, _('dhcp_host :hostname must be a valid hostname') unless resource.validate_hostname(val)
     end
 
     munge do |val|
+      return nil if val == :absent
       # this is a trick - we accept only hostname in form of FQDN
       return nil unless provider.validate_domain(val)
       val.downcase
@@ -93,7 +105,7 @@ Puppet::Type.newtype(:dhcp_host) do
     defaultto { resource.host_content || provider.pxe_data[:content] }
 
     munge do |value|
-      return nil if @resource[:ensure] == :absent
+      return nil if @resource[:ensure] == :absent || value == :absent
       value
     end
 
