@@ -81,7 +81,8 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
   end
 
   def self.instances
-    instances = []
+    return @instances if @instances
+    @instances = []
 
     # read ENC data
     Dir.glob('/var/lib/pxe/enc/*.{eyaml,yaml,yml}').each do |file_name|
@@ -103,7 +104,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
         end
     end
 
-    instances
+    @instances
   end
 
   private

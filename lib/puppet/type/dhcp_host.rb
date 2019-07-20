@@ -153,9 +153,12 @@ Puppet::Type.newtype(:dhcp_host) do
 
   # Retrieves all known instances.
   def self.instances
+    return @instances if @instances
     # Put the default provider first, then the rest of the suitable providers.
     provider_instances = {}
-    instances = providers_by_source.map do |provider|
+
+    # introduce class variable - we must call read current state once per run
+    type_instances = providers_by_source.map do |provider|
       provider.instances.map do |instance|
         # We always want to use the "first" provider instance we find, unless the resource
         # is already managed and has a different provider set
@@ -182,6 +185,6 @@ Puppet::Type.newtype(:dhcp_host) do
       end
     end
 
-    instances.flatten.compact
+    @instances = type_instances.flatten.compact
   end
 end
