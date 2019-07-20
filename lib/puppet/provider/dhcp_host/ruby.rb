@@ -228,14 +228,14 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       # we are strict: if either mac<N> or ip<N> missed - ignore any
       # other mac<N+1> or ip<N+1>
       unless validate_mac(host[:mac])
-        warning _('MAC Address (%{mac}) is not valid') % { mac: host[:mac] }
+        warning _("MAC Address for #{fqdn} (%{mac}) is not valid") % { mac: host[:mac] } if host[:mac]
         break if i > 0
         # exit if parameters `ip` or `mac` are not provided
         return {}
       end
 
       unless validate_ip(host[:ip])
-        warning _('IP Address (%{ip}) is not valid') % { ip: host[:ip] }
+        warning _("IP Address for #{fqdn} (%{ip}) is not valid (#{caller})") % { ip: host[:ip] } if host[:ip]
         break if i > 0
         return {}
       end
