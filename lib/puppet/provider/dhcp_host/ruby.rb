@@ -195,13 +195,24 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
       pxe = enc[:pxe].map { |k, v| [k.to_sym, v] }.to_h
     end
 
+    # default DHCP group for PXE interface
+    pxe[:group] ||= 'pxe'
+    pxe[:group] = pxe[:group].downcase.gsub(%r{[^a-z0-9]}, '_')
+
+    fqdn = enc[:hostname].downcase
+    hostname, _domain = fqdn.split('.', 2)
+
     # allow to use direct `mac` and `ip` parameters (but those inside `pxe` section
     # have higher priority).
     pxe[:mac] ||= enc[:mac]
     pxe[:ip] ||= enc[:ip]
 
-    pxe[:name] = enc[:hostname].downcase
-    pxe[:hostname] = enc[:hostname].downcase
+    if pxe[:group] == 'pxe'
+      pxe[:name] = fqdn
+      pxe[:hostname] = fqdn
+    else
+      pxe[:name] = "#{hostname}-eth0"
+    end
 
     # validation
     mac = pxe.delete(:mac) unless validate_mac(pxe[:mac])
@@ -217,13 +228,9 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
     # Element with index 0 is PXE interface
     ip_map = []
     if pxe[:mac] && pxe[:ip]
-      # default DHCP group for PXE interface
-
-      pxe[:group] ||= 'pxe'
 
       # translate
       pxe[:mac] = pxe[:mac].downcase.tr('-', ':')
-      pxe[:group] = pxe[:group].downcase.gsub(%r{[^a-z0-9]}, '_')
 
       # it is required to support IP mapping
       # pxe key could contain mapping for up to 9 network interfaces, e.g.
@@ -235,7 +242,7 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
         j = (i > 0) ? i : nil # rubocop:disable Style/NumericPredicate
         map_keys = ["mac#{j}", "ip#{j}", "group#{j}"].map(&:to_sym)
         next_map = [:mac, :ip, :group].zip(map_keys.map { |k| pxe[k] }).to_h
-        hostname, _domain = pxe[:name].split('.', 2)
+
 
         # we are strict: if either mac<N> or ip<N> missed - ignore any
         # other mac<N+1> or ip<N+1>
@@ -244,7 +251,12 @@ Puppet::Type.type(:dhcp_host).provide(:ruby, parent: Puppet::Provider) do
         next_map[:group] ||= 'default'
         next_map[:mac] = next_map[:mac].downcase.tr('-', ':')
         next_map[:group] = next_map[:group].downcase.gsub(%r{[^a-z0-9]}, '_')
-        next_map[:name] = "#{hostname}-eth#{i}"
+        if next_map[:group] == 'pxe'
+          next_map[:name] = fqdn
+          next_map[:hostname] = fqdn
+        else
+          next_map[:name] = "#{hostname}-eth#{i}"
+        end
         next_map[:content] = host_content(next_map)
 
         ip_map[i] = next_map
