@@ -163,8 +163,7 @@ Puppet::Type.newtype(:dhcp_group) do
     desc 'iPXE chainloading script (see http://ipxe.org/howto/dhcpd#pxe_chainloading)'
 
     defaultto do
-      'http://%{next_server}/boot/install.ipxe' %
-      {next_server: @resource[:next_server] } if @resource[:next_server]
+      'http://%{next_server}/boot/install.ipxe' % { next_server: @resource[:next_server] } if @resource[:next_server]
     end
 
     validate do |val|
