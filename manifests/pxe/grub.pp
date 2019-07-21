@@ -11,22 +11,11 @@
 #   by Puppet (therefore could be removed)
 #
 class lsys::pxe::grub (
-  Boolean $centos6_download = true,
-  Boolean $centos7_download = true,
   Boolean $enable      = true,
-){
-
+)
+{
   include lsys::pxe::params
-  $centos6_current_version = $lsys::pxe::params::centos6_current_version
   $centos7_current_version = $lsys::pxe::params::centos7_current_version
-
-  if $centos6_download and $enable {
-    lsys::pxe::centos { $centos6_current_version: }
-  }
-
-  if $centos7_download and $enable {
-    lsys::pxe::centos { $centos7_current_version: }
-  }
 
   # GRUB2 Modules installation
   package {

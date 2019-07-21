@@ -8,22 +8,34 @@ class lsys::pxe::server (
   Stdlib::Fqdn
           $server_name,
   Stdlib::Port
-          $web_port                   = 80,
-  Boolean $manage_web_user            = true,
+          $web_port             = 80,
+  Boolean $manage_web_user      = true,
   Optional[String]
-          $root_authorized_keys       = undef,
+          $root_authorized_keys = undef,
   Optional[String]
-          $puppet_local_config        = undef,
-  Boolean $enable                     = true,
+          $puppet_local_config  = undef,
+  Boolean $enable               = true,
+  Boolean $centos6_download     = true,
+  Boolean $centos7_download     = true,
 )
 {
   include lsys::pxe::storage
   include lsys::pxe::params
 
-  $storage_directory = $lsys::pxe::params::storage_directory
-  $centos_version    = $lsys::pxe::params::centos7_current_version
-  $centos6_version   = $lsys::pxe::params::centos6_current_version
-  $install_server    = $server_name
+  $storage_directory       = $lsys::pxe::params::storage_directory
+  $centos_version          = $lsys::pxe::params::centos7_current_version
+  $centos6_version         = $lsys::pxe::params::centos6_current_version
+  $install_server          = $server_name
+  $centos6_current_version = $lsys::pxe::params::centos6_current_version
+  $centos7_current_version = $lsys::pxe::params::centos7_current_version
+
+  if $centos6_download and $enable {
+    lsys::pxe::centos { $centos6_current_version: }
+  }
+
+  if $centos7_download and $enable {
+    lsys::pxe::centos { $centos7_current_version: }
+  }
 
   # Web service
   class { 'lsys::httpd':
