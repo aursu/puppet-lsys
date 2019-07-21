@@ -14,6 +14,7 @@ timezone America/New_York --isUtc --nontp
 bootloader --append=" crashkernel=auto rhgb quiet net.ifnames=0 biosdevname=0" --location=mbr --boot-drive=sda
 
 network --onboot yes --device eth0 --bootproto dhcp --ipv6=auto
+network --onboot yes --device eth1 --bootproto dhcp --nodns --noipv6
 
 rootpw  --iscrypted $6$TC9OXWLQy8dfzvKM$g2guXZPj4LUDsLB3JOCGC0g4FETFtSozOZmuF1JlNnn4QJSw1jDyKh6C6qj79U4ps9mb9s85XqD9JQqn24hVn/
 
