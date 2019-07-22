@@ -82,8 +82,10 @@ class lsys::profile::pxe (
   String  $enc_repo_identity,
   String  $enc_repo_branch        = 'enc',
   Boolean $enable                 = true,
-  String  $root_authorized_keys   = undef,
-  String  $puppet_local_config    = undef,
+  Optional[String]
+          $root_authorized_keys   = undef,
+  Optional[String]
+          $puppet_local_config    = undef,
 )
 {
   Lsys::Pxe::Client_config {
