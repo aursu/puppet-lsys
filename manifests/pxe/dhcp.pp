@@ -91,4 +91,12 @@ class lsys::pxe::dhcp (
     next_server      => $next_server,
     tftp_server_name => true,
   }
+
+  # Default iPXE group
+  dhcp_group { 'ipxe':
+    pxe_settings     => true,
+    ipxe_settings    => true,
+    next_server      => $next_server,
+    tftp_server_name => true,
+  }
 }
