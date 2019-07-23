@@ -1,3 +1,4 @@
 #!ipxe
 
-chain http://${next-server}/boot/install/${hostname}.cfg
+dhcp
+chain http://${next-server}/boot/install/${hostname}.cfg || exit 1
