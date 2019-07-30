@@ -1,6 +1,6 @@
-# A description of what this class does
+# EPEL Yum repository installation
 #
-# @summary A short summary of the purpose of this class
+# @summary EPEL Yum repository installation
 #
 # @example
 #   include lsys::repo::epel
