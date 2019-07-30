@@ -13,7 +13,7 @@ describe 'lsys::profile::pxe::nginx' do
       let(:params) do
         {
           server_name: 'install.domain.tld',
-          resolver: ['192.168.1.1'],
+          resolver: ['192.168.1.1']
         }
       end
 

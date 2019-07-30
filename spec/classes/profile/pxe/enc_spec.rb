@@ -33,7 +33,6 @@ T6plhPLwidmKGX1PiwTFbOc6bCg6XIwZuvd9LCxgTVTHvf05l1u9
 PRIVATEKEY
   end
 
-
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }

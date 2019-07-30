@@ -33,8 +33,6 @@ T6plhPLwidmKGX1PiwTFbOc6bCg6XIwZuvd9LCxgTVTHvf05l1u9
 PRIVATEKEY
   end
 
-
-
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
@@ -50,12 +48,12 @@ PRIVATEKEY
               broadcast: '192.168.1.255',
               routers: '192.168.1.1',
               domain_name: 'domain.tld',
-              nameservers: ['192.168.1.1', '8.8.8.8', '1.1.1.1'],
+              nameservers: ['192.168.1.1', '8.8.8.8', '1.1.1.1']
             }
           },
           enc_repo_source: 'git@gitlab.domain.tld:infra/enc.git',
           enc_repo_identity: ssh_rsa_id,
-          enc_repo_branch: 'master',
+          enc_repo_branch: 'master'
         }
       end
 
