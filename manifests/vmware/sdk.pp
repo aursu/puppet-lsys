@@ -8,12 +8,16 @@ class lsys::vmware::sdk (
 )
 {
   include lsys::repo::bintray
+  include lsys::repo::epel
 
   package { 'VMware-vSphere-Perl-SDK':
     ensure          => $package_ensure,
     install_options => [
       { '--enablerepo' => 'bintray-custom' }
     ],
-    require         => Yumrepo['bintray-custom'],
+    require         => [
+      Yumrepo['bintray-custom'],
+      Package['epel-release'],
+    ]
   }
 }
