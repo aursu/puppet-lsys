@@ -40,4 +40,5 @@ fixtures:
     dhcp:
       repo: https://github.com/voxpupuli/puppet-dhcp.git
       ref: "tags/v3.4.0"
+    openssh: "https://github.com/aursu/puppet-openssh.git"
 
