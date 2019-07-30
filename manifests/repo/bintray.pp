@@ -10,6 +10,8 @@ class lsys::repo::bintray (
   Boolean $php73_enable = false,
 )
 {
+  include lsys::repo
+
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['6', '7'] {
     yumrepo { 'bintray-custom':
       baseurl       => 'https://dl.bintray.com/aursu/custom/centos/$releasever/',
@@ -18,6 +20,7 @@ class lsys::repo::bintray (
       gpgcheck      => '0',
       repo_gpgcheck => '0',
       sslverify     => '0',
+      notify        => Exec['yum-reload-e0c99ff'],
     }
 
     if $php5_enable {
@@ -28,6 +31,7 @@ class lsys::repo::bintray (
         gpgcheck      => '0',
         repo_gpgcheck => '0',
         sslverify     => '0',
+        notify        => Exec['yum-reload-e0c99ff'],
       }
     }
 
@@ -39,6 +43,7 @@ class lsys::repo::bintray (
         gpgcheck      => '0',
         repo_gpgcheck => '0',
         sslverify     => '0',
+        notify        => Exec['yum-reload-e0c99ff'],
       }
     }
 
@@ -50,6 +55,7 @@ class lsys::repo::bintray (
         gpgcheck      => '0',
         repo_gpgcheck => '0',
         sslverify     => '0',
+        notify        => Exec['yum-reload-e0c99ff'],
       }
     }
   }
