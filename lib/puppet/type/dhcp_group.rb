@@ -133,13 +133,51 @@ Puppet::Type.newtype(:dhcp_group) do
     defaultto :true
   end
 
+  newparam(:ipxe_settings, boolean: true, parent: Puppet::Parameter::Boolean) do
+    desc 'Whether to enable iPXE settings'
+
+    defaultto :false
+  end
+
+  newparam(:ipxe_filename) do
+    desc 'TFTP location of iPXE boot loader'
+
+    defaultto 'boot/ipxe/undionly.kpxe'
+
+    validate do |val|
+      raise Puppet::ParseError, _('ipxe_filename parameter must be a string') unless val.is_a?(String)
+    end
+  end
+
+  newparam(:ipxe_uefi_filename) do
+    desc 'TFTP location of iPXE UEFI boot loader'
+
+    defaultto 'boot/ipxe/ipxe.efi'
+
+    validate do |val|
+      raise Puppet::ParseError, _('ipxe_uefi_filename parameter must be a string') unless val.is_a?(String)
+    end
+  end
+
+  newparam(:ipxe_script) do
+    desc 'iPXE chainloading script (see http://ipxe.org/howto/dhcpd#pxe_chainloading)'
+
+    defaultto do
+      'http://%{next_server}/boot/install.ipxe' % { next_server: @resource[:next_server] } if @resource[:next_server]
+    end
+
+    validate do |val|
+      raise Puppet::ParseError, _('ipxe_script parameter must be a string') unless val.is_a?(String)
+    end
+  end
+
   newparam(:pxe_filename) do
     desc 'Whether to add dhcp parameter "filename" into group PXE setings.'
 
     nodefault
 
     validate do |val|
-      raise Puppet::ParseError, _('$pxe_filename is not a string.') unless val.is_a?(String)
+      raise Puppet::ParseError, _('pxe_filename parameter must be a string.') unless val.is_a?(String)
     end
   end
 
@@ -204,6 +242,12 @@ Puppet::Type.newtype(:dhcp_group) do
     tftp_server_name = self[:tftp_server_name]
     pxe_filename = self[:pxe_filename]
 
+    # iPXE (required for VMWare VMs with VMXNET3 network driver)
+    ipxe_settings = self[:ipxe_settings]
+    ipxe_filename = self[:ipxe_filename]
+    ipxe_uefi_filename = self[:ipxe_uefi_filename]
+    ipxe_script = self[:ipxe_script]
+
     @generated_content = ERB.new(<<-EOF, nil, '<>').result(binding).strip + newline
 group {
 <% if host_decl_names %>
@@ -217,7 +261,18 @@ group {
     option tftp-server-name "<%= next_server %>";
 <%     end %>
 <%   end %>
-<%   if pxe_filename %>
+<%   if ipxe_settings %>
+    if exists user-class and option user-class = "iPXE" {
+      option bootfile-name "<%= ipxe_script %>";
+      filename "<%= ipxe_script %>";
+    } else if option client-arch != 00:00 {
+      option bootfile-name "<%= ipxe_uefi_filename %>";
+      filename "<%= ipxe_uefi_filename %>";
+    } else {
+      option bootfile-name "<%= ipxe_filename %>";
+      filename "<%= ipxe_filename %>";
+    }
+<%   elsif pxe_filename %>
     filename "<%= pxe_filename %>";
 <%   end %>
   }

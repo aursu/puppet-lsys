@@ -15,7 +15,7 @@ class lsys::pxe::grub (
 )
 {
   include lsys::pxe::params
-  $centos7_current_version = $lsys::pxe::params::centos7_current_version
+  $centos_version = $lsys::pxe::params::centos7_current_version
 
   # GRUB2 Modules installation
   package {
@@ -77,8 +77,8 @@ class lsys::pxe::grub (
   # cat boot/grub/i386-pc/grub.cfg
   # source boot/grub/grub.cfg
 
-  $default_kernel = "/boot/centos/${centos7_current_version}/os/x86_64/images/pxeboot/vmlinuz"
-  $default_initimg = "/boot/centos/${centos7_current_version}/os/x86_64/images/pxeboot/initrd.img"
+  $default_kernel = "/boot/centos/${centos_version}/os/x86_64/images/pxeboot/vmlinuz"
+  $default_initimg = "/boot/centos/${centos_version}/os/x86_64/images/pxeboot/initrd.img"
 
   file { '/var/lib/tftpboot/boot/grub/grub.cfg':
     ensure  => file,

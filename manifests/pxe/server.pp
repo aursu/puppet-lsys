@@ -26,15 +26,13 @@ class lsys::pxe::server (
   $centos_version          = $lsys::pxe::params::centos7_current_version
   $centos6_version         = $lsys::pxe::params::centos6_current_version
   $install_server          = $server_name
-  $centos6_current_version = $lsys::pxe::params::centos6_current_version
-  $centos7_current_version = $lsys::pxe::params::centos7_current_version
-
-  if $centos6_download and $enable {
-    lsys::pxe::centos { $centos6_current_version: }
-  }
 
   if $centos7_download and $enable {
-    lsys::pxe::centos { $centos7_current_version: }
+    lsys::pxe::centos { $centos_version: }
+  }
+
+  if $centos6_download and $enable {
+    lsys::pxe::centos { $centos6_version: }
   }
 
   # Web service
