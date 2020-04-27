@@ -4,7 +4,7 @@
 #
 # @example
 #   lsys::pxe::client_config { 'namevar': }
-define lsys::pxe::client_config(
+define lsys::pxe::client_config (
   # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-howto
   Stdlib::Fqdn
           $install_server,
@@ -31,8 +31,10 @@ define lsys::pxe::client_config(
 )
 {
   include lsys::pxe::params
-  $centos7_current_version = $lsys::pxe::params::centos7_current_version
+
   $centos6_current_version = $lsys::pxe::params::centos6_current_version
+  $centos7_current_version = $lsys::pxe::params::centos7_current_version
+  $centos8_current_version = $lsys::pxe::params::centos8_current_version
 
   if $centos {
     if $osrelease {
@@ -60,6 +62,8 @@ define lsys::pxe::client_config(
       $ks_filename = "${centos_version}-${arch}" ? {
         '6-x86_64'                          => 'default-6-x86_64.cfg',
         "${centos6_current_version}-x86_64" => 'default-6-x86_64.cfg',
+        '8-x86_64'                          => 'default-8-x86_64.cfg',
+        "${centos8_current_version}-x86_64" => 'default-8-x86_64.cfg',
         '7-x86_64'                          => 'default.cfg',
         "${centos7_current_version}-x86_64" => 'default.cfg',
         default                             => "default-${centos_version}-${arch}.cfg",
@@ -89,6 +93,12 @@ define lsys::pxe::client_config(
   else {
     $boot_initimg = undef
   }
+
+  # TODO: iPXE
+  # #!ipxe
+  # kernel http://rpmb.carrierzone.com/boot/centos/7.8.2003/os/x86_64/images/pxeboot/vmlinuz ip=dhcp ksdevice= inst.ks=http://rpmb.carrierzone.com/ks/default.cfg net.ifnames=0 biosdevname=0
+  # initrd http://rpmb.carrierzone.com/boot/centos/7.8.2003/os/x86_64/images/pxeboot/initrd.img
+  # boot
 
   # $hostname should match DHCP option host-name or the host declaration name
   # (if one) if use-host-decl-names is on
