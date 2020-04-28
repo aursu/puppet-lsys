@@ -25,6 +25,7 @@ class lsys::pxe::server (
   $storage_directory       = $lsys::pxe::params::storage_directory
   $centos_version          = $lsys::pxe::params::centos7_current_version
   $centos6_version         = $lsys::pxe::params::centos6_current_version
+  $centos8_version         = $lsys::pxe::params::centos8_current_version
   $install_server          = $server_name
 
   if $centos7_download and $enable {
@@ -63,6 +64,11 @@ class lsys::pxe::server (
   file{ "${storage_directory}/configs/default-6-x86_64.cfg":
     ensure  => file,
     content => template('lsys/pxe/default-centos-6-x86_64-ks.cfg.erb'),
+  }
+
+  file{ "${storage_directory}/configs/default-8-x86_64.cfg":
+    ensure  => file,
+    content => template('lsys/pxe/default-centos-8-x86_64-ks.cfg.erb'),
   }
 
   # CGI trigger for host installation
