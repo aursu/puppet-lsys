@@ -81,7 +81,7 @@ if grep -q '200 OK' headers; then
 fi
 
 # install Puppet Agent
-yum -y install puppet-agent-5.5.14
+yum -y install puppet-agent-5.5.19-1.el6
 
 # install Puppet agent config
 curl http://<%= @install_server %>/ks/assets/puppet.conf -Dheaders -odata -s
