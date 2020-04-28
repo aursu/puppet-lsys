@@ -264,7 +264,7 @@
 192.168.0.45 - - [27/Apr/2020:21:02:53 -0400] "GET /centos/8.1.1911/BaseOS/x86_64/os/Packages/squashfs-tools-4.3-19.el8.x86_64.rpm HTTP/1.1" 200 169424 "-" "libdnf"
 192.168.0.45 - - [27/Apr/2020:21:02:53 -0400] "GET /centos/8.1.1911/BaseOS/x86_64/os/Packages/libtool-ltdl-2.4.6-25.el8.x86_64.rpm HTTP/1.1" 200 59148 "-" "libdnf"
 192.168.0.45 - - [27/Apr/2020:21:02:53 -0400] "GET /centos/8.1.1911/AppStream/x86_64/os/Packages/geolite2-city-20180605-1.el8.noarch.rpm HTTP/1.1" 200 19876684 "-" "libdnf"
-192.168.0.45 - - [27/Apr/2020:21:05:25 -0400] "GET /exec/move.cgi?web45c100.carrierzone.com HTTP/1.1" 200 4 "-" "curl/7.61.1"
+192.168.0.45 - - [27/Apr/2020:21:05:25 -0400] "GET /exec/move.cgi?web45.internal.com HTTP/1.1" 200 4 "-" "curl/7.61.1"
 192.168.0.45 - - [27/Apr/2020:21:05:25 -0400] "GET /ks/assets/root.authorized_keys HTTP/1.1" 200 720 "-" "curl/7.61.1"
 192.168.0.45 - - [27/Apr/2020:21:05:25 -0400] "GET /ks/assets/RPM-GPG-KEY-puppet5-release HTTP/1.1" 200 1676 "-" "curl/7.61.1"
 192.168.0.45 - - [27/Apr/2020:21:05:25 -0400] "GET /ks/assets/puppet5.repo HTTP/1.1" 200 442 "-" "curl/7.61.1"

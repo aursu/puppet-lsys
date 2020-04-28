@@ -553,7 +553,7 @@
 192.168.0.45 - - [27/Apr/2020:17:52:41 -0400] "GET /centos/7.8.2003/os/x86_64/Packages/xfsprogs-4.5.0-20.el7.x86_64.rpm HTTP/1.1" 200 917404 "-" "urlgrabber/3.10 yum/3.4.3"
 192.168.0.45 - - [27/Apr/2020:17:52:41 -0400] "GET /centos/7.8.2003/os/x86_64/Packages/less-458-9.el7.x86_64.rpm HTTP/1.1" 200 122672 "-" "urlgrabber/3.10 yum/3.4.3"
 192.168.0.45 - - [27/Apr/2020:17:52:41 -0400] "GET /centos/7.8.2003/os/x86_64/Packages/rootfiles-8.1-11.el7.noarch.rpm HTTP/1.1" 200 7512 "-" "urlgrabber/3.10 yum/3.4.3"
-192.168.0.45 - - [27/Apr/2020:17:54:25 -0400] "GET /exec/move.cgi?web45c100.carrierzone.com HTTP/1.1" 200 4 "-" "curl/7.29.0"
+192.168.0.45 - - [27/Apr/2020:17:54:25 -0400] "GET /exec/move.cgi?web45.internal.com HTTP/1.1" 200 4 "-" "curl/7.29.0"
 192.168.0.45 - - [27/Apr/2020:17:54:25 -0400] "GET /ks/assets/root.authorized_keys HTTP/1.1" 200 720 "-" "curl/7.29.0"
 192.168.0.45 - - [27/Apr/2020:17:54:25 -0400] "GET /ks/assets/RPM-GPG-KEY-puppet5-release HTTP/1.1" 200 1676 "-" "curl/7.29.0"
 192.168.0.45 - - [27/Apr/2020:17:54:25 -0400] "GET /ks/assets/puppet5.repo HTTP/1.1" 200 442 "-" "curl/7.29.0"
