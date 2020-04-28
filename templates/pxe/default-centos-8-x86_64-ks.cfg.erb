@@ -46,6 +46,9 @@ reboot
 %packages --ignoremissing --excludedocs --nocore
 -@base
 @core --nodefaults
+dnf
+NetworkManager
+openssh-server
 %end
 
 %post
