@@ -35,37 +35,48 @@ define lsys::pxe::centos(
     /^8/ => 8,
   }
 
+  if $major_version > 7 {
+    $repo = 'BaseOS'
+    $arch_path = "${repo}/${arch}"
+    $repo_path = "${repo}/${arch}/os"
+  }
+  else {
+    $repo = 'os'
+    $arch_path = "${repo}/${arch}"
+    $repo_path = $arch_path
+  }
+
   $base_directory    = "/var/lib/tftpboot/boot/centos/${real_version}"
   $distro_base_directory = "${storage_directory}/centos/${real_version}"
 
   case $real_version {
-    $centos6_current_version, $centos7_current_version: {
-      $centos_url = "http://mirror.centos.org/centos/${real_version}/os/${arch}"
-    }
-    $centos8_current_version: {
-      # TODO: different $arch_directory and $distro_arch_directory
-      $centos_url = "http://mirror.centos.org/centos/${real_version}/BaseOS/${arch}/os"
+    $centos6_current_version, $centos7_current_version, $centos8_current_version: {
+      $centos_url = "http://mirror.centos.org/centos/${real_version}/${repo_path}"
     }
     default: {
       file { [ $base_directory, $distro_base_directory ]:
         ensure => directory,
       }
-      $centos_url = "http://vault.centos.org/${version}/os/${arch}"
+      $centos_url = "http://vault.centos.org/${version}/${repo_path}"
     }
   }
 
-  $arch_directory        = "${base_directory}/os/${arch}"
+  $arch_directory        = "${base_directory}/${arch_path}"
+  $repo_directory        = "${base_directory}/${repo_path}"
   $images_directory      = "${arch_directory}/images"
   $pxeboot_directory     = "${images_directory}/pxeboot"
-  $distro_arch_directory = "${distro_base_directory}/os/${arch}"
+  $distro_arch_directory = "${distro_base_directory}/${arch_path}"
+  $distro_repo_directory = "${distro_base_directory}/${repo_path}"
 
   file { [
-    "${base_directory}/os",
+    "${base_directory}/${repo}",
     $arch_directory,
+    $repo_directory,
     $images_directory,
     $pxeboot_directory,
-    "${distro_base_directory}/os",
-    $distro_arch_directory ]:
+    "${distro_base_directory}/${repo}",
+    $distro_arch_directory,
+    $distro_repo_directory].unique: # lint:ignore:unquoted_resource_title
     ensure => directory,
   }
 
@@ -80,12 +91,12 @@ define lsys::pxe::centos(
   }
 
   # /diskless/centos/7/os/x86_64/LiveOS/squashfs.img
-  if $major_version in [ 7, 8 ] {
-    file { "${distro_arch_directory}/LiveOS":
+  if $major_version == 7 {
+    file { "${distro_repo_directory}/LiveOS":
       ensure => directory,
     }
 
-    archive { "${distro_arch_directory}/LiveOS/squashfs.img":
+    archive { "${distro_repo_directory}/LiveOS/squashfs.img":
       ensure => present,
       source => "${centos_url}/LiveOS/squashfs.img",
     }
