@@ -4,14 +4,22 @@
 # path /diskless/centos
 
 osb="7"
-osv="7"
+osv="7.8.2003"
 osa="x86_64"
+
+dst=/diskless/centos/$osv
+if [ ! -d "$dst" ]; then
+    mkdir -p $dst
+fi
+if [ "$osb" != "$osv" ]; then
+    ln -sf $osv /diskless/centos/$osb
+fi
 
 # sync os data
 centos=(os updates extras)
 for r in "${centos[@]}"; do
     repo=$r
-    mirrors='http://mirrorlist.centos.org/?release='$osv'&arch='$osa'&repo='$r
+    mirrors='http://mirrorlist.centos.org/?release='$osb'&arch='$osa'&repo='$r
     echo $mirrors
 
     curl $mirrors 2>/dev/null | tac |
