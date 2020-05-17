@@ -33,6 +33,9 @@ fixtures:
       repo: "https://github.com/aursu/puppet-nginx.git"
       ref: "origin/optional-settings"
     puppet: "https://github.com/aursu/puppet-puppet.git"
+    selinux_core:
+      repo: https://github.com/puppetlabs/puppetlabs-selinux_core.git
+      puppet_version: ">= 6.0.0"
     tlsinfo: "https://github.com/aursu/puppet-tlsinfo.git"
     yumrepo_core:
       repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
