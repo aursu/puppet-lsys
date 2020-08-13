@@ -3,45 +3,25 @@
 ---
 fixtures:
   forge_modules:
-    apt:
-      repo: "puppetlabs/apt"
-      ref: "7.0.1"
-    concat:
-      repo: "puppetlabs/concat"
-      ref: "6.0.0"
-    inifile:
-      repo: "puppetlabs/inifile"
-      ref: "3.0.0"
-    stdlib:
-      repo: "puppetlabs/stdlib"
-      ref: "6.0.0"
-    puppet_agent:
-      repo: "puppetlabs/puppet_agent"
-      ref: "2.1.2"
     apache:
       repo: "puppetlabs/apache"
-      ref: "5.0.0"
-    archive:
-      repo: "puppet/archive"
-      ref: "4.0.0"
-    vcsrepo:
-      repo: "puppetlabs/vcsrepo"
-      ref: "3.0.0"
+      ref: "5.5.0"
+    concat:
+      repo: "puppetlabs/concat"
+      ref: "6.2.0"
+    inifile:
+      repo: "puppetlabs/inifile"
+      ref: "4.2.0"
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "6.3.0"
   repositories:
-    dockerinstall: "https://github.com/aursu/puppet-dockerinstall.git"
     nginx:
       repo: "https://github.com/aursu/puppet-nginx.git"
-      ref: "origin/optional-settings"
-    puppet: "https://github.com/aursu/puppet-puppet.git"
-    selinux_core:
-      repo: https://github.com/puppetlabs/puppetlabs-selinux_core.git
-      puppet_version: ">= 6.0.0"
-    tlsinfo: "https://github.com/aursu/puppet-tlsinfo.git"
+      ref: "tags/v1.1.1-rc0.5"
     yumrepo_core:
       repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
+      ref: "tags/1.0.7"
       puppet_version: ">= 6.0.0"
-    dhcp:
-      repo: https://github.com/voxpupuli/puppet-dhcp.git
-      ref: "tags/v3.4.0"
-    openssh: "https://github.com/aursu/puppet-openssh.git"
+
 
