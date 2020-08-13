@@ -1,10 +1,25 @@
 # puppet-lsys
 Different Puppet helpers (custom types, defined types, facts, profiles etc)
 
-## PXE environment
+## Nginx core
 
-TFTP directory is hardcoded to /var/lib/tftpboot
+```
+include lsys::nginx
+```
 
-## Docker registry
+## Apache core
 
-Based on Nginx and Docker Registry v2 (https://hub.docker.com/_/registry)
+```
+include lsys::httpd
+```
+
+## Yum cache cleanup
+
+Via notify event send to Calss['lsys::repo']
+
+```
+  package { 'epel-release':
+    ensure => 'present',
+    notify => Class['lsys::repo'],
+  }
+```
