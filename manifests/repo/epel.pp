@@ -10,6 +10,6 @@ class lsys::repo::epel {
 
   package { 'epel-release':
     ensure => 'present',
-    notify => Exec['yum-reload-e0c99ff'],
+    notify => Class['lsys::repo'],
   }
 }

@@ -1,15 +1,15 @@
 # lsys::systemd
 #
-# systemd resources
+# systemd reload command
 #
-# @summary Provides resources for basic systemd management
+# @summary Provides Exec resource to reload systemd
 #
 # @example
 #   include lsys::systemd
 class lsys::systemd {
-    exec { 'systemd-reload':
-        command     => 'systemctl daemon-reload',
-        path        => '/bin:/sbin:/usr/bin:/usr/sbin',
-        refreshonly => true,
-    }
+  exec { 'systemd-reload':
+    command     => 'systemctl daemon-reload',
+    path        => '/bin:/sbin:/usr/bin:/usr/sbin',
+    refreshonly => true,
+  }
 }

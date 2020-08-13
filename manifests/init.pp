@@ -1,2 +1,1 @@
-class lsys {
-}
+class lsys {}

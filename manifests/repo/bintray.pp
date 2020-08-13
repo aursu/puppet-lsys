@@ -8,11 +8,12 @@ class lsys::repo::bintray (
   Boolean $php5_enable  = false,
   Boolean $php71_enable = false,
   Boolean $php73_enable = false,
+  Boolean $php74_enable = false,
 )
 {
   include lsys::repo
 
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['6', '7'] {
+  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['6', '7', '8'] {
     yumrepo { 'bintray-custom':
       baseurl       => 'https://dl.bintray.com/aursu/custom/centos/$releasever/',
       descr         => 'PHP dependencies',
@@ -20,7 +21,7 @@ class lsys::repo::bintray (
       gpgcheck      => '0',
       repo_gpgcheck => '0',
       sslverify     => '0',
-      notify        => Exec['yum-reload-e0c99ff'],
+      notify        => Class['lsys::repo'],
     }
 
     if $php5_enable {
@@ -31,7 +32,7 @@ class lsys::repo::bintray (
         gpgcheck      => '0',
         repo_gpgcheck => '0',
         sslverify     => '0',
-        notify        => Exec['yum-reload-e0c99ff'],
+        notify        => Class['lsys::repo'],
       }
     }
 
@@ -43,7 +44,7 @@ class lsys::repo::bintray (
         gpgcheck      => '0',
         repo_gpgcheck => '0',
         sslverify     => '0',
-        notify        => Exec['yum-reload-e0c99ff'],
+        notify        => Class['lsys::repo'],
       }
     }
 
@@ -55,7 +56,19 @@ class lsys::repo::bintray (
         gpgcheck      => '0',
         repo_gpgcheck => '0',
         sslverify     => '0',
-        notify        => Exec['yum-reload-e0c99ff'],
+        notify        => Class['lsys::repo'],
+      }
+    }
+
+    if $php74_enable {
+      yumrepo { 'bintray-php74custom':
+        baseurl       => 'https://dl.bintray.com/aursu/php74custom/centos/$releasever/',
+        descr         => 'PHP 7.4 packages and extensions',
+        enabled       => '0',
+        gpgcheck      => '0',
+        repo_gpgcheck => '0',
+        sslverify     => '0',
+        notify        => Class['lsys::repo'],
       }
     }
   }

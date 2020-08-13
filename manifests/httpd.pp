@@ -1,6 +1,6 @@
 # Apache Web server installation and basic configuration
 #
-# @summary A short summary of the purpose of this class
+# @summary Apache Web server installation and basic configuration
 #
 # @example
 #   include lsys::httpd

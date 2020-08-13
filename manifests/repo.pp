@@ -1,6 +1,6 @@
-# Resources for Yum repository management
+# Yum cache cleanup
 #
-# @summary Resources for Yum repository management
+# @summary Resources for Yum cache cleanup
 #
 # @example
 #   include lsys::repo
