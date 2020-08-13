@@ -21,7 +21,7 @@ describe 'lsys::httpd' do
         context 'when user management disabled' do
           let(:params) do
             {
-              manage_user: false
+              manage_user: false,
             }
           end
 
@@ -33,7 +33,7 @@ describe 'lsys::httpd' do
         context 'when group management disabled' do
           let(:params) do
             {
-              manage_group: false
+              manage_group: false,
             }
           end
 

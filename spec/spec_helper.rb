@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet-facts'
 
@@ -5,20 +7,14 @@ require 'spec_helper_local' if File.file?(File.join(File.dirname(__FILE__), 'spe
 
 include RspecPuppetFacts
 
-# https://github.com/mcanevet/rspec-puppet-facts/blob/master/README.md#create-dynamic-facts
-# register is_init_systemd fact from module lsys
-add_custom_fact :is_init_systemd, ->(os, _facts) do
-  os != 'ubuntu-14.04-x86_64'
-end
-
 default_facts = {
   puppetversion: Puppet.version,
-  facterversion: Facter.version
+  facterversion: Facter.version,
 }
 
 default_fact_files = [
   File.expand_path(File.join(File.dirname(__FILE__), 'default_facts.yml')),
-  File.expand_path(File.join(File.dirname(__FILE__), 'default_module_facts.yml'))
+  File.expand_path(File.join(File.dirname(__FILE__), 'default_module_facts.yml')),
 ]
 
 default_fact_files.each do |f|
@@ -31,6 +27,11 @@ default_fact_files.each do |f|
   end
 end
 
+# read default_facts and merge them over what is provided by facterdb
+default_facts.each do |fact, value|
+  add_custom_fact fact, value
+end
+
 def fixture_path
   File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 end
@@ -39,12 +40,12 @@ RSpec.configure do |c|
   c.default_facts = default_facts
   c.add_setting :fixture_path, default: fixture_path
   c.hiera_config = File.join(fixture_path, '/hiera/hiera.yaml')
+
   c.before :each do
     # set to strictest setting for testing
     # by default Puppet runs at warning level
     Puppet.settings[:strict] = :warning
-    # Puppet::Util::Log.level = :debug
-    # Puppet::Util::Log.newdestination(:console)
+    Puppet.settings[:strict_variables] = true
   end
   c.filter_run_excluding(bolt: true) unless ENV['GEM_BOLT']
   c.after(:suite) do

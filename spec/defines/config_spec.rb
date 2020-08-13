@@ -7,9 +7,9 @@ describe 'lsys::config' do
       'data' => {
         'LicenseKey' => '000000000000',
         'UserId'     => '0',
-        'ProductIds' => 'GeoLite2-City GeoLite2-Country'
+        'ProductIds' => 'GeoLite2-City GeoLite2-Country',
       },
-      'key_val_separator' => ' '
+      'key_val_separator' => ' ',
     }
   end
 
