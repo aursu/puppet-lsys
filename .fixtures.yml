@@ -12,6 +12,9 @@ fixtures:
     inifile:
       repo: "puppetlabs/inifile"
       ref: "4.2.0"
+    selinux:
+      repo: "puppet/selinux"
+      ref: "3.2.0"
     stdlib:
       repo: "puppetlabs/stdlib"
       ref: "6.3.0"
