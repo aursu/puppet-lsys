@@ -18,6 +18,9 @@ fixtures:
     stdlib:
       repo: "puppetlabs/stdlib"
       ref: "6.3.0"
+    sysctl:
+      repo: "thias/sysctl"
+      ref: "1.0.6"
   repositories:
     nginx:
       repo: "https://github.com/aursu/puppet-nginx.git"

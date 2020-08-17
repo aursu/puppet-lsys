@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'lsys::hardening::auto_update' do
+describe 'lsys::auto_upgrade::bash' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
