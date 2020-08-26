@@ -7,6 +7,9 @@
 #   include lsys::hardening::root_access
 class lsys::hardening::root_access (
   Boolean $protecting_symbolic_links = true,
+  Boolean $manage_password           = false,
+  Optional[String]
+          $password_hash             = undef,
 )
 {
   # 4.2.6. Protecting Hard and Symbolic Links
@@ -16,6 +19,13 @@ class lsys::hardening::root_access (
       sysctl { 'fs.protected_symlinks':
         value => '0',
       }
+    }
+  }
+
+  # openssl passwd -6
+  if $manage_password and $password_hash {
+    user { 'root':
+      password => $password_hash,
     }
   }
 }
