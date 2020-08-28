@@ -23,6 +23,10 @@
       "version_requirement": ">= 0.4.1 < 1.0.0"
     },
     {
+      "name": "aursu/grayloginstall",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
       "name": "puppetlabs/inifile",
       "version_requirement": ">= 4.2.0 < 5.0.0"
     },
