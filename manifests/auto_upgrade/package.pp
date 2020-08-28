@@ -1,6 +1,6 @@
-# @summary A short summary of the purpose of this defined type.
+# @summary Setup latest available package
 #
-# A description of what this defined type does
+# Setup latest available package
 #
 # @example
 #   lsys::auto_upgrade::package { 'namevar': }
