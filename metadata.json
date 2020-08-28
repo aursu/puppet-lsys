@@ -11,8 +11,16 @@
       "version_requirement": ">= 5.5.0 < 6.0.0"
     },
     {
+      "name": "aboe/chrony",
+      "version_requirement": ">= 0.3.2 < 1.0.0"
+    },
+    {
       "name": "puppetlabs/concat",
       "version_requirement": ">= 6.2.0 < 7.0.0"
+    },
+    {
+      "name": "aursu/dockerinstall",
+      "version_requirement": ">= 0.4.1 < 1.0.0"
     },
     {
       "name": "puppetlabs/inifile",
@@ -21,6 +29,10 @@
     {
       "name": "puppet/nginx",
       "version_requirement": ">= 1.0.0 < 2.0.0"
+    },
+    {
+      "name": "puppetlabs/ntp",
+      "version_requirement": ">= 8.3.0 < 9.0.0"
     },
     {
       "name": "camptocamp/postfix",

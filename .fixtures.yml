@@ -9,12 +9,18 @@ fixtures:
     apache:
       repo: "puppetlabs/apache"
       ref: "5.5.0"
+    chrony:
+      repo: aboe/chrony
+      ref: 0.3.2
     concat:
       repo: "puppetlabs/concat"
       ref: "6.2.0"
     inifile:
       repo: "puppetlabs/inifile"
       ref: "4.2.0"
+    ntp:
+      repo: puppetlabs/ntp
+      ref: 8.3.0
     postfix:
       repo: camptocamp/postfix
       ref: 1.10.0
@@ -27,16 +33,20 @@ fixtures:
     sysctl:
       repo: "thias/sysctl"
       ref: "1.0.6"
+    systemd:
+      repo: camptocamp/systemd
+      ref: 2.9.0
   repositories:
     augeas_core:
       repo: https://github.com/puppetlabs/puppetlabs-augeas_core.git
       puppet_version: ">= 6.0.0"
+    dockerinstall:
+      repo: https://github.com/aursu/puppet-dockerinstall.git
     nginx:
       repo: "https://github.com/aursu/puppet-nginx.git"
-      ref: "tags/v1.1.1-rc0.5"
+      ref: "tags/v1.1.1-rc0.6"
     yumrepo_core:
       repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
-      ref: "tags/1.0.7"
       puppet_version: ">= 6.0.0"
 
 
