@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -41,6 +41,10 @@
     {
       "name": "camptocamp/postfix",
       "version_requirement": ">= 1.10.0 < 2.0.0"
+    },
+    {
+      "name": "puppetlabs/postgresql",
+      "version_requirement": ">= 6.6.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/stdlib",

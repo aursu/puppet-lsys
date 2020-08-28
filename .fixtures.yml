@@ -42,6 +42,9 @@ fixtures:
     postfix:
       repo: camptocamp/postfix
       ref: 1.10.0
+    postgresql:
+      repo: puppetlabs/postgresql
+      ref: 6.6.0
     selinux:
       repo: "puppet/selinux"
       ref: "3.2.0"
