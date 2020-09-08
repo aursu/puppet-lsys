@@ -26,7 +26,7 @@ class lsys::postgres (
           $repo_sslverify             = undef,
 ){
 
-  $version_data = split($package_version, '.')
+  $version_data = split($package_version, '[.]')
   $major_version = $version_data[0]
   $minor_version = $version_data[1]
 
