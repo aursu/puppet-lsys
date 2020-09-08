@@ -36,6 +36,10 @@ class lsys::postgres (
         sslverify => $repo_sslverify,
       }
     }
+
+    file { '/etc/yum.repos.d/yum.postgresql.org.repo':
+      mode => '0600',
+    }
   }
 
   class { 'postgresql::server':
