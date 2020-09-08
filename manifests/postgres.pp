@@ -52,6 +52,8 @@ class lsys::postgres (
     file { '/etc/yum.repos.d/yum.postgresql.org.repo':
       mode => '0600',
     }
+
+    Yumrepo['yum.postgresql.org'] ~> Class['lsys::repo']
   }
 
   class { 'postgresql::server':
