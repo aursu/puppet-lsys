@@ -16,7 +16,7 @@
 class lsys::postgres (
   Boolean $manage_package_repo        = true,
   # https://www.postgresql.org/docs/11/pgupgrade.html
-  Pattern[/([89]|1[0-2])(\.[0-9]+)+/]
+  Lsys::PGVersion
           $package_version            = '12.4',
   String  $ip_mask_allow_all_users    = '0.0.0.0/0',
   String  $listen_addresses           = 'localhost',
@@ -25,10 +25,22 @@ class lsys::postgres (
   Optional[Integer[0,1]]
           $repo_sslverify             = undef,
 ){
+
+  $version_data = split($package_version, '.')
+  $major_version = $version_data[0]
+  $minor_version = $version_data[1]
+
+  $repo_version = $major_version ? {
+    '9' => $minor_version ? {
+      default => "9.${minor_version}",
+    },
+    default => $major_version,
+  }
+
   if $manage_package_repo {
     class { 'postgresql::globals':
       manage_package_repo => $manage_package_repo,
-      version             => $package_version,
+      version             => $repo_version,
     }
 
     if $repo_sslverify {
@@ -43,6 +55,7 @@ class lsys::postgres (
   }
 
   class { 'postgresql::server':
+    package_ensure          => $package_version,
     ip_mask_allow_all_users => $ip_mask_allow_all_users,
     listen_addresses        => $listen_addresses,
     port                    => $database_port + 0,
