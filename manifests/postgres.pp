@@ -53,6 +53,7 @@ class lsys::postgres (
       mode => '0600',
     }
 
+    include lsys::repo
     Yumrepo['yum.postgresql.org'] ~> Class['lsys::repo']
   }
 

@@ -11,7 +11,8 @@ describe 'lsys::postgres' do
 
       it {
         is_expected.to contain_yumrepo('yum.postgresql.org')
-        .with_baseurl(%r{^https://download.postgresql.org/pub/repos/yum/12/redhat/rhel-\$releasever-\$basearch})
+          .with_baseurl(%r{^https://download.postgresql.org/pub/repos/yum/12/redhat/rhel-\$releasever-\$basearch})
+          .that_notifies('Exec[yum-reload-e0c99ff]')
       }
 
       it {
