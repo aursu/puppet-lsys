@@ -5,6 +5,7 @@
 # @example
 #   include lsys::params
 class lsys::params {
+  include nginx::params
   include lsys::webserver::params
 
   $nginx_libdir          = '/var/lib/nginx'
@@ -17,4 +18,9 @@ class lsys::params {
     '8'     => '1.19.0-1.el8.ngx',
     default => '1.19.0-1.el7.ngx',
   }
+
+  $nginx_conf_dir        = $nginx::params::conf_dir
+
+  # directory to store configuration snippets to include into map directive
+  $nginx_map_dir         = "${nginx_conf_dir}/conf.d/mapping"
 }

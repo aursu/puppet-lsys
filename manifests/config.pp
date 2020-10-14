@@ -1,11 +1,11 @@
 # lsys::config
 #
-# A description of what this defined type does
+# Setup ini-based configuration file
 #
-# @summary A short summary of the purpose of this defined type.
+# @summary Setup ini-based configuration file
 #
 # @example
-#   
+#
 #   lsys::config { '/etc/GeoIP.conf':
 #       data              => {
 #           'LicenseKey' => $license_key,

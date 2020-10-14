@@ -1,6 +1,6 @@
-# @summary A short summary of the purpose of this class
+# @summary Manage Nginx core
 #
-# A description of what this class does
+# Manage Nginx core
 #
 # @example
 #   include lsys::nginx
@@ -111,12 +111,12 @@ class lsys::nginx  (
           $nginx_user_home          = $lsys::params::nginx_user_home,
   Stdlib::Unixpath
           $web_server_user_shell    = $lsys::webserver::params::user_shell,
-  Optional[Boolean]
-          $yum_repo_sslverify       = false,
+  Boolean $yum_repo_sslverify       = false,
+  Boolean $manage_map_dir           = false,
+  Stdlib::Unixpath
+          $map_dir                  = $lsys::params::nginx_map_dir,
 ) inherits lsys::params
 {
-  include nginx::params
-
   $nginx_conf_dir = $conf_dir ? {
     Stdlib::Unixpath => $conf_dir,
     default          => $nginx::params::conf_dir,
@@ -221,6 +221,12 @@ class lsys::nginx  (
     file { $document_root:
       ensure => directory,
       owner  => $daemon_user,
+    }
+  }
+
+  if $manage_map_dir {
+    file { $map_dir:
+      ensure => directory,
     }
   }
 
