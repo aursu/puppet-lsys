@@ -67,7 +67,7 @@ fixtures:
       repo: https://github.com/aursu/puppet-grayloginstall.git
     nginx:
       repo: "https://github.com/aursu/puppet-nginx.git"
-      ref: "tags/v1.1.1-rc0.6"
+      ref: tags/v2.0.1-rc0.4
     rlimits:
       repo: "https://github.com/aursu/puppet-rlimits.git"
     selinux_core:
