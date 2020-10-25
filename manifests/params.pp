@@ -23,4 +23,10 @@ class lsys::params {
 
   # directory to store configuration snippets to include into map directive
   $nginx_map_dir         = "${nginx_conf_dir}/conf.d/mapping"
+
+  # cron
+  $cron_package_name = $facts['os']['release']['major'] ? {
+    '5'     => 'vixie-cron',
+    default => 'cronie',
+  }
 }

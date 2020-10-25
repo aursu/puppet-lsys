@@ -15,6 +15,9 @@ fixtures:
     concat:
       repo: "puppetlabs/concat"
       ref: "6.2.0"
+    cron:
+      repo: puppet/cron
+      ref: 2.0.0
     datacat:
       repo: richardc/datacat
       ref: 0.6.2
