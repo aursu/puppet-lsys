@@ -9,6 +9,9 @@ fixtures:
     apache:
       repo: "puppetlabs/apache"
       ref: "5.5.0"
+    archive:
+      repo: puppet/archive
+      ref: 4.5.0
     chrony:
       repo: aboe/chrony
       ref: 0.3.2

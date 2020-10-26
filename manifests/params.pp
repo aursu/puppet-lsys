@@ -29,4 +29,8 @@ class lsys::params {
     '5'     => 'vixie-cron',
     default => 'cronie',
   }
+
+  # monit
+  $monit_version = '5.27.1'
+  $monit_binary_path = '/usr/local/bin/monit'
 }

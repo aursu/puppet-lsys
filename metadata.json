@@ -11,6 +11,10 @@
       "version_requirement": ">= 5.5.0 < 6.0.0"
     },
     {
+      "name": "puppet/archive",
+      "version_requirement": ">= 4.5.0 < 5.0.0"
+    },
+    {
       "name": "aboe/chrony",
       "version_requirement": ">= 0.3.2 < 1.0.0"
     },
