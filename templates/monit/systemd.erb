@@ -1,0 +1,12 @@
+[Unit]
+Description=Pro-active monitoring utility for unix systems
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=<%= @binary_path %> -I
+ExecStop=<%= @binary_path %> quit
+ExecReload=<%= @binary_path %> reload
+
+[Install]
+WantedBy=multi-user.target

@@ -36,4 +36,5 @@ class lsys::params {
   $monit_config_dir  = '/etc/monit.d'
   $monit_config_file = '/etc/monitrc'
   $monit_logfile     = '/var/log/monit.log'
+  $monit_pid_file    = '/var/run/monit.pid'
 }

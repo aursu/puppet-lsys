@@ -1,8 +1,3 @@
-<% |
-	Stdlib::Unixpath	$config_file = '/etc/monitrc',
-	Stdlib::Unixpath	$binary_path = '/usr/bin/monit',
-	Stdlib::Unixpath	$pid_file    = '/var/run/monit.pid',
-| -%>
 #!/bin/bash
 #
 # Init file for Monit system monitor
@@ -13,16 +8,16 @@
 # description: Utility for monitoring services on a Unix system
 #
 # processname: monit
-# config: <%= $config_file %>
-# pidfile: <%= $pid_file %>
+# config: <%= @config_file %>
+# pidfile: <%= @pid_file %>
 # Short-Description: Monit is a system monitor
 
 # Source function library.
 . /etc/init.d/functions
 
 ### Default variables
-CONFIG="<%= $config_file %>"
-pidfile="<%= $pid_file %>"
+CONFIG="<%= @config_file %>"
+pidfile="<%= @pid_file %>"
 prog="monit"
 
 if [ -f /etc/sysconfig/monit ]; then
@@ -30,7 +25,7 @@ if [ -f /etc/sysconfig/monit ]; then
 fi
 
 # Check if requirements are met
-[ -x <%= $binary_path %> ] || exit 1
+[ -x <%= @binary_path %> ] || exit 1
 [ -r "$CONFIG" ] || exit 1
 
 RETVAL=0

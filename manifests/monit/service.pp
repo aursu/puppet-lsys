@@ -22,6 +22,8 @@ class lsys::monit::service (
           $config_file = $lsys::params::monit_config_file,
   Stdlib::Unixpath
           $logfile     = $lsys::params::monit_logfile,
+  Stdlib::Unixpath
+          $pid_file    = $lsys::params::monit_pid_file,
 ) inherits lsys::params
 {
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {
@@ -36,12 +38,12 @@ class lsys::monit::service (
   file { 'monit_startup_script':
     ensure  => file,
     path    => $init_path,
-    content => epp($init_template),
+    content => template($init_template),
   }
 
   file { 'monit_logrotate_script':
     ensure  => file,
     path    => '/etc/logrotate.d/monit',
-    content => epp('lsys/monit/logrotate.epp'),
+    content => epp('lsys/monit/logrotate.epp', { logfile => $logfile }),
   }
 }
