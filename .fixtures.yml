@@ -43,7 +43,7 @@ fixtures:
       repo: puppet/mongodb
       ref: 3.1.0
     monit:
-      repo: puppet/monit
+      repo: soli/monit
       ref: 2.0.1
     ntp:
       repo: puppetlabs/ntp
