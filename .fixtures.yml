@@ -7,8 +7,8 @@ fixtures:
       repo: puppet/alternatives
       ref: 3.0.0
     apache:
-      repo: "puppetlabs/apache"
-      ref: "5.5.0"
+      repo: puppetlabs/apache
+      ref: 5.5.0
     archive:
       repo: puppet/archive
       ref: 4.5.0
@@ -16,8 +16,8 @@ fixtures:
       repo: aboe/chrony
       ref: 0.3.2
     concat:
-      repo: "puppetlabs/concat"
-      ref: "6.2.0"
+      repo: puppetlabs/concat
+      ref: 6.2.0
     cron:
       repo: puppet/cron
       ref: 2.0.0
@@ -34,14 +34,17 @@ fixtures:
       repo: graylog/graylog
       ref: 0.9.0
     inifile:
-      repo: "puppetlabs/inifile"
-      ref: "4.2.0"
+      repo: puppetlabs/inifile
+      ref: 4.2.0
     java:
       repo: puppetlabs/java
       ref: 6.3.0
     mongodb:
       repo: puppet/mongodb
       ref: 3.1.0
+    monit:
+      repo: puppet/monit
+      ref: 2.0.1
     ntp:
       repo: puppetlabs/ntp
       ref: 8.3.0
@@ -52,14 +55,14 @@ fixtures:
       repo: puppetlabs/postgresql
       ref: 6.6.0
     selinux:
-      repo: "puppet/selinux"
-      ref: "3.2.0"
+      repo: puppet/selinux
+      ref: 3.2.0
     stdlib:
-      repo: "puppetlabs/stdlib"
-      ref: "6.3.0"
+      repo: puppetlabs/stdlib
+      ref: 6.3.0
     sysctl:
-      repo: "thias/sysctl"
-      ref: "1.0.6"
+      repo: thias/sysctl
+      ref: 1.0.6
     systemd:
       repo: camptocamp/systemd
       ref: 2.9.0
@@ -72,10 +75,10 @@ fixtures:
     grayloginstall:
       repo: https://github.com/aursu/puppet-grayloginstall.git
     nginx:
-      repo: "https://github.com/aursu/puppet-nginx.git"
+      repo: https://github.com/aursu/puppet-nginx.git
       ref: tags/v2.0.1-rc0.4
     rlimits:
-      repo: "https://github.com/aursu/puppet-rlimits.git"
+      repo: https://github.com/aursu/puppet-rlimits.git
     selinux_core:
       repo: https://github.com/puppetlabs/puppetlabs-selinux_core.git
       puppet_version: ">= 6.0.0"

@@ -56,9 +56,9 @@ class lsys::monit (
     cleanup       => true,
   }
 
-  file { 'monit':
-    path      => $binary_path,
+  file { 'monit_binary':
     ensure    => file,
+    path      => $binary_path,
     source    => "file://${extracted_binary}",
     mode      => '0755',
     owner     => 'root',
