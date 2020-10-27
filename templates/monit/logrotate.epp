@@ -1,0 +1,21 @@
+<% |
+	Stdlib::Unixpath $logfile = '/var/log/monit.log',
+| -%>
+<%
+  if $facts['os']['name'] in ['RedHat', 'CentOS']
+  and $facts['os']['release']['major'] in ['5', '6'] {
+    $restart_command = '/sbin/service monit condrestart'
+  }
+  else {
+    $restart_command = '/bin/systemctl reload monit.service'
+  }
+-%>
+<%= $logfile %> {
+    missingok
+    notifempty
+    size 100k
+    create 0644 root root
+    postrotate
+        <%= $restart_command %> >/dev/null 2>&1 || :
+    endscript
+}
