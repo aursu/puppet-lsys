@@ -32,3 +32,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.6.2
+
+**Features**
+
+* Added Monit and systemd settings for cron
+
+**Bugfixes**
+
+**Known Issues**
