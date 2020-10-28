@@ -39,6 +39,7 @@ describe 'lsys::monit::service' do
             .with_ensure('file')
             .with_path('/etc/systemd/system/monit.service')
             .with_content(%r{^ExecStart=/usr/local/bin/monit -I$})
+            .that_notifies('Class[lsys::systemd]')
         }
 
         it {

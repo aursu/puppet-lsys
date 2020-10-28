@@ -26,6 +26,8 @@ class lsys::monit::service (
           $pid_file    = $lsys::params::monit_pid_file,
 ) inherits lsys::params
 {
+  include lsys::systemd
+
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {
     $init_path     = '/etc/rc.d/init.d/monit'
     $init_template = 'lsys/monit/init.erb'
@@ -33,6 +35,8 @@ class lsys::monit::service (
   else {
     $init_path     = '/etc/systemd/system/monit.service'
     $init_template = 'lsys/monit/systemd.erb'
+
+    File['monit_startup_script'] ~> Class['lsys::systemd']
   }
 
   file { 'monit_startup_script':
