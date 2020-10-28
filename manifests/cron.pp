@@ -14,9 +14,10 @@
 # @example
 #   include lsys::cron
 class lsys::cron (
-  Boolean $manage_package            = true,
-  String  $package_ensure            = 'installed',
-  String  $package_name              = $lsys::params::cron_package_name,
+  Boolean $manage_package = true,
+  String  $package_ensure = 'installed',
+  String  $package_name   = $lsys::params::cron_package_name,
+  Boolean $enable_monit   = false,
 ) inherits lsys::params
 {
   class { 'cron':
@@ -25,6 +26,9 @@ class lsys::cron (
   }
 
   class { 'lsys::cron::cronjobs_directory': }
+  class { 'lsys::cron::service':
+    enable_monit => $enable_monit,
+  }
 
   if $manage_package {
     package { 'cron':
@@ -32,7 +36,10 @@ class lsys::cron (
       name     => $package_name,
       # provider yum can remove package with all circular dependencies
       provider => 'yum',
-      before   => Class['lsys::cron::cronjobs_directory']
+      before   => [
+        Class['lsys::cron::cronjobs_directory'],
+        Class['lsys::cron::service'],
+      ],
     }
   }
 }
