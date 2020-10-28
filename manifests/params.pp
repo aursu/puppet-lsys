@@ -31,7 +31,7 @@ class lsys::params {
   }
 
   # monit
-  $monit_version = '5.27.1'
+  $monit_version     = '5.27.1'
   $monit_binary_path = '/usr/local/bin/monit'
   $monit_config_dir  = '/etc/monit.d'
   $monit_config_file = '/etc/monitrc'
