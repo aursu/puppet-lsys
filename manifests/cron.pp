@@ -11,6 +11,9 @@
 # @param package_name
 #   Real cron daemon package name (either cronie or vixie-cron)
 #
+# @param enable_monit
+#   Whether to monitor crond service with Monit or not
+#
 # @example
 #   include lsys::cron
 class lsys::cron (
