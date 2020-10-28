@@ -31,6 +31,13 @@ class lsys::monit (
   Stdlib::Unixpath
           $logfile          = $lsys::params::monit_logfile,
   Boolean $httpd            = true,
+  Stdlib::IP::Address
+          $httpd_address    = '127.0.0.1',
+  Stdlib::IP::Address
+          $httpd_allow      = '127.0.0.1',
+  String  $httpd_user       = 'admin',
+  Optional[String]
+          $httpd_password   = undef,
 ) inherits lsys::params
 {
   if $prebuilt_binary {
@@ -65,7 +72,13 @@ class lsys::monit (
     config_file      => $config_file,
 
     # configuration options
-    httpd            => $httpd,
     logfile          => $logfile,
+
+    # monit httpd service
+    httpd            => $httpd,
+    httpd_address    => $httpd_address,
+    httpd_allow      => $httpd_allow,
+    httpd_user       => $httpd_user,
+    httpd_password   => $httpd_password,
   }
 }
