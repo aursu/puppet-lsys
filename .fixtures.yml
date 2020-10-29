@@ -42,9 +42,6 @@ fixtures:
     mongodb:
       repo: puppet/mongodb
       ref: 3.1.0
-    monit:
-      repo: soli/monit
-      ref: 2.0.1
     ntp:
       repo: puppetlabs/ntp
       ref: 8.3.0
@@ -74,6 +71,9 @@ fixtures:
       repo: https://github.com/aursu/puppet-dockerinstall.git
     grayloginstall:
       repo: https://github.com/aursu/puppet-grayloginstall.git
+    monit:
+      repo: https://github.com/aursu/puppet-monit.git
+      ref: tags/v2.0.2-rc1
     nginx:
       repo: https://github.com/aursu/puppet-nginx.git
       ref: tags/v2.0.1-rc0.4
