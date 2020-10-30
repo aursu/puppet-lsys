@@ -11,7 +11,7 @@
 # @example
 #   include lsys::tools::psmisc
 class lsys::tools::psmisc (
-  $package_ensure = present,
+  String $package_ensure = present,
 )
 {
   package { 'psmisc':
