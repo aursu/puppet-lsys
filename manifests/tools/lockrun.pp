@@ -6,8 +6,7 @@
 #
 # @example
 #   include lsys::tools::lockrun
-class lsys::tools::lockrun
-{
+class lsys::tools::lockrun {
   $os_release_major = $facts['os']['release']['major']
 
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $os_release_major in ['6', '7', '8'] {
