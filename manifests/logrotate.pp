@@ -21,4 +21,7 @@ class lsys::logrotate (
     manage_cron_hourly => $manage_cron_hourly,
     create_base_rules  => $create_base_rules,
   }
+
+  # v5.0.0 does not contain logrotate::hourly
+  include logrotate::hourly
 }
