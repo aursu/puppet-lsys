@@ -63,3 +63,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.6.5
+
+**Features**
+
+* Added ntpdate management
+
+**Bugfixes**
+
+**Known Issues**

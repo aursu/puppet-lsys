@@ -1,0 +1,20 @@
+<%-
+def bool2config(b)
+    case b.to_s.downcase
+    when '1', 'true', 'on', 'yes'
+        'yes'
+    when '0','false', 'off', 'no'
+        'no'
+    else
+        b.to_s
+    end
+end
+-%>
+# Options for ntpdate
+OPTIONS="<%= @options %>"
+
+# Number of retries before giving up
+RETRIES=<%= @retries %>
+
+# Set to 'yes' to sync hw clock after successful ntpdate
+SYNC_HWCLOCK=<%= bool2config(@sync_hwclock) %>
