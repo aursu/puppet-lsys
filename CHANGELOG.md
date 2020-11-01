@@ -53,3 +53,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.6.4
+
+**Features**
+
+* Added logrotate management
+
+**Bugfixes**
+
+**Known Issues**

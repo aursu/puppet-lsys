@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -37,6 +37,10 @@
     {
       "name": "puppetlabs/inifile",
       "version_requirement": ">= 4.2.0 < 5.0.0"
+    },
+    {
+      "name": "puppet/logrotate",
+      "version_requirement": ">= 5.0.0 < 6.0.0"
     },
     {
       "name": "soli/monit",

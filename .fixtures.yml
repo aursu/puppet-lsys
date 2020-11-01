@@ -39,6 +39,9 @@ fixtures:
     java:
       repo: puppetlabs/java
       ref: 6.3.0
+    logrotate:
+      repo: puppet/logrotate
+      ref: 5.0.0
     mongodb:
       repo: puppet/mongodb
       ref: 3.1.0
