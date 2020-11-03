@@ -8,6 +8,7 @@ class lsys::params {
   include nginx::params
   include lsys::webserver::params
 
+  # nginx
   $nginx_libdir          = '/var/lib/nginx'
   $nginx_cachedir        = '/var/cache/nginx'
   $nginx_proxy_temp_path = "${nginx_cachedir}/proxy_temp"
