@@ -26,7 +26,8 @@ class lsys::docker (
   Boolean $daemon_enable   = true,
 )
 {
-  class { 'dockerinstall': }
+  include dockerinstall
+
   class { 'dockerinstall::repos':
     gpgcheck  => $repo_gpgcheck,
     sslverify => $repo_sslverify,
