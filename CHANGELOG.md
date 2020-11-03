@@ -73,3 +73,15 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.6.6
+
+**Features**
+
+* Added /etc/login.defs hardening
+
+**Bugfixes**
+
+* Replaced dockerinstall class definition with include
+
+**Known Issues**

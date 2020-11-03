@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
