@@ -44,7 +44,7 @@
     },
     {
       "name": "soli/monit",
-      "version_requirement": ">= 2.0.1 < 3.0.0"
+      "version_requirement": ">= 3.0.0 < 4.0.0"
     },
     {
       "name": "puppet/nginx",
