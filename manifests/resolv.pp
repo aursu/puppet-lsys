@@ -12,6 +12,16 @@
 # @param search
 #   Search list for host-name lookup
 #
+# @param options
+#   Options allows certain internal resolver variables to be modified.
+#
+# @param sortlist
+#   This option allows addresses returned by gethostbyname(3) to be sorted.
+#   A sortlist is specified by IP-address-netmask pairs.
+#
+# @param conf_template
+#   Template to use for `/etc/resolv.conf`
+#
 # @example
 #   include lsys::resolv
 class lsys::resolv (

@@ -85,3 +85,17 @@ All notable changes to this project will be documented in this file.
 * Replaced dockerinstall class definition with include
 
 **Known Issues**
+
+## Release 0.7.0
+
+**Features**
+
+* Added class lsys::resolv
+* Added function lsys::fqdn_rand_array
+
+**Bugfixes**
+
+* Moved Java connfiguration types into javalocal module
+* Renamed some types following Stdlib approach
+
+**Known Issues**
