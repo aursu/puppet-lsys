@@ -1,0 +1,17 @@
+# THIS FILE IS BEING MANAGED BY PUPPET
+# DO NOT ATTEMPT TO EDIT THIS FILE
+
+<% if @search[0] -%>
+search <%= @search.join(" ") %>
+<% end -%>
+<% if @nameserver[0] -%>
+<%   @nameserver.each do |ns| -%>
+nameserver <%= ns %>
+<%   end -%>
+<% end -%>
+<% if @options[0] -%>
+options <%= @options.map { |o| (o.is_a?(Hash)) ? o.map { |k, v| "#{k}:#{v}" }[0]: o }.join(" ") %>
+<% end -%>
+<% if @sortlist[0] -%>
+sortlist <%= @sortlist.join(" ") %>
+<% end -%>
