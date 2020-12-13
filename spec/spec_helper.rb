@@ -47,6 +47,7 @@ RSpec.configure do |c|
     Puppet.settings[:strict] = :warning
     Puppet.settings[:strict_variables] = true
   end
+  c.mock_with :rspec
   c.filter_run_excluding(bolt: true) unless ENV['GEM_BOLT']
   c.after(:suite) do
   end
