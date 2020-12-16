@@ -9,7 +9,7 @@ Puppet::Functions.create_function(:'lsys::fqdn_rand_array') do
   end
 
   def rand_int(max, *args)
-    hostname = Socket.gethostname
+    hostname = Facter.value(:hostname)
     seed = Digest::MD5.hexdigest([hostname, max, *args].join(':')).hex
     Random.new(seed).rand(max)
   end
