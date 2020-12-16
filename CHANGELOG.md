@@ -99,3 +99,13 @@ All notable changes to this project will be documented in this file.
 * Renamed some types following Stdlib approach
 
 **Known Issues**
+
+## Release 0.7.1
+
+**Features**
+
+**Bugfixes**
+
+* Replace Secket.gethostname with Facter.value(:hostname)
+
+**Known Issues**
