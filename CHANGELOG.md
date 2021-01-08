@@ -109,3 +109,13 @@ All notable changes to this project will be documented in this file.
 * Replace Secket.gethostname with Facter.value(:hostname)
 
 **Known Issues**
+
+## Release 0.8.0
+
+**Features**
+
+**Bugfixes**
+
+* Replace Secket.gethostname with Facter.value(:hostname)
+
+**Known Issues**
