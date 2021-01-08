@@ -77,6 +77,9 @@ fixtures:
       repo: https://github.com/aursu/puppet-dockerinstall.git
     grayloginstall:
       repo: https://github.com/aursu/puppet-grayloginstall.git
+    mount_core:
+      repo: https://github.com/puppetlabs/puppetlabs-mount_core.git
+      puppet_version: ">= 6.0.0"
     nginx:
       repo: https://github.com/aursu/puppet-nginx.git
       ref: tags/v2.0.1-rc0.4
