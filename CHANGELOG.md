@@ -106,7 +106,7 @@ All notable changes to this project will be documented in this file.
 
 **Bugfixes**
 
-* Replace Secket.gethostname with Facter.value(:hostname)
+* Replace Socket.gethostname with Facter.value(:hostname)
 
 **Known Issues**
 
@@ -114,8 +114,8 @@ All notable changes to this project will be documented in this file.
 
 **Features**
 
-**Bugfixes**
+* Added lsys::bindmount defined type
 
-* Replace Secket.gethostname with Facter.value(:hostname)
+**Bugfixes**
 
 **Known Issues**
