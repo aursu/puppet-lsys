@@ -11,10 +11,9 @@
 # @example
 #   include lsys::tools::psmisc
 class lsys::tools::psmisc (
-  String $package_ensure = present,
+  Lsys::PackageVersion
+          $package_ensure = true,
 )
 {
-  package { 'psmisc':
-    ensure => $package_ensure,
-  }
+  lsys::tools::package { 'psmisc': ensure => $package_ensure }
 }

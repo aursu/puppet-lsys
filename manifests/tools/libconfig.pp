@@ -8,10 +8,9 @@
 # @example
 #   include lsys::tools::libconfig
 class lsys::tools::libconfig (
-  String $package_ensure = present,
+  Lsys::PackageVersion
+          $package_ensure = true,
 )
 {
-  package { 'libconfig':
-    ensure => $package_ensure,
-  }
+  lsys::tools::package { 'libconfig': ensure => $package_ensure }
 }

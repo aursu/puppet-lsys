@@ -5,26 +5,20 @@
 # @example
 #   include lsys::tools::remote
 class lsys::tools::remote (
-  String  $curl_ensure  = present,
-  Optional[String]
-          $rsync_ensure = undef,
-  Optional[String]
-          $wget_ensure  = undef,
+  Lsys::PackageVersion
+          $curl_ensure   = true,
+  Lsys::PackageVersion
+          $rsync_ensure  = false,
+  Lsys::PackageVersion
+          $wget_ensure   = false,
+  Lsys::PackageVersion
+          $telnet_ensure = false,
 )
 {
-  package { 'curl':
-    ensure => $curl_ensure,
-  }
+  lsys::tools::package { 'curl': ensure => $curl_ensure }
+  lsys::tools::package { 'rsync': ensure => $rsync_ensure }
+  lsys::tools::package { 'wget':  ensure => $wget_ensure }
 
-  if $rsync_ensure {
-    package { 'rsync':
-      ensure => $rsync_ensure,
-    }
-  }
-
-  if $wget_ensure {
-    package { 'wget':
-      ensure => $wget_ensure,
-    }
-  }
+  # The client program for the Telnet remote login protocol
+  lsys::tools::package { 'telnet': ensure => $telnet_ensure }
 }
