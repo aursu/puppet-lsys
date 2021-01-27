@@ -5,9 +5,15 @@
 # @example
 #   include lsys::tools::system
 class lsys::tools::system (
-  Optional[String]
-          $sudo_ensure = undef,
+  Lsys::PackageVersion
+          $sudo_ensure = false,
+  Lsys::PackageVersion
+          $file_ensure = false,
 )
 {
-  if $sudo_ensure { package { 'sudo': ensure => $sudo_ensure } }
+  # Allows restricted root access for specified users
+  lsys::tools::package { 'sudo': ensure => $sudo_ensure }
+
+  # A utility for determining file types
+  lsys::tools::package { 'file': ensure => $file_ensure }
 }
