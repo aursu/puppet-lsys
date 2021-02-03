@@ -170,3 +170,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.14.0
+
+**Features**
+
+* Added sysstat tool installation and logs hardening
+
+**Bugfixes**
+
+**Known Issues**
