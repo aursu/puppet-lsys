@@ -160,3 +160,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.13.0
+
+**Features**
+
+* Added /etc/profile management
+
+**Bugfixes**
+
+**Known Issues**
