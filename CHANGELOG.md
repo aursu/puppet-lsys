@@ -150,3 +150,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.12.0
+
+**Features**
+
+* Added GCC into lsys::tools::lang
+
+**Bugfixes**
+
+**Known Issues**
