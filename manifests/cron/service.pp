@@ -1,6 +1,6 @@
-# @summary A short summary of the purpose of this class
+# @summary Adds cron service always run control
 #
-# A description of what this class does
+# Adds cron service always run control
 #
 # @example
 #   include lsys::cron::service

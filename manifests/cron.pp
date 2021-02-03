@@ -17,15 +17,40 @@
 # @example
 #   include lsys::cron
 class lsys::cron (
-  Boolean $manage_package = true,
-  String  $package_ensure = 'installed',
-  String  $package_name   = $lsys::params::cron_package_name,
-  Boolean $enable_monit   = false,
+  Boolean $manage_package   = true,
+  String  $package_ensure   = 'installed',
+  String  $package_name     = $lsys::params::cron_package_name,
+  Boolean $enable_monit     = false,
+  Boolean $enable_hardening = false,
+  Array[String]
+          $users_allow      = ['root'],
 ) inherits lsys::params
 {
+  if $enable_hardening {
+    $manage_users_allow = true
+
+    # Running cron jobs can be allowed or disallowed for different users. For
+    # this purpose, use the cron.allow and cron.deny files. If the cron.allow
+    # file exists, a user must be listed in it to be allowed to use cron. If
+    # the cron.allow file does not exist but the cron.deny file does exist,
+    # then a user must not be listed in the cron.deny file in order to use cron.
+    # If neither of these files exists, only the super user is allowed to use
+    # cron.
+    file { '/etc/cron.deny':
+      ensure => absent,
+    }
+  }
+  else {
+    $manage_users_allow = false
+  }
+
+  #  forge.puppet.com/puppet/cron
   class { 'cron':
-    manage_service => true,
-    manage_package => false,
+    manage_service     => true,
+    manage_package     => false,
+    manage_users_allow => $manage_users_allow,
+    users_allow        => $users_allow,
+    manage_users_deny  => false,
   }
 
   class { 'lsys::cron::cronjobs_directory': }

@@ -129,3 +129,24 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.10.0
+
+**Features**
+
+* Added lsys::tools::* set of classes with different system tools
+* Switched to lsys::tools::package and Lsys::PackageVersion type use
+
+**Bugfixes**
+
+**Known Issues**
+
+## Release 0.11.0
+
+**Features**
+
+* Added ability to harden crontab usage to specified users
+
+**Bugfixes**
+
+**Known Issues**
