@@ -14,7 +14,7 @@ class lsys::hardening::bash_profile (
 
     file { '/etc/profile' :
       ensure  => present,
-      content => template("lsys/hardening/profile.el${osmajor}"),
+      content => template("lsys/hardening/profile.el${osmajor}.erb"),
     }
   }
 }
