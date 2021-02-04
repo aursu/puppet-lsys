@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe 'lsys::hardening::chmod_directory' do
-  let(:title) { 'namevar' }
+  let(:title) { '/etc' }
   let(:params) do
     {}
   end
