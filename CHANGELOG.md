@@ -190,3 +190,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.16.0
+
+**Features**
+
+* Added packages cleanup
+* Added PHP 8 bintray repo definition
+
+**Bugfixes**
+
+**Known Issues**
