@@ -16,10 +16,10 @@ class lsys::tools::cleanup (
   #  D-Bus service for Fingerprint reader access
   lsys::tools::package {
     default:
-      nsure => $fprintd_ensure;
+      ensure => $fprintd_ensure;
     'fprintd': ;
-    'fprintd-pam': ;
-      before => Lsys::Tools::Package['fprintd']
+    'fprintd-pam':
+      before => Lsys::Tools::Package['fprintd'];
   }
 
   lsys::tools::package { 'man-db': ensure => $man_ensure }
