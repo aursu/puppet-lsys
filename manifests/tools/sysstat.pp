@@ -13,8 +13,8 @@ class lsys::tools::sysstat (
 
   if $ensure {
     exec { 'chmod 0600 /var/log/sa/sa*':
-      path    => '/usr/bin:/usr/sbin:/bin:/sbin',
-      onlyif  => 'find /var/log/sa -maxdepth 1 -type f -not -perm 0600 -exec false {} +',
+      path   => '/usr/bin:/usr/sbin:/bin:/sbin',
+      onlyif => 'find /var/log/sa -maxdepth 1 -type f -not -perm 0600 -exec false {} +',
     }
   }
 }
