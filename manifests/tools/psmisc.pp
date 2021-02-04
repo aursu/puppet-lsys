@@ -11,9 +11,22 @@
 # @example
 #   include lsys::tools::psmisc
 class lsys::tools::psmisc (
+  Boolean $enable_hardening = false,
   Lsys::PackageVersion
-          $package_ensure = true,
+          $package_ensure   = true,
 )
 {
   lsys::tools::package { 'psmisc': ensure => $package_ensure }
+
+  if $enable_hardening {
+    file {
+      default: mode => 'o=';
+      '/usr/bin/killall': ;
+      '/usr/bin/peekfd': ;
+      '/usr/bin/prtstat': ;
+      '/usr/bin/pstree': ;
+      '/usr/bin/pstree.x11': ;
+      '/usr/sbin/fuser': ;
+    }
+  }
 }

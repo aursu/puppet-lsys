@@ -5,15 +5,20 @@
 # @example
 #   include lsys::ntpdate
 class lsys::ntpdate (
-  String  $package_ensure = 'latest',
-  Integer $retries        = 2,
-  Boolean $sync_hwclock   = false,
+  String  $package_ensure   = 'latest',
+  Integer $retries          = 2,
+  Boolean $sync_hwclock     = false,
+  Boolean $enable_hardening = false,
 )
 {
   $os_release_major = $facts['os']['release']['major']
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $os_release_major in [ '6','7' ] {
     package { 'ntpdate':
       ensure => $package_ensure,
+    }
+
+    if $enable_hardening {
+      file { '/usr/sbin/ntpdate': mode => 'o=' }
     }
 
     # -s   Divert logging output from the standard output (default) to the

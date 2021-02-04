@@ -17,13 +17,14 @@
 # @example
 #   include lsys::cron
 class lsys::cron (
-  Boolean $manage_package   = true,
-  String  $package_ensure   = 'installed',
-  String  $package_name     = $lsys::params::cron_package_name,
-  Boolean $enable_monit     = false,
-  Boolean $enable_hardening = false,
+  Boolean $manage_package        = true,
+  String  $package_ensure        = 'installed',
+  String  $package_name          = $lsys::params::cron_package_name,
+  Boolean $enable_monit          = false,
+  Boolean $enable_hardening      = false,
+  Boolean $file_system_hardening = true,
   Array[String]
-          $users_allow      = ['root'],
+          $users_allow           = ['root'],
 ) inherits lsys::params
 {
   if $enable_hardening {
@@ -38,6 +39,18 @@ class lsys::cron (
     # cron.
     file { '/etc/cron.deny':
       ensure => absent,
+    }
+
+    # FS hardening
+    if $file_system_hardening {
+      file {
+        '/etc/anacrontab':      mode => '0600';
+        '/etc/crontab':         mode => '0600';
+        '/var/spool/anacron':   mode => '0750';
+        '/var/spool/cron':      mode => '0700';
+        '/var/spool/cron/root': mode => '0600';
+        '/usr/sbin/crond':      mode => '0750';
+      }
     }
   }
   else {

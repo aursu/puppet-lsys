@@ -5,14 +5,17 @@
 # @example
 #   include lsys::tools::diagnostic
 class lsys::tools::diagnostic (
+  Boolean $enable_hardening = false,
   Lsys::PackageVersion
-          $iotop_ensure  = false,
+          $iotop_ensure     = false,
   Lsys::PackageVersion
-          $lsof_ensure   = false,
+          $lsof_ensure      = false,
   Lsys::PackageVersion
-          $strace_ensure = false,
+          $strace_ensure    = false,
   Lsys::PackageVersion
-          $perf_ensure   = false,
+          $perf_ensure      = false,
+  Lsys::PackageVersion
+          $procps_ensure    = false,
 )
 {
   # Top like utility for I/O
@@ -26,4 +29,38 @@ class lsys::tools::diagnostic (
 
   # Performance monitoring for the Linux kernel
   lsys::tools::package { 'perf': ensure => $perf_ensure }
+
+  # System and process monitoring utilities
+  lsys::tools::package { 'procps-ng': ensure => $procps_ensure }
+
+  if $enable_hardening {
+    file {
+      default: mode => 'o=';
+
+      # procps-ng
+      '/usr/bin/free': ;
+      '/usr/bin/pgrep': ;
+      '/usr/bin/pkill': ;
+      '/usr/bin/pmap': ;
+      '/usr/bin/ps': ;
+      '/usr/bin/pwdx': ;
+      '/usr/bin/skill': ;
+      '/usr/bin/slabtop': ;
+      '/usr/bin/snice': ;
+      '/usr/bin/tload': ;
+      '/usr/bin/top': ;
+      '/usr/bin/uptime': ;
+      '/usr/bin/vmstat': ;
+      '/usr/bin/w': ;
+      '/usr/bin/watch': ;
+      '/usr/sbin/sysctl': ;
+
+      # strace
+      '/usr/bin/strace': ;
+      '/usr/bin/strace-log-merge': ;
+
+      # lsof
+      '/usr/sbin/lsof': ;
+    }
+  }
 }

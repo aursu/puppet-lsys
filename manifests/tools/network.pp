@@ -5,6 +5,11 @@
 # @example
 #   include lsys::tools::network
 class lsys::tools::network (
+  Boolean $enable_hardening  = false,
+  Lsys::PackageVersion
+          $iputils_ensure    = true,
+  Lsys::PackageVersion
+          $iproute_ensure    = true,
   Lsys::PackageVersion
           $bind_utils_ensure = false,
   Lsys::PackageVersion
@@ -19,6 +24,12 @@ class lsys::tools::network (
           $nmap_ncat_ensure  = false,
 )
 {
+  # Network monitoring tools including ping
+  lsys::tools::package { 'iputils': ensure => $iputils_ensure }
+
+  # Advanced IP routing and network device configuration tools
+  lsys::tools::package { 'iproute': ensure => $iproute_ensure }
+
   # Utilities for querying DNS name servers
   # dig, host, nslookup
   lsys::tools::package { 'bind-utils': ensure => $bind_utils_ensure }
@@ -27,7 +38,6 @@ class lsys::tools::network (
   lsys::tools::package { 'whois': ensure => $whois_ensure }
 
   # Basic networking tools
-  # arp, ifconfig, route
   lsys::tools::package { 'net-tools': ensure => $net_tools_ensure }
 
   # A network traffic monitoring tool
@@ -38,4 +48,57 @@ class lsys::tools::network (
 
   # Nmap's Netcat replacement
   lsys::tools::package { 'nmap-ncat': ensure => $nmap_ncat_ensure }
+
+  if $enable_hardening {
+    file {
+      default: mode => 'o=';
+      # iproute
+      '/etc/iproute2': ;
+      '/usr/sbin/arpd': ;
+      '/usr/sbin/bridge': ;
+      '/usr/sbin/cbq': ;
+      '/usr/sbin/devlink': ;
+      '/usr/sbin/genl': ;
+      '/usr/sbin/ifcfg': ;
+      '/usr/sbin/ifstat': ;
+      '/usr/sbin/ip': ;
+      '/usr/sbin/lnstat': ;
+      '/usr/sbin/nstat': ;
+      '/usr/sbin/rdma': ;
+      '/usr/sbin/routef': ;
+      '/usr/sbin/routel': ;
+      '/usr/sbin/rtacct': ;
+      '/usr/sbin/rtmon': ;
+      '/usr/sbin/rtpr': ;
+      '/usr/sbin/ss': ;
+      '/usr/sbin/tc': ;
+
+      # iputils
+      '/usr/bin/ping': ;
+      '/usr/bin/tracepath': ;
+      '/usr/bin/tracepath6': ;
+      '/usr/sbin/arping': ;
+      '/usr/sbin/clockdiff': ;
+      '/usr/sbin/ifenslave': ;
+      '/usr/sbin/rdisc': ;
+
+      # net-tools
+      '/bin/netstat': ;
+      '/sbin/arp': ;
+      '/sbin/ether-wake': ;
+      '/sbin/ifconfig': ;
+      '/sbin/ipmaddr': ;
+      '/sbin/iptunnel': ;
+      '/sbin/mii-diag': ;
+      '/sbin/mii-tool': ;
+      '/sbin/nameif': ;
+      '/sbin/plipconfig': ;
+      '/sbin/route': ;
+      '/sbin/slattach': ;
+
+      # tcpdump
+      '/usr/sbin/tcpdump': ;
+      '/usr/sbin/tcpslice': ;
+    }
+  }
 }
