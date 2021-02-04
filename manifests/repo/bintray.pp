@@ -87,8 +87,8 @@ class lsys::repo::bintray (
         repo_gpgcheck => '0',
         sslverify     => '0',
         notify        => Class['lsys::repo'],
-        file { '/etc/yum.repos.d/bintray-php8custom.repo': }
       }
+      file { '/etc/yum.repos.d/bintray-php8custom.repo': }
     }
   }
 }
