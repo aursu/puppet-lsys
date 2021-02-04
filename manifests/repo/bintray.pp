@@ -24,6 +24,7 @@ class lsys::repo::bintray (
       sslverify     => '0',
       notify        => Class['lsys::repo'],
     }
+    file { '/etc/yum.repos.d/bintray-custom.repo': }
 
     if $php5_enable {
       yumrepo { 'bintray-php5custom':
@@ -35,6 +36,7 @@ class lsys::repo::bintray (
         sslverify     => '0',
         notify        => Class['lsys::repo'],
       }
+      file { '/etc/yum.repos.d/bintray-php5custom.repo': }
     }
 
     if $php71_enable {
@@ -47,6 +49,7 @@ class lsys::repo::bintray (
         sslverify     => '0',
         notify        => Class['lsys::repo'],
       }
+      file { '/etc/yum.repos.d/bintray-php71custom.repo': }
     }
 
     if $php73_enable {
@@ -59,6 +62,7 @@ class lsys::repo::bintray (
         sslverify     => '0',
         notify        => Class['lsys::repo'],
       }
+      file { '/etc/yum.repos.d/bintray-php73custom.repo': }
     }
 
     if $php74_enable {
@@ -71,6 +75,7 @@ class lsys::repo::bintray (
         sslverify     => '0',
         notify        => Class['lsys::repo'],
       }
+      file { '/etc/yum.repos.d/bintray-php74custom.repo': }
     }
 
     if $php8_enable {
@@ -82,6 +87,7 @@ class lsys::repo::bintray (
         repo_gpgcheck => '0',
         sslverify     => '0',
         notify        => Class['lsys::repo'],
+        file { '/etc/yum.repos.d/bintray-php8custom.repo': }
       }
     }
   }
