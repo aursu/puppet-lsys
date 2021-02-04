@@ -9,6 +9,7 @@ class lsys::repo::bintray (
   Boolean $php71_enable = false,
   Boolean $php73_enable = false,
   Boolean $php74_enable = false,
+  Boolean $php8_enable = false,
 )
 {
   include lsys::repo
@@ -64,6 +65,18 @@ class lsys::repo::bintray (
       yumrepo { 'bintray-php74custom':
         baseurl       => 'https://dl.bintray.com/aursu/php74custom/centos/$releasever/',
         descr         => 'PHP 7.4 packages and extensions',
+        enabled       => '0',
+        gpgcheck      => '0',
+        repo_gpgcheck => '0',
+        sslverify     => '0',
+        notify        => Class['lsys::repo'],
+      }
+    }
+
+    if $php8_enable {
+      yumrepo { 'bintray-php8custom':
+        baseurl       => 'https://dl.bintray.com/aursu/php8custom/centos/$releasever/',
+        descr         => 'PHP 8.x packages and extensions',
         enabled       => '0',
         gpgcheck      => '0',
         repo_gpgcheck => '0',
