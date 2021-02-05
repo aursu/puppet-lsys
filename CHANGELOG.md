@@ -201,3 +201,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.17.0
+
+**Features**
+
+* Added ability to disable tcp_wrappers
+
+**Bugfixes**
+
+**Known Issues**
