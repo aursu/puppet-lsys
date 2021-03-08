@@ -9,7 +9,7 @@ class lsys::repo::bintray (
   Boolean $php71_enable = false,
   Boolean $php73_enable = false,
   Boolean $php74_enable = false,
-  Boolean $php8_enable = false,
+  Boolean $php8_enable  = false,
 )
 {
   include lsys::repo
