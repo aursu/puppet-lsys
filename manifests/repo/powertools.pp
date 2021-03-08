@@ -29,7 +29,7 @@ class lsys::repo::powertools (
       *        => $source,
       ensure   => 'present',
       descr    => 'CentOS Linux $releasever - PowerTools',
-      enabled  => $enabled,
+      enabled  => '1',
       gpgcheck => '1',
       gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial',
     }
