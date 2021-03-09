@@ -18,6 +18,7 @@ class lsys::python (
             ensure => present,
           }
         }
+
         if $python3_install {
           # 3.6.8
           package { 'python3':
@@ -32,10 +33,12 @@ class lsys::python (
             ensure => present,
           }
         }
+
         if $python3_install {
           # 3.6.8
           package { 'python3':
-            ensure => present,
+            ensure        => present,
+            allow_virtual => true,
           }
         }
       }
