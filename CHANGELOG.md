@@ -221,3 +221,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.19.0
+
+**Features**
+
+* Allow to setup different owner/group while quota package hardening
+
+**Bugfixes**
+
+**Known Issues**

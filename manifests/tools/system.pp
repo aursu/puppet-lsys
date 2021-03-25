@@ -14,6 +14,8 @@ class lsys::tools::system (
           $which_ensure     = false,
   Lsys::PackageVersion
           $quota_ensure     = false,
+  String  $quota_owner      = 'root',
+  String  $quota_group      = 'root',
 )
 {
   # Allows restricted root access for specified users
@@ -31,6 +33,17 @@ class lsys::tools::system (
   if $enable_hardening {
     file {
       default: mode => 'o=';
+
+      # which
+      '/usr/bin/which': ;
+    }
+
+    file {
+      default:
+        mode  => 'o=',
+        owner => $quota_owner,
+        group => $quota_group,
+      ;
       # quota
       '/usr/bin/quota': ;
       '/usr/bin/quotasync': ;
@@ -48,9 +61,6 @@ class lsys::tools::system (
 
       # quota-warnquota
       '/usr/sbin/warnquota': ;
-
-      # which
-      '/usr/bin/which': ;
     }
   }
 }
