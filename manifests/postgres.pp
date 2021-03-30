@@ -44,9 +44,18 @@ class lsys::postgres (
     }
   }
 
+  # CentOS 8 provides modules postgresql:10, postgresql:12 and postgresql:9.6
+  if $manage_dnf_module and $repo_version in ['10', '12', '9.6'] {
+    package { 'postgresql dnf module':
+      ensure      => $repo_version,
+      name        => 'postgresql',
+      enable_only => true,
+      provider    => 'dnfmodule',
+    }
+  }
+
   class { 'postgresql::globals':
     manage_package_repo => $manage_package_repo,
-    manage_dnf_module   => $manage_dnf_module,
     version             => $repo_version,
   }
 
