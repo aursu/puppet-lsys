@@ -15,11 +15,19 @@ describe 'lsys::postgres' do
           .that_notifies('Exec[yum-reload-e0c99ff]')
       }
 
-      it {
-        is_expected.to contain_package('postgresql-server')
-          .with_ensure('12.4')
-          .with_name('postgresql12-server')
-      }
+      if os == 'centos-8-x86_64'
+        it {
+          is_expected.to contain_package('postgresql-server')
+            .with_ensure('12.5')
+            .with_name('postgresql-server')
+        }
+      else
+        it {
+          is_expected.to contain_package('postgresql-server')
+            .with_ensure('12.5')
+            .with_name('postgresql12-server')
+        }
+      end
     end
   end
 end
