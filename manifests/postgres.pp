@@ -17,7 +17,7 @@ class lsys::postgres (
   Boolean $manage_package_repo        = true,
   # https://www.postgresql.org/docs/11/pgupgrade.html
   Lsys::PGVersion
-          $package_version            = '12.6',
+          $package_version            = '12.5',
   String  $ip_mask_allow_all_users    = '0.0.0.0/0',
   String  $listen_addresses           = 'localhost',
   Variant[Integer, Pattern[/^[0-9]+$/]]
@@ -37,12 +37,20 @@ class lsys::postgres (
     default => $major_version,
   }
 
-  if $manage_package_repo {
-    class { 'postgresql::globals':
-      manage_package_repo => $manage_package_repo,
-      version             => $repo_version,
+  $manage_dnf_module = $facts['os']['name'] ? {
+    'CentOS' => $facts['os']['release']['major'] ? {
+      '7'     => false,
+      default => true,
     }
+  }
 
+  class { 'postgresql::globals':
+    manage_package_repo => $manage_package_repo,
+    manage_dnf_module   => $manage_dnf_module,
+    version             => $repo_version,
+  }
+
+  if $manage_package_repo {
     if $repo_sslverify {
       Yumrepo <| title == 'yum.postgresql.org' |> {
         sslverify => $repo_sslverify,
