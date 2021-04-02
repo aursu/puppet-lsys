@@ -231,3 +231,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.19.1
+
+**Features**
+
+* Allow to provide mail relay into postfix configuration
+
+**Bugfixes**
+
+**Known Issues**
