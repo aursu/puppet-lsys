@@ -13,9 +13,17 @@ class lsys::postfix::client (
           $relayhost = undef,
 )
 {
+  if $relayhost {
+    $enable_mta = true
+  }
+  else {
+    $enable_mta = false
+  }
+
   class { 'postfix':
     manage_mailx   => false,
     manage_aliases => false,
+    mta            => $enable_mta,
     relayhost      => $relayhost,
   }
 }
