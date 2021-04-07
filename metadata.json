@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.19.1",
+  "version": "0.19.2",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -61,6 +61,10 @@
     {
       "name": "puppetlabs/postgresql",
       "version_requirement": ">= 7.0.0 < 8.0.0"
+    },
+    {
+      "name": "aursu/puppet",
+      "version_requirement": ">= 0.3.0 < 1.0.0"
     },
     {
       "name": "puppetlabs/stdlib",

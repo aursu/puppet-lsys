@@ -241,3 +241,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.19.2
+
+**Features**
+
+* Added puppet installation profile
+
+**Bugfixes**
+
+**Known Issues**

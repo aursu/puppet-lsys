@@ -88,6 +88,8 @@ fixtures:
     selinux_core:
       repo: https://github.com/puppetlabs/puppetlabs-selinux_core.git
       puppet_version: ">= 6.0.0"
+    puppet:
+      repo: https://github.com/aursu/puppet-puppet.git
     yumrepo_core:
       repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
       puppet_version: ">= 6.0.0"
