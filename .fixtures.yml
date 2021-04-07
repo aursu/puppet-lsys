@@ -12,6 +12,9 @@ fixtures:
     archive:
       repo: puppet/archive
       ref: 4.5.0
+    augeas_core:
+      repo: puppetlabs/augeas_core
+      puppet_version: ">= 6.0.0"
     chrony:
       repo: aboe/chrony
       ref: 0.3.2
@@ -21,6 +24,9 @@ fixtures:
     cron:
       repo: puppet/cron
       ref: 2.0.0
+    cron_core:
+      repo: puppetlabs/cron_core
+      puppet_version: ">= 6.0.0"
     datacat:
       repo: richardc/datacat
       ref: 0.6.2
@@ -48,6 +54,9 @@ fixtures:
     monit:
       repo: soli/monit
       ref: 3.0.0
+    mount_core:
+      repo: puppetlabs/mount_core
+      puppet_version: ">= 6.0.0"
     ntp:
       repo: puppetlabs/ntp
       ref: 8.3.0
@@ -60,6 +69,9 @@ fixtures:
     selinux:
       repo: puppet/selinux
       ref: 3.2.0
+    selinux_core:
+      repo: puppetlabs/selinux_core
+      puppet_version: ">= 6.0.0"
     stdlib:
       repo: puppetlabs/stdlib
       ref: 6.3.0
@@ -69,29 +81,21 @@ fixtures:
     systemd:
       repo: camptocamp/systemd
       ref: 2.9.0
-  repositories:
-    augeas_core:
-      repo: https://github.com/puppetlabs/puppetlabs-augeas_core.git
+    yumrepo_core:
+      repo: puppetlabs/yumrepo_core
       puppet_version: ">= 6.0.0"
+  repositories:
     dockerinstall:
       repo: https://github.com/aursu/puppet-dockerinstall.git
     grayloginstall:
       repo: https://github.com/aursu/puppet-grayloginstall.git
-    mount_core:
-      repo: https://github.com/puppetlabs/puppetlabs-mount_core.git
-      puppet_version: ">= 6.0.0"
     nginx:
       repo: https://github.com/aursu/puppet-nginx.git
       ref: tags/v2.0.1-rc0.4
     rlimits:
       repo: https://github.com/aursu/puppet-rlimits.git
-    selinux_core:
-      repo: https://github.com/puppetlabs/puppetlabs-selinux_core.git
-      puppet_version: ">= 6.0.0"
     puppet:
       repo: https://github.com/aursu/puppet-puppet.git
-    yumrepo_core:
-      repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
-      puppet_version: ">= 6.0.0"
+
 
 
