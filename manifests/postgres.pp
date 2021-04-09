@@ -42,15 +42,24 @@ class lsys::postgres (
   # Therefore we use postgresql:12 dnf module stream
   $manage_dnf_module = $facts['os']['name'] ? {
     'CentOS' => $facts['os']['release']['major'] ? {
+      '6'     => false,
       '7'     => false,
       default => true,
     }
   }
 
-  class { 'postgresql::globals':
-    manage_package_repo => $manage_package_repo,
-    manage_dnf_module   => $manage_dnf_module,
-    version             => $repo_version,
+  if $manage_dnf_module {
+    class { 'postgresql::globals':
+      manage_package_repo => $manage_package_repo,
+      manage_dnf_module   => $manage_dnf_module,
+      version             => $repo_version,
+    }
+  }
+  else {
+    class { 'postgresql::globals':
+      manage_package_repo => $manage_package_repo,
+      version             => $repo_version,
+    }
   }
 
   if $manage_package_repo {

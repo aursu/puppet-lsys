@@ -251,3 +251,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.19.3
+
+**Features**
+
+**Bugfixes**
+
+* Added ability to use lsys::postgres with puppetlabs/postgres < 7.0.0
+
+**Known Issues**
