@@ -261,3 +261,4 @@ All notable changes to this project will be documented in this file.
 * Added ability to use lsys::postgres with puppetlabs/postgres < 7.0.0
 
 **Known Issues**
+
