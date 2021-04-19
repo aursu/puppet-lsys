@@ -282,3 +282,14 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
+## Release 0.21.0
+
+**Features**
+
+* Added NodeJS installation
+* Added Google Lighthous installation
+
+**Bugfixes**
+
+**Known Issues**
+

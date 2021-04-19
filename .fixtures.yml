@@ -57,6 +57,9 @@ fixtures:
     mount_core:
       repo: puppetlabs/mount_core
       puppet_version: ">= 6.0.0"
+    nodejs:
+      repo: puppet/nodejs
+      ref: 8.1.0
     ntp:
       repo: puppetlabs/ntp
       ref: 8.3.0
