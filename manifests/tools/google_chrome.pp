@@ -12,6 +12,7 @@ class lsys::tools::google_chrome (
 )
 {
   include lsys::repo::google_chrome
+  include lsys::tools::docs
 
   $package_name = "google-chrome-${release}"
 

@@ -272,3 +272,13 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
+## Release 0.20.1
+
+**Features**
+
+* Added man tools installation
+
+**Bugfixes**
+
+**Known Issues**
+
