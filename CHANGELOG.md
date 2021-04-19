@@ -262,3 +262,13 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
+## Release 0.20.0
+
+**Features**
+
+* Added Google Chrome installation
+
+**Bugfixes**
+
+**Known Issues**
+
