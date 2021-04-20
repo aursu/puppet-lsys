@@ -22,6 +22,8 @@ class lsys::puppet (
   Boolean $puppetserver  = false,
   Stdlib::Host
           $server        = 'puppet',
+  Optional[Stdlib::Host]
+          $ca_server     = undef,
   Boolean $hosts_update  = false,
 )
 {
@@ -45,6 +47,7 @@ class lsys::puppet (
     class { 'puppet::profile::agent':
       platform_name => $platform_name,
       server        => $server,
+      ca_server     => $ca_server,
       hosts_update  => $hosts_update,
     }
   }
