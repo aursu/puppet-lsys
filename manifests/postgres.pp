@@ -45,7 +45,9 @@ class lsys::postgres (
       '6'     => false,
       '7'     => false,
       default => true,
-    }
+    },
+    # only CentOS supported
+    default => false,
   }
 
   if $manage_dnf_module {
