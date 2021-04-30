@@ -9,9 +9,10 @@ class lsys::repo::powertools (
   # baseurl=http://mirror.centos.org/$contentdir/$releasever/PowerTools/$basearch/os/
   Optional[Stdlib::HTTPUrl]
           $baseurl    = undef,
-  Optional[Stdlib::HTTPUrl]
-          $mirrorlist = 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra',
-)
+  Stdlib::HTTPUrl
+          $mirrorlist = $lsys::params::repo_powertools_mirrorlist,
+  String  $os_name    = $lsys::params::repo_os_name,
+) inherits lsys::params
 {
   if $baseurl {
     $source = {
@@ -24,11 +25,14 @@ class lsys::repo::powertools (
     }
   }
 
+  # Notice: /Stage[main]/Lsys::Repo::Powertools/Yumrepo[powertools]/descr: descr changed 'CentOS Stream $releasever - PowerTools' to 'CentOS Linux $releasever - PowerTools'
+  # Notice: /Stage[main]/Lsys::Repo::Powertools/Yumrepo[powertools]/mirrorlist: mirrorlist changed 'http://mirrorlist.centos.org/?release=$stream&arch=$basearch&repo=PowerTools&infra=$infra' to 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra'
+
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['8'] {
     yumrepo { 'powertools':
       *        => $source,
       ensure   => 'present',
-      descr    => 'CentOS Linux $releasever - PowerTools',
+      descr    => "${os_name} \$releasever - PowerTools",
       enabled  => '1',
       gpgcheck => '1',
       gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial',

@@ -38,4 +38,23 @@ class lsys::params {
   $monit_config_file = '/etc/monitrc'
   $monit_logfile     = '/var/log/monit.log'
   $monit_pid_file    = '/var/run/monit.pid'
+
+  # centos stream
+  $centos_stream = $facts['os']['release']['major'] ? {
+    '6' => false,
+    '7' => false,
+    default => $facts['os']['distro']['id'] ? {
+      'CentOSStream' => true,
+      default        => false,
+    },
+  }
+
+  if $centos_stream {
+    $repo_powertools_mirrorlist = 'http://mirrorlist.centos.org/?release=$stream&arch=$basearch&repo=PowerTools&infra=$infra'
+    $repo_os_name = 'CentOS Stream'
+  }
+  else {
+    $repo_powertools_mirrorlist = 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra'
+    $repo_os_name = 'CentOS Linux'
+  }
 }
