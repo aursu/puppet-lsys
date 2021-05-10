@@ -36,6 +36,7 @@ class lsys::ntp (
     class { 'chrony':
       servers => $ntp_servers,
     }
+    contain chrony
 
     if $enable_hardening {
       file {
@@ -57,6 +58,7 @@ class lsys::ntp (
         '-6 ::1',
       ],
     }
+    contain ntp
 
     if $enable_hardening {
       file {

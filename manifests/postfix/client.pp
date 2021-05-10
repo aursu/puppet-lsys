@@ -26,4 +26,6 @@ class lsys::postfix::client (
     mta            => $enable_mta,
     relayhost      => $relayhost,
   }
+
+  contain postfix
 }
