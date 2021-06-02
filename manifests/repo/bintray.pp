@@ -5,8 +5,6 @@
 # @example
 #   include lsys::repo::bintray
 class lsys::repo::bintray (
-  Boolean $php5_enable  = false,
-  Boolean $php71_enable = false,
   Boolean $php73_enable = false,
   Boolean $php74_enable = false,
   Boolean $php8_enable  = false,
@@ -25,32 +23,6 @@ class lsys::repo::bintray (
       notify        => Class['lsys::repo'],
     }
     file { '/etc/yum.repos.d/bintray-custom.repo': }
-
-    if $php5_enable {
-      yumrepo { 'bintray-php5custom':
-        baseurl       => 'https://rpmb.jfrog.io/artifactory/php5custom/centos/$releasever/',
-        descr         => 'PHP 5.6 packages and extensions',
-        enabled       => '0',
-        gpgcheck      => '0',
-        repo_gpgcheck => '0',
-        sslverify     => '0',
-        notify        => Class['lsys::repo'],
-      }
-      file { '/etc/yum.repos.d/bintray-php5custom.repo': }
-    }
-
-    if $php71_enable {
-      yumrepo { 'bintray-php71custom':
-        baseurl       => 'https://rpmb.jfrog.io/artifactory/php71custom/centos/$releasever/',
-        descr         => 'PHP 7.1 packages and extensions',
-        enabled       => '0',
-        gpgcheck      => '0',
-        repo_gpgcheck => '0',
-        sslverify     => '0',
-        notify        => Class['lsys::repo'],
-      }
-      file { '/etc/yum.repos.d/bintray-php71custom.repo': }
-    }
 
     if $php73_enable {
       yumrepo { 'bintray-php73custom':
