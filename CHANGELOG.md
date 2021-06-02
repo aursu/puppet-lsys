@@ -293,3 +293,13 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
+## Release 0.21.1
+
+**Features**
+
+**Bugfixes**
+
+* Corrected bintray location
+
+**Known Issues**
+
