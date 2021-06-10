@@ -303,3 +303,12 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
+## Release 0.21.2
+
+**Features**
+
+* Added Rsyslog upstream  repository
+
+**Bugfixes**
+
+**Known Issues**
