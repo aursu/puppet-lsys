@@ -6,6 +6,8 @@
 # @example
 #   include lsys::repo::rsyslog
 class lsys::repo::rsyslog {
+  include lsys::repo
+
   case $facts['os']['name'] {
     'RedHat', 'CentOS': {
       yumrepo { 'rsyslog_v8':

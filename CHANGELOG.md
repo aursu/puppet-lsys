@@ -312,3 +312,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.22.0
+
+**Features**
+
+**Bugfixes**
+
+* Added Class[Lsys::Repo] into lsys::repo::rsyslog
+* Fixed CentOS Stream flag setup in lsys::params for Puppet 5 and 6
+
+**Known Issues**
