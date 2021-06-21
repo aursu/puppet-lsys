@@ -323,3 +323,13 @@ All notable changes to this project will be documented in this file.
 * Fixed CentOS Stream flag setup in lsys::params for Puppet 5 and 6
 
 **Known Issues**
+
+## Release 0.22.1
+
+**Features**
+
+**Bugfixes**
+
+* Updated module dependencies
+
+**Known Issues**
