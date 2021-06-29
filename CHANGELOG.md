@@ -324,7 +324,7 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.22.1
+## Release 0.23.0
 
 **Features**
 
