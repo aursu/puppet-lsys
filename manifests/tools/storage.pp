@@ -4,9 +4,7 @@
 #
 # @example
 #   include lsys::tools::storage
-class lsys::tools::storage {
-}
-class lsys::tools::system (
+class lsys::tools::storage (
   Boolean $enable_hardening = false,
   Lsys::PackageVersion
           $lvm2_ensure      = true,
