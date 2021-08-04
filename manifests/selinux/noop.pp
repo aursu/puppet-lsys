@@ -5,8 +5,8 @@
 # @example
 #   include lsys::selinux::noop
 class lsys::selinux::noop {
-  if $facts['selinux'] {
-    class {'selinux':
+  if $facts['os']['selinux'] and $facts['os']['selinux']['enabled'] {
+    class { 'selinux':
       mode => 'disabled',
     }
   }
