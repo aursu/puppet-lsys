@@ -30,7 +30,7 @@ class lsys::puppet (
   if $puppetserver {
     if $platform_name == 'puppet5' {
       class { 'lsys::postgres':
-        package_version => '9.6.20',
+        package_version => '9.6.23',
       }
     }
     else {
@@ -42,6 +42,7 @@ class lsys::puppet (
       server        => $server,
       hosts_update  => $hosts_update,
     }
+    contain puppet::profile::server
   }
   else {
     class { 'puppet::profile::agent':
