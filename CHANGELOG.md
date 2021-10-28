@@ -333,3 +333,15 @@ All notable changes to this project will be documented in this file.
 * Updated module dependencies
 
 **Known Issues**
+
+## Release 0.24.0
+
+**Features**
+
+* Added compiler Puppet server operational mode
+* Added common environment in use into puppet.conf
+* Added ability to disable PuppetDB
+
+**Bugfixes**
+
+**Known Issues**
