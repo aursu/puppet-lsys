@@ -345,3 +345,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.24.1
+
+**Features**
+
+**Bugfixes**
+
+* Removed `compiler` flag
+
+**Known Issues**

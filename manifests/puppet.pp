@@ -8,15 +8,13 @@
 # @param puppetserver
 #   Whether it is Puppet server or not
 #
-# @param compiler
-#   Whether Puppet server is compiler or not
+# @param sameca
+#   Whether Puppet server provides CA service or not
+#   If not - it is compiler Puppet server
 #   see https://puppet.com/docs/puppet/7/server/scaling_puppet_server.html
 #   If server is compiler then
 #     - no Puppet CA and
 #     - no PuppetDB on it
-#
-# @param sameca
-#   Whether Puppet server provides CA service or not
 #
 # @param server
 #   Puppet server name
@@ -31,8 +29,7 @@ class lsys::puppet (
           $platform_name  = 'puppet7',
 
   Boolean $puppetserver   = false,
-  Boolean $compiler       = true,
-  Boolean $sameca         = true,
+  Boolean $sameca         = false,
 
   Boolean $puppetdb_local = true,
   Boolean $postgres_local = true,
@@ -51,17 +48,7 @@ class lsys::puppet (
 )
 {
   if $puppetserver {
-    if $compiler {
-      class { 'puppet::profile::compiler':
-        platform_name  => $platform_name,
-        ca_server      => $ca_server,
-        server         => $server,
-        use_common_env => $use_common_env,
-        common_envname => $common_envname,
-      }
-      contain puppet::profile::compiler
-    }
-    else {
+    if $sameca {
       if $puppetdb_local and $postgres_local {
         if $platform_name == 'puppet5' {
           class { 'lsys::postgres':
@@ -85,6 +72,16 @@ class lsys::puppet (
         common_envname => $common_envname,
       }
       contain puppet::profile::server
+    }
+    else {
+      class { 'puppet::profile::compiler':
+        platform_name  => $platform_name,
+        ca_server      => $ca_server,
+        server         => $server,
+        use_common_env => $use_common_env,
+        common_envname => $common_envname,
+      }
+      contain puppet::profile::compiler
     }
   }
   else {
