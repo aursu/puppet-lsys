@@ -31,6 +31,7 @@ class lsys::puppet (
   Boolean $puppetserver   = false,
   Boolean $sameca         = false,
 
+  Boolean $use_puppetdb   = true,
   Boolean $puppetdb_local = true,
   Boolean $postgres_local = true,
 
@@ -66,6 +67,7 @@ class lsys::puppet (
         server         => $server,
         sameca         => $sameca,
         hosts_update   => $hosts_update,
+        use_puppetdb   => $use_puppetdb,
         puppetdb_local => $puppetdb_local,
         postgres_local => $postgres_local,
         use_common_env => $use_common_env,
@@ -80,6 +82,7 @@ class lsys::puppet (
         server         => $server,
         use_common_env => $use_common_env,
         common_envname => $common_envname,
+        use_puppetdb   => $use_puppetdb,
       }
       contain puppet::profile::compiler
     }
