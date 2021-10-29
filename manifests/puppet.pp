@@ -89,11 +89,9 @@ class lsys::puppet (
   }
   else {
     class { 'puppet::profile::agent':
-      platform_name  => $platform_name,
-      server         => $server,
-      ca_server      => $ca_server,
-      use_common_env => $use_common_env,
-      common_envname => $common_envname,
+      platform_name => $platform_name,
+      server        => $server,
+      ca_server     => $ca_server,
     }
   }
 }
