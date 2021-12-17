@@ -355,3 +355,13 @@ All notable changes to this project will be documented in this file.
 * Removed `compiler` flag
 
 **Known Issues**
+
+## Release 0.24.2
+
+**Features**
+
+* Added ability to install packages out of corporate repo
+
+**Bugfixes**
+
+**Known Issues**
