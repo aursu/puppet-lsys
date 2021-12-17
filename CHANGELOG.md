@@ -365,3 +365,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.24.3
+
+**Features**
+
+* Make ability to disable tools for remote access management
+
+**Bugfixes**
+
+**Known Issues**
