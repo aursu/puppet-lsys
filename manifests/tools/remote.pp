@@ -15,10 +15,17 @@ class lsys::tools::remote (
           $telnet_ensure = false,
 )
 {
-  lsys::tools::package { 'curl': ensure => $curl_ensure }
-  lsys::tools::package { 'rsync': ensure => $rsync_ensure }
-  lsys::tools::package { 'wget':  ensure => $wget_ensure }
-
+  if $curl_ensure {
+    lsys::tools::package { 'curl': ensure => $curl_ensure }
+  }
+  if $rsync_ensure {
+    lsys::tools::package { 'rsync': ensure => $rsync_ensure }
+  }
+  if $wget_ensure {
+    lsys::tools::package { 'wget':  ensure => $wget_ensure }
+  }
   # The client program for the Telnet remote login protocol
-  lsys::tools::package { 'telnet': ensure => $telnet_ensure }
+  if $telnet_ensure {
+    lsys::tools::package { 'telnet': ensure => $telnet_ensure }
+  }
 }
