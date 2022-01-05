@@ -5,31 +5,34 @@ fixtures:
   forge_modules:
     alternatives:
       repo: puppet/alternatives
-      ref: 3.0.0
+      ref: 4.0.0
     apache:
       repo: puppetlabs/apache
-      ref: 5.5.0
+      ref: 7.0.0
     archive:
       repo: puppet/archive
-      ref: 4.5.0
+      ref: 6.0.2
     augeas_core:
       repo: puppetlabs/augeas_core
       puppet_version: ">= 6.0.0"
     chrony:
-      repo: aboe/chrony
-      ref: 0.3.2
+      repo: puppet/chrony
+      ref: 2.1.0
     concat:
       repo: puppetlabs/concat
-      ref: 6.2.0
+      ref: 7.1.1
     cron:
       repo: puppet/cron
-      ref: 2.0.0
+      ref: 3.0.0
     cron_core:
       repo: puppetlabs/cron_core
       puppet_version: ">= 6.0.0"
     datacat:
       repo: richardc/datacat
       ref: 0.6.2
+    dockerinstall:
+      repo: aursu/dockerinstall
+      ref: 0.13.0
     elastic_stack:
       repo: elastic/elastic_stack
       ref: 7.0.0
@@ -38,19 +41,19 @@ fixtures:
       ref: 6.4.0
     graylog:
       repo: graylog/graylog
-      ref: 0.9.0
+      ref: 1.0.0
     inifile:
       repo: puppetlabs/inifile
-      ref: 4.2.0
+      ref: 5.2.0
     java:
       repo: puppetlabs/java
-      ref: 6.3.0
+      ref: 7.3.0
     logrotate:
       repo: puppet/logrotate
-      ref: 5.0.0
+      ref: 6.0.0
     mongodb:
       repo: puppet/mongodb
-      ref: 3.1.0
+      ref: 4.1.0
     monit:
       repo: soli/monit
       ref: 3.0.0
@@ -59,45 +62,43 @@ fixtures:
       puppet_version: ">= 6.0.0"
     nodejs:
       repo: puppet/nodejs
-      ref: 8.1.0
+      ref: 9.0.1
     ntp:
       repo: puppetlabs/ntp
-      ref: 8.3.0
+      ref: 9.1.0
     postfix:
-      repo: camptocamp/postfix
-      ref: 1.10.0
+      repo: puppet/postfix
+      ref: 2.0.0
     postgresql:
       repo: puppetlabs/postgresql
-      ref: 7.0.2
+      ref: 7.5.0
     puppet:
       repo: aursu/puppet
       ref: 0.3.6
     selinux:
       repo: puppet/selinux
-      ref: 3.2.0
+      ref: 3.4.1
     selinux_core:
       repo: puppetlabs/selinux_core
       puppet_version: ">= 6.0.0"
     stdlib:
       repo: puppetlabs/stdlib
-      ref: 6.3.0
+      ref: 8.1.0
     sysctl:
       repo: thias/sysctl
-      ref: 1.0.6
+      ref: 1.0.7
     systemd:
-      repo: camptocamp/systemd
-      ref: 2.9.0
+      repo: puppet/systemd
+      ref: 3.5.1
     yumrepo_core:
       repo: puppetlabs/yumrepo_core
       puppet_version: ">= 6.0.0"
   repositories:
-    dockerinstall:
-      repo: https://github.com/aursu/puppet-dockerinstall.git
     grayloginstall:
       repo: https://github.com/aursu/puppet-grayloginstall.git
     nginx:
       repo: https://github.com/aursu/puppet-nginx.git
-      ref: tags/v2.0.1-rc0.4
+      ref: tags/v3.3.1-rc0.4
     rlimits:
       repo: https://github.com/aursu/puppet-rlimits.git
 

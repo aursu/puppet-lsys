@@ -18,13 +18,13 @@ describe 'lsys::postgres' do
       if os == 'centos-8-x86_64'
         it {
           is_expected.to contain_package('postgresql-server')
-            .with_ensure('12.5')
+            .with_ensure('12.8')
             .with_name('postgresql-server')
         }
       else
         it {
           is_expected.to contain_package('postgresql-server')
-            .with_ensure('12.5')
+            .with_ensure('12.8')
             .with_name('postgresql12-server')
         }
       end
