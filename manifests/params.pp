@@ -14,10 +14,18 @@ class lsys::params {
   $nginx_proxy_temp_path = "${nginx_cachedir}/proxy_temp"
   $nginx_user_home       = '/var/lib/nginx'
 
-  $nginx_version = $facts['os']['release']['major'] ? {
-    '6'     => '1.19.5-1.el6.ngx',
-    '8'     => '1.21.1-1.el8.ngx',
-    default => '1.21.1-1.el7.ngx',
+  if $facts['os']['name'] == 'Ubuntu' {
+    $oscode = $facts['os']['distro']['codename']
+
+    $nginx_version = "1.21.5-1~${oscode}"
+  }
+  else {
+    $osmaj  = $facts['os']['release']['major']
+
+    $nginx_version = $facts['os']['release']['major'] ? {
+      '6'     => '1.19.5-1.el6.ngx',
+      default => "1.21.5-1.el${osmaj}.ngx",
+    }
   }
 
   $nginx_conf_dir        = $nginx::params::conf_dir
