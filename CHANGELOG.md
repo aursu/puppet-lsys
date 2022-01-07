@@ -385,3 +385,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.25.1
+
+**Features**
+
+* Added Ubuntu support for Nginx packages installation
+
+**Bugfixes**
+
+**Known Issues**
