@@ -8,10 +8,12 @@ class lsys::nginx  (
   String  $package_ensure           = $lsys::params::nginx_version,
   Boolean $manage_user              = true,
   Boolean $manage_user_home         = false,
-  String  $daemon_group             = $lsys::webserver::params::user,
-  Integer $daemon_group_id          = $lsys::webserver::params::user_id,
-  String  $daemon_user              = $lsys::webserver::params::group,
-  Integer $daemon_user_id           = $lsys::webserver::params::group_id,
+  String  $daemon_user              = $lsys::webserver::params::user,
+  Integer $daemon_user_id           = $lsys::webserver::params::user_id,
+  String  $daemon_group             = $lsys::webserver::params::group,
+  Integer $daemon_group_id          = $lsys::webserver::params::group_id,
+  Optional[Array[String, 1]]
+          $daemon_user_groups       = undef,
   Optional[String]
           $charset                  = undef,
   Optional[String]
@@ -169,6 +171,8 @@ class lsys::nginx  (
         uid        => $daemon_user_id,
         allowdupe  => true,
         gid        => $daemon_group,
+        groups     => $daemon_user_groups,
+        membership => 'minimum',
         home       => $nginx_user_home,
         managehome => false,
         shell      => $web_server_user_shell,
