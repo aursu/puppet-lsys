@@ -75,4 +75,12 @@ class lsys::params {
     $repo_powertools_mirrorlist = 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra'
     $repo_os_name = 'CentOS Linux'
   }
+
+  # custom case for CentOS 8 Stream only
+  if $facts['os']['name'] == 'CentOS' and $facts['os']['release']['major'] == '8' and $centos_stream {
+    $postgres_version = '12.9'
+  }
+  else {
+    $postgres_version = '12.8'
+  }
 }
