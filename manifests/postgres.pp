@@ -14,7 +14,7 @@
 #   subnet. Default value: '127.0.0.1/32'.
 #
 class lsys::postgres (
-  Boolean $manage_package_repo        = true,
+  Boolean $manage_package_repo        = $lsys::params::postgres_manage_repo,
   # https://www.postgresql.org/docs/11/pgupgrade.html
   Lsys::PGVersion
           $package_version            = $lsys::params::postgres_version,
@@ -26,6 +26,7 @@ class lsys::postgres (
           $repo_sslverify             = undef,
 ) inherits lsys::params
 {
+  include lsys::repo
 
   $version_data = split($package_version, '[.]')
   $major_version = $version_data[0]
@@ -70,14 +71,31 @@ class lsys::postgres (
       Yumrepo <| title == 'yum.postgresql.org' |> {
         sslverify => $repo_sslverify,
       }
+
+      Yumrepo <| title == 'pgdg-common' |> {
+        sslverify => $repo_sslverify,
+      }
     }
 
-    file { '/etc/yum.repos.d/yum.postgresql.org.repo':
-      mode => '0600',
+    file {
+      default: mode => '0600';
+      '/etc/yum.repos.d/yum.postgresql.org.repo': ;
+      '/etc/yum.repos.d/pgdg-common.repo': ;
     }
 
-    include lsys::repo
     Yumrepo['yum.postgresql.org'] ~> Class['lsys::repo']
+    Yumrepo['pgdg-common']        ~> Class['lsys::repo']
+  }
+  else {
+    # remove unmanaged repositories
+    file {
+      default:
+        ensure => 'absent',
+        notify => Class['lsys::repo'],
+      ;
+      '/etc/yum.repos.d/yum.postgresql.org.repo': ;
+      '/etc/yum.repos.d/pgdg-common.repo': ;
+    }
   }
 
   class { 'postgresql::server':
