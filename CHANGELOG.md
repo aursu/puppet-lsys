@@ -396,12 +396,14 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.25.2
+## Release 0.25.3
 
 **Features**
 
 * Added Postgres 12.9 for CentOS Stream 8
 
 **Bugfixes**
+
+* Disable package repo management for CentOS Stream 8
 
 **Known Issues**
