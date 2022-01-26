@@ -407,3 +407,13 @@ All notable changes to this project will be documented in this file.
 * Disable package repo management for CentOS Stream 8
 
 **Known Issues**
+
+## Release 0.25.4
+
+**Features**
+
+* Added CVE-2021-4034 mitigation
+
+**Bugfixes**
+
+**Known Issues**
