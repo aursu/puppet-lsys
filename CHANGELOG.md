@@ -408,7 +408,7 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.25.4
+## Release 0.25.5
 
 **Features**
 

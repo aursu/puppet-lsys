@@ -7,6 +7,6 @@
 #   include lsys::hardening::polkit
 class lsys::hardening::polkit {
   file { '/usr/bin/pkexec':
-    mode => '0750',
+    mode => '0755',
   }
 }
