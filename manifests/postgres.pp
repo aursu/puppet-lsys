@@ -83,8 +83,15 @@ class lsys::postgres (
       '/etc/yum.repos.d/pgdg-common.repo': ;
     }
 
-    Yumrepo['yum.postgresql.org'] ~> Class['lsys::repo']
-    Yumrepo['pgdg-common']        ~> Class['lsys::repo']
+    case $facts['os']['family'] {
+      'RedHat': {
+        Class['postgresql::repo::yum_postgresql_org'] ~> Class['lsys::repo']
+      }
+      'Debian': {
+        Class['postgresql::repo::apt_postgresql_org'] ~> Class['lsys::repo']
+      }
+      default: {}
+    }
   }
   else {
     # remove unmanaged repositories

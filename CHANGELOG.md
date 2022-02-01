@@ -417,3 +417,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.26.0
+
+**Features**
+
+**Bugfixes**
+
+* Added dependencies on Class level to make compatibility with
+  postgresql module v6+
+
+**Known Issues**
