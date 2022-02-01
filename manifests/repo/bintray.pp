@@ -8,6 +8,7 @@ class lsys::repo::bintray (
   Boolean $php73_enable = false,
   Boolean $php74_enable = false,
   Boolean $php8_enable  = false,
+  Boolean $php81_enable  = false,
 )
 {
   include lsys::repo
@@ -53,7 +54,7 @@ class lsys::repo::bintray (
     if $php8_enable {
       yumrepo { 'bintray-php8custom':
         baseurl       => 'https://rpmb.jfrog.io/artifactory/php8custom/centos/$releasever/',
-        descr         => 'PHP 8.x packages and extensions',
+        descr         => 'PHP 8.0 packages and extensions',
         enabled       => '0',
         gpgcheck      => '0',
         repo_gpgcheck => '0',
@@ -61,6 +62,19 @@ class lsys::repo::bintray (
         notify        => Class['lsys::repo'],
       }
       file { '/etc/yum.repos.d/bintray-php8custom.repo': }
+    }
+
+    if $php81_enable {
+      yumrepo { 'bintray-php81custom':
+        baseurl       => 'https://rpmb.jfrog.io/artifactory/php81custom/centos/$releasever/',
+        descr         => 'PHP 8.1 packages and extensions',
+        enabled       => '0',
+        gpgcheck      => '0',
+        repo_gpgcheck => '0',
+        sslverify     => '0',
+        notify        => Class['lsys::repo'],
+      }
+      file { '/etc/yum.repos.d/bintray-php81custom.repo': }
     }
   }
 }
