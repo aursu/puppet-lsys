@@ -5,11 +5,12 @@
 # @example
 #   include lsys::repo::epel
 class lsys::repo::epel {
+  if $facts['os']['family'] == 'RedHat' {
+    include lsys::repo
 
-  include lsys::repo
-
-  package { 'epel-release':
-    ensure => 'present',
-    notify => Class['lsys::repo'],
+    package { 'epel-release':
+      ensure => 'present',
+      notify => Class['lsys::repo'],
+    }
   }
 }
