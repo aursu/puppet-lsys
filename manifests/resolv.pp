@@ -43,4 +43,6 @@ class lsys::resolv (
     mode    => '0644',
     content => template($conf_template),
   }
+
+  # TODO: https://wiki.ubuntuusers.de/systemd/systemd-resolved/
 }
