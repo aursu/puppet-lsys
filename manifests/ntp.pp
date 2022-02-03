@@ -30,7 +30,7 @@ class lsys::ntp (
     ]
   }
 
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['8'] {
+  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['8', '9'] {
     # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/using-chrony-to-configure-ntp
     # https://access.redhat.com/solutions/1977523
     class { 'chrony':
