@@ -428,3 +428,13 @@ All notable changes to this project will be documented in this file.
   postgresql module v6+
 
 **Known Issues**
+
+## Release 0.27.0
+
+**Features**
+
+* Added non-RedHat support for Python management
+
+**Bugfixes**
+
+**Known Issues**
