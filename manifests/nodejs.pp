@@ -11,7 +11,7 @@ class lsys::nodejs (
   # 15.x - EOL 2021-06-01
   # 16.x - EOL 2024-04-30
   Enum['12.x', '14.x', '15.x', '16.x']
-          $release = '14.x',
+          $release = '16.x',
 )
 {
   class { 'nodejs':
