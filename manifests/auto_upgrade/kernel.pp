@@ -5,13 +5,19 @@
 # @example
 #   include lsys::auto_upgrade::kernel
 class lsys::auto_upgrade::kernel (
-  String  $version = 'latest',
-  Optional[String]
-          $corporate_repo = undef,
+  String  $version             = 'latest',
+  Optional[
+    Variant[
+      String,
+      Array[String]
+    ]
+  ]       $corporate_repo      = undef,
+  Boolean $corporate_repo_only = false,
 )
 {
-  lsys::auto_upgrade::package { 'kernel':
-    version        => $version,
-    corporate_repo => $corporate_repo,
+  lsys::tools::package { 'kernel':
+    ensure              => $version,
+    corporate_repo      => $corporate_repo,
+    corporate_repo_only => $corporate_repo_only,
   }
 }

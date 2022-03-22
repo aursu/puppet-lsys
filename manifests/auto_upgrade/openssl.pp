@@ -5,13 +5,19 @@
 # @example
 #   include lsys::auto_upgrade::openssl
 class lsys::auto_upgrade::openssl (
-  String  $version = 'latest',
-  Optional[String]
-          $corporate_repo = undef,
+  String  $version             = 'latest',
+  Optional[
+    Variant[
+      String,
+      Array[String]
+    ]
+  ]       $corporate_repo      = undef,
+  Boolean $corporate_repo_only = false,
 )
 {
-  lsys::auto_upgrade::package { 'openssl':
-    version        => $version,
-    corporate_repo => $corporate_repo,
+  lsys::tools::package { 'openssl':
+    ensure              => $version,
+    corporate_repo      => $corporate_repo,
+    corporate_repo_only => $corporate_repo_only,
   }
 }

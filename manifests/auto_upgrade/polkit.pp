@@ -5,13 +5,19 @@
 # @example
 #   include lsys::auto_upgrade::polkit
 class lsys::auto_upgrade::polkit (
-  String  $version = 'latest',
-  Optional[String]
-          $corporate_repo = undef,
+  String  $version             = 'latest',
+  Optional[
+    Variant[
+      String,
+      Array[String]
+    ]
+  ]       $corporate_repo      = undef,
+  Boolean $corporate_repo_only = false,
 )
 {
-  lsys::auto_upgrade::package { 'polkit':
-    version        => $version,
-    corporate_repo => $corporate_repo,
+  lsys::tools::package { 'polkit':
+    ensure              => $version,
+    corporate_repo      => $corporate_repo,
+    corporate_repo_only => $corporate_repo_only,
   }
 }

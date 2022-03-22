@@ -438,3 +438,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.28.0
+
+**Features**
+
+* Added ability to use multiple corporate repos for package installation
+* Added ability to use corporate repos exclusively
+
+**Bugfixes**
+
+**Known Issues**
