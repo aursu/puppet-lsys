@@ -17,14 +17,14 @@ class lsys::params {
   if $facts['os']['name'] == 'Ubuntu' {
     $oscode = $facts['os']['distro']['codename']
 
-    $nginx_version = "1.21.5-1~${oscode}"
+    $nginx_version = "1.23.1-1~${oscode}"
   }
   else {
     $osmaj  = $facts['os']['release']['major']
 
     $nginx_version = $facts['os']['release']['major'] ? {
       '6'     => '1.19.5-1.el6.ngx',
-      default => "1.21.5-1.el${osmaj}.ngx",
+      default => "1.23.1-1.el${osmaj}.ngx",
     }
   }
 

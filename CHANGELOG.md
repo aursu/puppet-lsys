@@ -459,3 +459,13 @@ All notable changes to this project will be documented in this file.
 * Added PostgreSQL version 13.8, 14 and 15
 
 **Known Issues**
+
+## Release 0.28.2
+
+**Features**
+
+**Bugfixes**
+
+* Set Nginx default version to 1.23.1
+
+**Known Issues**
