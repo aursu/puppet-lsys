@@ -449,3 +449,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.28.1
+
+**Features**
+
+**Bugfixes**
+
+* Added PostgreSQL version 13.8, 14 and 15
+
+**Known Issues**
