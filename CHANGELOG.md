@@ -469,3 +469,13 @@ All notable changes to this project will be documented in this file.
 * Set Nginx default version to 1.23.1
 
 **Known Issues**
+
+## Release 0.28.3
+
+**Features**
+
+**Bugfixes**
+
+* Added latest PostgreSQL versions for 10, 11 and 12
+
+**Known Issues**
