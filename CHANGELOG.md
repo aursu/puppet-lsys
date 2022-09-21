@@ -479,3 +479,13 @@ All notable changes to this project will be documented in this file.
 * Added latest PostgreSQL versions for 10, 11 and 12
 
 **Known Issues**
+
+## Release 0.28.4
+
+**Features**
+
+**Bugfixes**
+
+* Added postfix user/group management for RedHat
+
+**Known Issues**
