@@ -28,4 +28,24 @@ class lsys::postfix::client (
   }
 
   contain postfix
+
+  case $facts['os']['family'] {
+    'RedHat': {
+      # postfix:x:89:
+      group { 'postfix':
+        ensure    => present,
+        gid       => 89,
+      }
+      # postfix:x:89:89::/var/spool/postfix:/sbin/nologin
+      user { 'postfix':
+        ensure     => present,
+        uid        => 89,
+        gid        => 'postfix',
+        home       => '/var/spool/postfix',
+        managehome => false,
+        shell      => '/sbin/nologin',
+      }
+    }
+    default: {}
+  }
 }
