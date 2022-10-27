@@ -10,10 +10,11 @@ class lsys::nodejs (
   # 14.x - EOL 2023-04-30
   # 15.x - EOL 2021-06-01
   # 16.x - EOL 2024-04-30
-  Enum['12.x', '14.x', '15.x', '16.x']
-          $release = '16.x',
-)
-{
+  # 18.x - EOL 2025-04-30
+  # 19.x - EOL 2023-06-01
+  # 20.x - EOL 2026-04-30
+  Enum['14.x', '15.x', '16.x', '18.x', '19.x', '20.x'] $release = '18.x',
+) {
   class { 'nodejs':
     repo_url_suffix => $release,
     repo_enable_src => false,

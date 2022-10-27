@@ -489,3 +489,16 @@ All notable changes to this project will be documented in this file.
 * Added postfix user/group management for RedHat
 
 **Known Issues**
+
+## Release 0.29.0
+
+**Features**
+
+* Added NodeJS versions 18.x, 19.x and 20.x
+* Monit version is 5.32.0
+
+**Bugfixes**
+
+* Removed PHP  8.0 and PHP 7.3 support from bintray repos
+
+**Known Issues**

@@ -11,12 +11,10 @@
 # @example
 #   include lsys::monit::prebuilt_binary
 class lsys::monit::prebuilt_binary (
-  String  $version     = $lsys::params::monit_version,
-  Stdlib::Unixpath
-          $binary_path = $lsys::params::monit_binary_path,
-) inherits lsys::params
-{
-  # e.g. https://mmonit.com/monit/dist/binary/5.27.1/monit-5.27.1-linux-x64.tar.gz
+  String $version = $lsys::params::monit_version,
+  Stdlib::Unixpath $binary_path = $lsys::params::monit_binary_path,
+) inherits lsys::params {
+  # e.g. https://mmonit.com/monit/dist/binary/5.32.0/monit-5.32.0-linux-x64.tar.gz
   $download_name    = "monit-${version}-linux-x64.tar.gz"
   $download_url     = "https://mmonit.com/monit/dist/binary/${version}/${download_name}"
   $checksum_url     = "${download_url}.sha256"
