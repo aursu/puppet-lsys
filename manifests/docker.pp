@@ -24,8 +24,7 @@ class lsys::docker (
   Optional[String]
           $dockerd_version = undef,
   Boolean $daemon_enable   = true,
-)
-{
+) {
   include dockerinstall
 
   class { 'dockerinstall::repos':

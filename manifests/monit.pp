@@ -38,8 +38,7 @@ class lsys::monit (
   String  $httpd_user       = 'admin',
   Optional[String]
           $httpd_password   = undef,
-) inherits lsys::params
-{
+) inherits lsys::params {
   if $prebuilt_binary {
     $config_file    = $lsys::params::monit_config_file
     $package_ensure = 'absent'

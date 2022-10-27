@@ -4,7 +4,7 @@
 #
 # @example
 #   include lsys::nginx
-class lsys::nginx  (
+class lsys::nginx (
   String  $package_ensure           = $lsys::params::nginx_version,
   Boolean $manage_user              = true,
   Boolean $manage_user_home         = false,
@@ -37,8 +37,8 @@ class lsys::nginx  (
           $fastcgi_buffers          = undef,              # '8 4k|8 8k'
   Boolean $global_ssl_redirect      = false,
   Optional[Array[String]]
-          $gzip_types               = [                   # 'text/html'
-                                        'application/javascript',
+          $gzip_types               = [
+                                        'application/javascript', # 'text/html'
                                         'application/json',
                                         'application/x-javascript',
                                         'application/xml',
@@ -117,8 +117,7 @@ class lsys::nginx  (
   Boolean $manage_map_dir           = false,
   Stdlib::Unixpath
           $map_dir                  = $lsys::params::nginx_map_dir,
-) inherits lsys::params
-{
+) inherits lsys::params {
   $nginx_conf_dir = $conf_dir ? {
     Stdlib::Unixpath => $conf_dir,
     default          => $nginx::params::conf_dir,
@@ -147,7 +146,7 @@ class lsys::nginx  (
     $nginx_cache_directory,
     $nginx_proxy_temp_path,
     $nginx_lib_directory,
-    "${nginx_lib_directory}/tmp"
+    "${nginx_lib_directory}/tmp",
   ].unique
 
   file { $runtime_directories:
@@ -206,7 +205,7 @@ class lsys::nginx  (
       }
     }
 
-    if $facts['selinux'] {
+    if $facts['os']['selinux']['enabled'] {
       selinux::fcontext { "${nginx_log_directory}(/.*)?":
         filetype => 'f',
         seltype  => 'httpd_log_t',
@@ -299,7 +298,7 @@ class lsys::nginx  (
     yum_repo_sslverify       => $yum_repo_sslverify,
   }
 
-  file{ '/etc/yum.repos.d/nginx-release.repo':
+  file { '/etc/yum.repos.d/nginx-release.repo':
     mode => '0600',
   }
 

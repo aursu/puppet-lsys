@@ -5,20 +5,18 @@
 # @example
 #   include lsys::auto_upgrade::glibc
 class lsys::auto_upgrade::glibc (
-  String  $version             = 'latest',
+  String $version = 'latest',
   Optional[
     Variant[
       String,
       Array[String]
     ]
-  ]       $corporate_repo      = undef,
+  ] $corporate_repo = undef,
   Boolean $corporate_repo_only = false,
-)
-{
+) {
   lsys::tools::package { 'glibc':
     ensure              => $version,
     corporate_repo      => $corporate_repo,
     corporate_repo_only => $corporate_repo_only,
   }
 }
-

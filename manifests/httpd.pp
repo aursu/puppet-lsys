@@ -11,8 +11,7 @@ class lsys::httpd (
   Boolean $manage_group = true,
   Boolean $manage_user  = true,
   Boolean $enable       = true,
-)
-{
+) {
     if $enable {
         $service_ensure = 'running'
         $service_enable = true

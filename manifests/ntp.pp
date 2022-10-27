@@ -6,14 +6,12 @@
 #   include lsys::ntp
 class lsys::ntp (
   Boolean $enable_hardening = false,
-  Optional[Array[Stdlib::Host]]
-          $servers = undef,
-)
-{
+  Optional[Array[Stdlib::Host]] $servers = undef,
+) {
   if $servers {
     $ntp_servers = $servers
   }
-  elsif $::osfamily == 'RedHat' {
+  elsif $facts['os']['family'] == 'RedHat' {
     $ntp_servers = [
       '0.centos.pool.ntp.org',
       '1.centos.pool.ntp.org',

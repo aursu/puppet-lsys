@@ -25,19 +25,14 @@
 # @example
 #   include lsys::resolv
 class lsys::resolv (
-  Array[Stdlib::IP::Address]
-          $nameserver = [],
-  Array[Stdlib::Fqdn]
-          $search     = [],
-  Array[Lsys::Resolv::Option]
-          $options    = [],
-  Array[String, 0, 10]
-          $sortlist   = [],
-  String  $conf_template = 'lsys/resolv/resolv.conf.erb',
-)
-{
+  Array[Stdlib::IP::Address] $nameserver = [],
+  Array[Stdlib::Fqdn] $search = [],
+  Array[Lsys::Resolv::Option] $options = [],
+  Array[String, 0, 10] $sortlist = [],
+  String $conf_template = 'lsys/resolv/resolv.conf.erb',
+) {
   file { '/etc/resolv.conf' :
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',

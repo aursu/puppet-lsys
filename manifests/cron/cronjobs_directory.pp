@@ -19,19 +19,17 @@
 # @example
 #   include lsys::cron::cronjobs_directory
 class lsys::cron::cronjobs_directory (
-  Array[Stdlib::Unixpath]
-          $items          = [
-                            '/etc/cron.d',
-                            '/etc/cron.hourly',
-                            '/etc/cron.daily',
-                            '/etc/cron.weekly',
-                            '/etc/cron.monthly',
-                          ],
-  Boolean $manage         = true,
-  String  $mode           = '0750',
-  Boolean $purge          = true,
-)
-{
+  Array[Stdlib::Unixpath] $items = [
+    '/etc/cron.d',
+    '/etc/cron.hourly',
+    '/etc/cron.daily',
+    '/etc/cron.weekly',
+    '/etc/cron.monthly',
+  ],
+  Boolean $manage = true,
+  String $mode = '0750',
+  Boolean $purge = true,
+) {
   if $manage {
     file { $items:
       ensure  => directory,
@@ -47,7 +45,7 @@ class lsys::cron::cronjobs_directory (
         '/etc/cron.hourly/0anacron': ;
         default:
           ensure => present,
-        ;
+          ;
       }
     }
   }

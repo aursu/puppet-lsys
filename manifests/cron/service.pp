@@ -13,8 +13,8 @@ class lsys::cron::service (
     }
   }
 
-  if  $facts['os']['name'] in ['RedHat', 'CentOS'] and
-      $facts['os']['release']['major'] in ['7', '8'] {
+  if  $facts['os']['name'] in ['RedHat', 'CentOS']
+  and $facts['os']['release']['major'] in ['7', '8'] {
     systemd::dropin_file { 'crond.service.d/override.conf':
       filename => 'override.conf',
       unit     => 'crond.service',

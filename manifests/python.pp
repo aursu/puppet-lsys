@@ -7,8 +7,7 @@
 class lsys::python (
   Boolean $python2_install = true,
   Boolean $python3_install = true,
-)
-{
+) {
   case $facts['os']['family'] {
     'RedHat': {
       case $facts['os']['release']['major'] {

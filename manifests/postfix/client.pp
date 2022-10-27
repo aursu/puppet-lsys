@@ -11,8 +11,7 @@
 class lsys::postfix::client (
   Optional[Variant[Stdlib::Fqdn, Stdlib::IP::Address]]
           $relayhost = undef,
-)
-{
+) {
   if $relayhost {
     $enable_mta = true
   }

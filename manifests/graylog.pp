@@ -22,8 +22,7 @@ class lsys::graylog (
   Boolean $manage_web_user      = true,
   Optional[Stdlib::Fqdn]
           $http_server          = undef,
-)
-{
+) {
   if $enable_web and $http_server {
     class { 'lsys::nginx':
       manage_user => $manage_web_user,

@@ -12,8 +12,7 @@ class lsys::repo::powertools (
   Stdlib::HTTPUrl
           $mirrorlist = $lsys::params::repo_powertools_mirrorlist,
   String  $os_name    = $lsys::params::repo_os_name,
-) inherits lsys::params
-{
+) inherits lsys::params {
   if $baseurl {
     $source = {
       'baseurl' => $baseurl,
