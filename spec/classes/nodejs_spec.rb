@@ -12,7 +12,7 @@ describe 'lsys::nodejs' do
       if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
         it {
           is_expected.to contain_yumrepo('nodesource')
-            .with_baseurl("https://rpm.nodesource.com/pub_16.x/el/7/\$basearch")
+            .with_baseurl("https://rpm.nodesource.com/pub_18.x/el/7/\$basearch")
         }
 
         it {
