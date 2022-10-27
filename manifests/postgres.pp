@@ -24,8 +24,7 @@ class lsys::postgres (
           $database_port              = 5432,
   Optional[Integer[0,1]]
           $repo_sslverify             = undef,
-) inherits lsys::params
-{
+) inherits lsys::params {
   include lsys::repo
 
   $version_data = split($package_version, '[.]')
@@ -99,7 +98,7 @@ class lsys::postgres (
       default:
         ensure => 'absent',
         notify => Class['lsys::repo'],
-      ;
+        ;
       '/etc/yum.repos.d/yum.postgresql.org.repo': ;
       '/etc/yum.repos.d/pgdg-common.repo': ;
     }

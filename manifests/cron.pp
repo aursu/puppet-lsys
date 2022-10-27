@@ -25,8 +25,7 @@ class lsys::cron (
   Boolean $file_system_hardening = true,
   Array[String]
           $users_allow           = ['root'],
-) inherits lsys::params
-{
+) inherits lsys::params {
   if $enable_hardening {
     $manage_users_allow = true
 

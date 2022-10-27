@@ -46,9 +46,9 @@
 #        notify  => Exec['nova-compute-restart'],
 #   }
 #
-define lsys::config(
-    Hash[ String,
-        Variant[ String,
+define lsys::config (
+    Hash[String,
+        Variant[String,
             Struct[{
                 value                       => String,
                 Optional[require]           => Type,
@@ -64,17 +64,16 @@ define lsys::config(
                     Enum['md5'],
                 ],
             }]
-        ], 1 ]  $data,
+        ], 1]  $data,
     String      $path               = $name,
     String      $key_val_separator  = ' = ',
-)
-{
+) {
     $data.each | String $key, $value | {
         if '/' in $key {
             $location = split($key, '/')
         }
         else {
-            $location = [ '', $key ]
+            $location = ['', $key]
         }
         $attributes = $value ? {
             String  => { value => $value },
@@ -88,7 +87,7 @@ define lsys::config(
             } + $attributes;
             default: * => {
                 ensure => present,
-                path   =>  $path,
+                path   => $path,
             };
         }
     }

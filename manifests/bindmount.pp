@@ -24,7 +24,6 @@ define lsys::bindmount (
           $options        = 'bind',
   Boolean $require_target = false,
 ) {
-
   # fs/proc_namespace.c
   # static const struct proc_fs_info mnt_info[] = {
   #   { MNT_NOSUID, ",nosuid" },
@@ -72,7 +71,6 @@ define lsys::bindmount (
   #
   # we instantly remount mount point to apply additional options
   if $ensure in ['defined', 'present', 'mounted'] and $options =~ /(ro|nosuid|nodev|noexec|noatime|nodiratime|relatime)/ {
-
     $defined_options = split($options, ',').unique - ['bind']
 
     # 'noatime' and 'relatime' are mutual exclusive (relatime is default but noatime could override)
