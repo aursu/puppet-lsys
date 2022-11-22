@@ -502,3 +502,13 @@ All notable changes to this project will be documented in this file.
 * Removed PHP  8.0 and PHP 7.3 support from bintray repos
 
 **Known Issues**
+
+## Release 0.29.1
+
+**Features**
+
+* PDK upgrade to 2.5.0
+
+**Bugfixes**
+
+**Known Issues**

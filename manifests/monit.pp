@@ -24,20 +24,15 @@
 #   include lsys::monit
 class lsys::monit (
   Boolean $prebuilt_binary  = true,
-  String  $version          = 'present',
+  String  $version = 'present',
   String  $download_version = $lsys::params::monit_version,
-  Stdlib::Unixpath
-          $binary_path      = $lsys::params::monit_binary_path,
-  Stdlib::Unixpath
-          $logfile          = $lsys::params::monit_logfile,
-  Boolean $httpd            = true,
-  Stdlib::IP::Address
-          $httpd_address    = '127.0.0.1',
-  Stdlib::IP::Address
-          $httpd_allow      = '127.0.0.1',
-  String  $httpd_user       = 'admin',
-  Optional[String]
-          $httpd_password   = undef,
+  Stdlib::Unixpath $binary_path = $lsys::params::monit_binary_path,
+  Stdlib::Unixpath $logfile = $lsys::params::monit_logfile,
+  Boolean $httpd = true,
+  Stdlib::IP::Address $httpd_address = '127.0.0.1',
+  Stdlib::IP::Address $httpd_allow = '127.0.0.1',
+  String $httpd_user = 'admin',
+  Optional[String] $httpd_password = undef,
 ) inherits lsys::params {
   if $prebuilt_binary {
     $config_file    = $lsys::params::monit_config_file

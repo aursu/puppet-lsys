@@ -14,16 +14,13 @@
 #   subnet. Default value: '127.0.0.1/32'.
 #
 class lsys::postgres (
-  Boolean $manage_package_repo        = $lsys::params::postgres_manage_repo,
+  Boolean $manage_package_repo = $lsys::params::postgres_manage_repo,
   # https://www.postgresql.org/docs/11/pgupgrade.html
-  Lsys::PGVersion
-          $package_version            = $lsys::params::postgres_version,
-  String  $ip_mask_allow_all_users    = '0.0.0.0/0',
-  String  $listen_addresses           = 'localhost',
-  Variant[Integer, Pattern[/^[0-9]+$/]]
-          $database_port              = 5432,
-  Optional[Integer[0,1]]
-          $repo_sslverify             = undef,
+  Lsys::PGVersion $package_version = $lsys::params::postgres_version,
+  String $ip_mask_allow_all_users = '0.0.0.0/0',
+  String $listen_addresses = 'localhost',
+  Variant[Integer, Pattern[/^[0-9]+$/]] $database_port = 5432,
+  Optional[Integer[0,1]] $repo_sslverify = undef,
 ) inherits lsys::params {
   include lsys::repo
 

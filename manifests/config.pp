@@ -47,48 +47,48 @@
 #   }
 #
 define lsys::config (
-    Hash[String,
-        Variant[String,
-            Struct[{
-                value                       => String,
-                Optional[require]           => Type,
-                Optional[notify]            => Type,
-                Optional[ensure]            => Enum[present, absent],
-                Optional[path]              => String,
-                Optional[section_prefix]    => String,
-                Optional[section_suffix]    => String,
-                Optional[indent_char]       => String,
-                Optional[indent_width]      => Integer,
-                Optional[show_diff]         => Variant[
-                    Boolean,
-                    Enum['md5'],
-                ],
-            }]
-        ], 1]  $data,
-    String      $path               = $name,
-    String      $key_val_separator  = ' = ',
+  Hash[String,
+    Variant[String,
+      Struct[{
+          value                       => String,
+          Optional[require]           => Type,
+          Optional[notify]            => Type,
+          Optional[ensure]            => Enum[present, absent],
+          Optional[path]              => String,
+          Optional[section_prefix]    => String,
+          Optional[section_suffix]    => String,
+          Optional[indent_char]       => String,
+          Optional[indent_width]      => Integer,
+          Optional[show_diff]         => Variant[
+            Boolean,
+            Enum['md5'],
+          ],
+      }]
+  ], 1] $data,
+  String $path = $name,
+  String $key_val_separator = ' = ',
 ) {
-    $data.each | String $key, $value | {
-        if '/' in $key {
-            $location = split($key, '/')
-        }
-        else {
-            $location = ['', $key]
-        }
-        $attributes = $value ? {
-            String  => { value => $value },
-            default => $value
-        }
-        ini_setting {
-            "${path}/${key}": * => {
-                section           => $location[0],
-                setting           => $location[1],
-                key_val_separator => $key_val_separator
-            } + $attributes;
-            default: * => {
-                ensure => present,
-                path   => $path,
-            };
-        }
+  $data.each | String $key, $value | {
+    if '/' in $key {
+      $location = split($key, '/')
     }
+    else {
+      $location = ['', $key]
+    }
+    $attributes = $value ? {
+      String  => { value => $value },
+      default => $value
+    }
+    ini_setting {
+      "${path}/${key}": * => {
+        section           => $location[0],
+        setting           => $location[1],
+        key_val_separator => $key_val_separator,
+      } + $attributes;
+      default: * => {
+        ensure => present,
+        path   => $path,
+      };
+    }
+  }
 }

@@ -5,17 +5,26 @@
 #
 # @example
 #   include lsys::hardening::shadow_utils
+#
+# @param pass_max_days
+# @param pass_min_days
+# @param pass_min_len
+# @param pass_warn_age
+# @param uid_min
+# @param gid_min
+# @param system_accounts
+# @param enable_hardening
+#
 class lsys::hardening::shadow_utils (
-  Integer  $pass_max_days    = 180,
-  Integer  $pass_min_days    = 0,
-  Integer  $pass_min_len     = 8,
-  Integer  $pass_warn_age    = 14,
-  Integer  $uid_min          = $lsys::hardening::params::uid_min,
-  Integer  $gid_min          = $lsys::hardening::params::gid_min,
-  Boolean  $system_accounts  = $lsys::hardening::params::system_accounts,
-  Boolean  $enable_hardening = false,
-) inherits lsys::hardening::params
-{
+  Integer $pass_max_days = 180,
+  Integer $pass_min_days = 0,
+  Integer $pass_min_len = 8,
+  Integer $pass_warn_age = 14,
+  Integer $uid_min = $lsys::hardening::params::uid_min,
+  Integer $gid_min = $lsys::hardening::params::gid_min,
+  Boolean $system_accounts = $lsys::hardening::params::system_accounts,
+  Boolean $enable_hardening = false,
+) inherits lsys::hardening::params {
   file { '/etc/login.defs':
     content => template('lsys/shadow_utils/login.defs.erb'),
     group   => 'root',

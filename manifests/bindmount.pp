@@ -13,15 +13,18 @@
 #        mount -B olddir newdir
 # or fstab entry is:
 #        /olddir /newdir none bind
+#
+# @param source
+# @param target
+# @param ensure
+# @param options
+# @param require_target
+#
 define lsys::bindmount (
-  Stdlib::Unixpath
-          $source,
-  Stdlib::Unixpath
-          $target         = $name,
-  String
-          $ensure         = 'mounted',
-  Lsys::BindOptions
-          $options        = 'bind',
+  Stdlib::Unixpath $source,
+  Stdlib::Unixpath $target = $name,
+  String $ensure = 'mounted',
+  Lsys::BindOptions $options = 'bind',
   Boolean $require_target = false,
 ) {
   # fs/proc_namespace.c

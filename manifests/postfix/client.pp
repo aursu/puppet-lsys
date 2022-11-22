@@ -9,8 +9,7 @@
 # @example
 #   include lsys::postfix::client
 class lsys::postfix::client (
-  Optional[Variant[Stdlib::Fqdn, Stdlib::IP::Address]]
-          $relayhost = undef,
+  Optional[Variant[Stdlib::Fqdn, Stdlib::IP::Address]] $relayhost = undef,
 ) {
   if $relayhost {
     $enable_mta = true
@@ -32,8 +31,8 @@ class lsys::postfix::client (
     'RedHat': {
       # postfix:x:89:
       group { 'postfix':
-        ensure    => present,
-        gid       => 89,
+        ensure => present,
+        gid    => 89,
       }
       # postfix:x:89:89::/var/spool/postfix:/sbin/nologin
       user { 'postfix':

@@ -4,13 +4,14 @@
 #
 # @example
 #   include lsys::tools::lang
+#
+# @param bc_ensure
+# @param gcc_ensure
+#
 class lsys::tools::lang (
-  Lsys::PackageVersion
-          $bc_ensure  = false,
-  Lsys::PackageVersion
-          $gcc_ensure = false,
-)
-{
+  Lsys::PackageVersion $bc_ensure  = false,
+  Lsys::PackageVersion $gcc_ensure = false,
+) {
   # GNU's bc (a numeric processing language) and dc (a calculator)
   lsys::tools::package { 'bc': ensure => $bc_ensure }
 

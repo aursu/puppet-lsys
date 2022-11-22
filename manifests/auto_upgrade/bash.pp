@@ -4,6 +4,10 @@
 #
 # @example
 #   include lsys::auto_upgrade::bash
+#
+# @param corporate_repo
+# @param corporate_repo_only
+#
 class lsys::auto_upgrade::bash (
   String $version = 'latest',
   Optional[

@@ -4,13 +4,14 @@
 #
 # @example
 #   include lsys::tools::google_chrome
+#
+# @param release
+# @param ensure
+#
 class lsys::tools::google_chrome (
-  Enum['unstable', 'beta', 'stable']
-          $release = 'stable',
-  Lsys::PackageVersion
-          $ensure  = true,
-)
-{
+  Enum['unstable', 'beta', 'stable'] $release = 'stable',
+  Lsys::PackageVersion $ensure  = true,
+) {
   include lsys::repo::google_chrome
   include lsys::tools::docs
 

@@ -4,26 +4,28 @@
 #
 # @example
 #   include lsys::tools::network
+#
+# @param enable_hardening
+# @param iputils_ensure
+# @param iproute_ensure
+# @param bind_utils_ensure
+# @param whois_ensure
+# @param net_tools_ensure
+# @param tcpdump_ensure
+# @param traceroute_ensure
+# @param nmap_ncat_ensure
+#
 class lsys::tools::network (
   Boolean $enable_hardening  = false,
-  Lsys::PackageVersion
-          $iputils_ensure    = true,
-  Lsys::PackageVersion
-          $iproute_ensure    = true,
-  Lsys::PackageVersion
-          $bind_utils_ensure = false,
-  Lsys::PackageVersion
-          $whois_ensure      = false,
-  Lsys::PackageVersion
-          $net_tools_ensure  = false,
-  Lsys::PackageVersion
-          $tcpdump_ensure    = false,
-  Lsys::PackageVersion
-          $traceroute_ensure = false,
-  Lsys::PackageVersion
-          $nmap_ncat_ensure  = false,
-)
-{
+  Lsys::PackageVersion $iputils_ensure = true,
+  Lsys::PackageVersion $iproute_ensure = true,
+  Lsys::PackageVersion $bind_utils_ensure = false,
+  Lsys::PackageVersion $whois_ensure = false,
+  Lsys::PackageVersion $net_tools_ensure = false,
+  Lsys::PackageVersion $tcpdump_ensure = false,
+  Lsys::PackageVersion $traceroute_ensure = false,
+  Lsys::PackageVersion $nmap_ncat_ensure = false,
+) {
   # Network monitoring tools including ping
   lsys::tools::package { 'iputils': ensure => $iputils_ensure }
 

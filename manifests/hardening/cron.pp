@@ -9,14 +9,16 @@
 #
 # @example
 #   include lsys::hardening::cron
+#
+# @param users_allow
+#
 class lsys::hardening::cron (
   Array[String] $users_allow = ['root'],
-)
-{
+) {
   $content = join($users_allow, "\n")
 
   file { '/etc/cron.allow':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0640',

@@ -17,14 +17,13 @@
 # @example
 #   include lsys::cron
 class lsys::cron (
-  Boolean $manage_package        = true,
-  String  $package_ensure        = 'installed',
-  String  $package_name          = $lsys::params::cron_package_name,
-  Boolean $enable_monit          = false,
-  Boolean $enable_hardening      = false,
+  Boolean $manage_package = true,
+  String  $package_ensure = 'installed',
+  String  $package_name = $lsys::params::cron_package_name,
+  Boolean $enable_monit = false,
+  Boolean $enable_hardening = false,
   Boolean $file_system_hardening = true,
-  Array[String]
-          $users_allow           = ['root'],
+  Array[String] $users_allow = ['root'],
 ) inherits lsys::params {
   if $enable_hardening {
     $manage_users_allow = true

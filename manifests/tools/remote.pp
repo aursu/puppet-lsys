@@ -5,16 +5,11 @@
 # @example
 #   include lsys::tools::remote
 class lsys::tools::remote (
-  Lsys::PackageVersion
-          $curl_ensure   = true,
-  Lsys::PackageVersion
-          $rsync_ensure  = false,
-  Lsys::PackageVersion
-          $wget_ensure   = false,
-  Lsys::PackageVersion
-          $telnet_ensure = false,
-)
-{
+  Lsys::PackageVersion $curl_ensure = true,
+  Lsys::PackageVersion $rsync_ensure = false,
+  Lsys::PackageVersion $wget_ensure = false,
+  Lsys::PackageVersion $telnet_ensure = false,
+) {
   if $curl_ensure {
     lsys::tools::package { 'curl': ensure => $curl_ensure }
   }

@@ -5,118 +5,78 @@
 # @example
 #   include lsys::nginx
 class lsys::nginx (
-  String  $package_ensure           = $lsys::params::nginx_version,
-  Boolean $manage_user              = true,
-  Boolean $manage_user_home         = false,
-  String  $daemon_user              = $lsys::webserver::params::user,
-  Integer $daemon_user_id           = $lsys::webserver::params::user_id,
-  String  $daemon_group             = $lsys::webserver::params::group,
-  Integer $daemon_group_id          = $lsys::webserver::params::group_id,
-  Optional[Array[String, 1]]
-          $daemon_user_groups       = undef,
-  Optional[String]
-          $charset                  = undef,
-  Optional[String]
-          $charset_types            = undef,
-  Optional[Nginx::Time]
-          $client_body_timeout      = undef,              # 60s
-  Optional[Nginx::Time]
-          $client_header_timeout    = undef,              # 60s
-  Optional[Stdlib::Unixpath]
-          $conf_dir                 = undef,
-  Optional[String]
-          $default_type             = undef,              # 'text/plain'
-  Optional[Nginx::Switch]
-          $etag                     = undef,              # 'on'
+  String  $package_ensure = $lsys::params::nginx_version,
+  Boolean $manage_user = true,
+  Boolean $manage_user_home = false,
+  String  $daemon_user = $lsys::webserver::params::user,
+  Integer $daemon_user_id = $lsys::webserver::params::user_id,
+  String  $daemon_group = $lsys::webserver::params::group,
+  Integer $daemon_group_id = $lsys::webserver::params::group_id,
+  Optional[Array[String, 1]] $daemon_user_groups = undef,
+  Optional[String] $charset = undef,
+  Optional[String] $charset_types = undef,
+  Optional[Nginx::Time] $client_body_timeout = undef,              # 60s
+  Optional[Nginx::Time] $client_header_timeout = undef,              # 60s
+  Optional[Stdlib::Unixpath] $conf_dir = undef,
+  Optional[String] $default_type = undef,              # 'text/plain'
+  Optional[Nginx::Switch] $etag = undef,              # 'on'
   # http://nginx.org/en/docs/events.html
-  Optional[Nginx::ConnectionProcessing]
-          $events_use               = undef,              # 'epoll'
-  Optional[Nginx::Size]
-          $fastcgi_buffer_size      = undef,              # '4k|8k'
-  Optional[Nginx::Buffers]
-          $fastcgi_buffers          = undef,              # '8 4k|8 8k'
-  Boolean $global_ssl_redirect      = false,
-  Optional[Array[String]]
-          $gzip_types               = [
-                                        'application/javascript', # 'text/html'
-                                        'application/json',
-                                        'application/x-javascript',
-                                        'application/xml',
-                                        'application/xml+rss',
-                                        'text/css',
-                                        'text/javascript',
-                                        'text/plain',
-                                        'text/xml'
-                                      ],
-  Optional[Stdlib::Unixpath]
-          $http_access_log          = undef,
-  Optional[String]
-          $http_format_log          = undef,
+  Optional[Nginx::ConnectionProcessing] $events_use = undef,              # 'epoll'
+  Optional[Nginx::Size] $fastcgi_buffer_size = undef,              # '4k|8k'
+  Optional[Nginx::Buffers] $fastcgi_buffers = undef,              # '8 4k|8 8k'
+  Boolean $global_ssl_redirect = false,
+  Array[String] $gzip_types = [
+    'application/javascript', # 'text/html'
+    'application/json',
+    'application/x-javascript',
+    'application/xml',
+    'application/xml+rss',
+    'text/css',
+    'text/javascript',
+    'text/plain',
+    'text/xml',
+  ],
+  Optional[Stdlib::Unixpath] $http_access_log = undef,
+  Optional[String] $http_format_log = undef,
   Variant[
-      String,
-      Array[String]
-  ]       $http_raw_prepend         = [],
-  Optional[String]
-          $index                    = undef,              # 'index.html'
-  Optional[Nginx::Time]
-          $keepalive_timeout        = 65,                 # 75s
-  Optional[Hash[String, String]]
-          $log_format               = undef,
-  Boolean $manage_document_root     = false,
-  Optional[Integer]
-          $names_hash_bucket_size   = 64,                 # 32|64|128
-  Optional[Integer]
-          $names_hash_max_size      = undef,              # 512
-  Stdlib::Unixpath
-          $nginx_cache_directory    = $lsys::params::nginx_cachedir,
-  Optional[Stdlib::Unixpath]
-          $nginx_lib_directory      = $lsys::params::nginx_libdir,
+    String,
+    Array[String]
+  ] $http_raw_prepend = [],
+  Optional[String] $index = undef, # 'index.html'
+  Nginx::Time $keepalive_timeout = 65, # 75s
+  Optional[Hash[String, String]] $log_format = undef,
+  Boolean $manage_document_root = false,
+  Integer $names_hash_bucket_size = 64, # 32|64|128
+  Optional[Integer] $names_hash_max_size = undef, # 512
+  Stdlib::Unixpath $nginx_cache_directory = $lsys::params::nginx_cachedir,
+  Optional[Stdlib::Unixpath] $nginx_lib_directory = $lsys::params::nginx_libdir,
   # only for cases when it is custom
-  Optional[Stdlib::Unixpath]
-          $nginx_log_directory      = undef,
-  Stdlib::Unixpath
-          $nginx_proxy_temp_path    = $lsys::params::nginx_proxy_temp_path,
-  Optional[Nginx::FileCache]
-          $open_file_cache          = undef,              # 'off'
-  Integer $open_file_cache_min_uses = 1,                  # 1
-  Nginx::Time
-          $open_file_cache_valid    = 60,                 # 60s
-  Optional[String]
-          $package_name             = undef,
-  String  $package_source           = 'nginx-mainline',
-  Optional[Stdlib::Unixpath]
-          $pid_path                 = undef,
-  Optional[Boolean]
-          $port_in_redirect         = undef,              # 'on'
-  Optional[Boolean]
-          $proxy_buffering          = undef,              # on
-  Optional[String]
-          $proxy_cache              = undef,
-  Optional[String]
-          $proxy_cache_key          = undef,              # $scheme$proxy_host$request_uri
-  Optional[Hash]
-          $proxy_cache_path         = undef,
-  Optional[Stdlib::Unixpath]
-          $proxy_temp_path          = undef,
-  Optional[Boolean]
-          $recursive_error_pages    = undef,              # off
-  Optional[String]
-          $service_name             = undef,
-  Optional[Nginx::Time]
-          $send_timeout             = undef,              # 60s
+  Optional[Stdlib::Unixpath] $nginx_log_directory = undef,
+  Stdlib::Unixpath $nginx_proxy_temp_path = $lsys::params::nginx_proxy_temp_path,
+  Optional[Nginx::FileCache] $open_file_cache = undef, # 'off'
+  Integer $open_file_cache_min_uses = 1, # 1
+  Nginx::Time $open_file_cache_valid = 60, # 60s
+  Optional[String] $package_name = undef,
+  String  $package_source = 'nginx-mainline',
+  Optional[Stdlib::Unixpath] $pid_path = undef,
+  Optional[Boolean] $port_in_redirect = undef, # 'on'
+  Optional[Boolean] $proxy_buffering = undef, # on
+  Optional[String] $proxy_cache = undef,
+  Optional[String] $proxy_cache_key = undef, # $scheme$proxy_host$request_uri
+  Optional[Hash] $proxy_cache_path = undef,
+  Optional[Stdlib::Unixpath] $proxy_temp_path = undef,
+  Optional[Boolean] $recursive_error_pages = undef, # off
+  Optional[String] $service_name = undef,
+  Optional[Nginx::Time] $send_timeout = undef, # 60s
   # to control only few nginx configuration files and
   # to not remove all other
-  Boolean $server_purge             = true,
-  Optional[Nginx::Size]
-          $types_hash_max_size      = undef,              # 1024
-  Stdlib::Unixpath
-          $nginx_user_home          = $lsys::params::nginx_user_home,
-  Stdlib::Unixpath
-          $web_server_user_shell    = $lsys::webserver::params::user_shell,
-  Boolean $yum_repo_sslverify       = false,
-  Boolean $manage_map_dir           = false,
-  Stdlib::Unixpath
-          $map_dir                  = $lsys::params::nginx_map_dir,
+  Boolean $server_purge = true,
+  Optional[Nginx::Size] $types_hash_max_size = undef, # 1024
+  Stdlib::Unixpath $nginx_user_home = $lsys::params::nginx_user_home,
+  Stdlib::Unixpath $web_server_user_shell = $lsys::webserver::params::user_shell,
+  Boolean $yum_repo_sslverify = false,
+  Boolean $manage_map_dir = false,
+  Stdlib::Unixpath $map_dir = $lsys::params::nginx_map_dir,
 ) inherits lsys::params {
   $nginx_conf_dir = $conf_dir ? {
     Stdlib::Unixpath => $conf_dir,
@@ -214,7 +174,7 @@ class lsys::nginx (
       }
 
       selinux::exec_restorecon { $nginx_log_directory:
-        subscribe => Selinux::Fcontext[$nginx_log_directory]
+        subscribe => Selinux::Fcontext[$nginx_log_directory],
       }
     }
   }

@@ -27,7 +27,7 @@ describe 'lsys::cron' do
         }
 
         it {
-          is_expected.to contain_file('/etc/cron.d/0hourly').with_ensure('present')
+          is_expected.to contain_file('/etc/cron.d/0hourly').with_ensure('file')
         }
       end
     end

@@ -4,15 +4,16 @@
 #
 # @example
 #   include lsys::tools::cleanup
+#
+# @param fprintd_ensure
+# @param man_ensure
+# @param man_pages_ensure
+#
 class lsys::tools::cleanup (
-  Lsys::PackageVersion
-          $fprintd_ensure   = absent,
-  Lsys::PackageVersion
-          $man_ensure       = absent,
-  Lsys::PackageVersion
-          $man_pages_ensure = absent,
-)
-{
+  Lsys::PackageVersion $fprintd_ensure = absent,
+  Lsys::PackageVersion $man_ensure = absent,
+  Lsys::PackageVersion $man_pages_ensure = absent,
+) {
   #  D-Bus service for Fingerprint reader access
   lsys::tools::package {
     default:

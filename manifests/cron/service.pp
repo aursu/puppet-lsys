@@ -4,6 +4,9 @@
 #
 # @example
 #   include lsys::cron::service
+#
+# @param enable_monit
+#
 class lsys::cron::service (
   Boolean $enable_monit = false,
 ) {

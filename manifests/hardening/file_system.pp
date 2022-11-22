@@ -4,11 +4,12 @@
 #
 # @example
 #   include lsys::hardening::file_system
+#
+# @param proc_mode
+#
 class lsys::hardening::file_system (
-  Lsys::FileMode
-          $proc_mode        = '0551',
-)
-{
+  Lsys::FileMode $proc_mode        = '0551',
+) {
   lsys::hardening::chmod_directory {
     default: mode => '0711';
     '/': ;

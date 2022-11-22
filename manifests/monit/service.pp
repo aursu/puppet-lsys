@@ -13,19 +13,16 @@
 # @param logfile
 #   - log file location to manage with logrotate script
 #
+# @param pid_file
+#
 # @example
 #   include lsys::monit::service
 class lsys::monit::service (
-  Stdlib::Unixpath
-          $binary_path = $lsys::params::monit_binary_path,
-  Stdlib::Unixpath
-          $config_file = $lsys::params::monit_config_file,
-  Stdlib::Unixpath
-          $logfile     = $lsys::params::monit_logfile,
-  Stdlib::Unixpath
-          $pid_file    = $lsys::params::monit_pid_file,
-) inherits lsys::params
-{
+  Stdlib::Unixpath $binary_path = $lsys::params::monit_binary_path,
+  Stdlib::Unixpath $config_file = $lsys::params::monit_config_file,
+  Stdlib::Unixpath $logfile = $lsys::params::monit_logfile,
+  Stdlib::Unixpath $pid_file = $lsys::params::monit_pid_file,
+) inherits lsys::params {
   include lsys::systemd
 
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {

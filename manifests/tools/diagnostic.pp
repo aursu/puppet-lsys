@@ -3,21 +3,23 @@
 # System statistic/monitoring tools
 #
 # @example
-#   include lsys::tools::diagnostic
+#   include lsys::tools::
+#
+# @param enable_hardening
+# @param iotop_ensure
+# @param lsof_ensure
+# @param strace_ensure
+# @param perf_ensure
+# @param procps_ensure
+#
 class lsys::tools::diagnostic (
   Boolean $enable_hardening = false,
-  Lsys::PackageVersion
-          $iotop_ensure     = false,
-  Lsys::PackageVersion
-          $lsof_ensure      = false,
-  Lsys::PackageVersion
-          $strace_ensure    = false,
-  Lsys::PackageVersion
-          $perf_ensure      = false,
-  Lsys::PackageVersion
-          $procps_ensure    = false,
-)
-{
+  Lsys::PackageVersion $iotop_ensure = false,
+  Lsys::PackageVersion $lsof_ensure = false,
+  Lsys::PackageVersion $strace_ensure = false,
+  Lsys::PackageVersion $perf_ensure = false,
+  Lsys::PackageVersion $procps_ensure = false,
+) {
   # Top like utility for I/O
   lsys::tools::package { 'iotop': ensure => $iotop_ensure }
 

@@ -7,10 +7,11 @@
 #
 # @example
 #   include lsys::tools::libconfig
+#
+# @param package_ensure
+#
 class lsys::tools::libconfig (
-  Lsys::PackageVersion
-          $package_ensure = true,
-)
-{
+  Lsys::PackageVersion $package_ensure = true,
+) {
   lsys::tools::package { 'libconfig': ensure => $package_ensure }
 }

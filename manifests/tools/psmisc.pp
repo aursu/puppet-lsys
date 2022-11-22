@@ -10,12 +10,14 @@
 #
 # @example
 #   include lsys::tools::psmisc
+#
+# @param enable_hardening
+# @param package_ensure
+#
 class lsys::tools::psmisc (
   Boolean $enable_hardening = false,
-  Lsys::PackageVersion
-          $package_ensure   = true,
-)
-{
+  Lsys::PackageVersion $package_ensure   = true,
+) {
   lsys::tools::package { 'psmisc': ensure => $package_ensure }
 
   if $enable_hardening {

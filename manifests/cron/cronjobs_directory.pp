@@ -44,7 +44,7 @@ class lsys::cron::cronjobs_directory (
         '/etc/cron.d/0hourly': ;
         '/etc/cron.hourly/0anacron': ;
         default:
-          ensure => present,
+          ensure => file,
           ;
       }
     }

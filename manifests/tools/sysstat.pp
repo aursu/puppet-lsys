@@ -5,10 +5,9 @@
 # @example
 #   include lsys::tools::sysstat
 class lsys::tools::sysstat (
-  Optional[Lsys::PackageVersion]
-          $ensure           = undef,
+  Optional[Lsys::PackageVersion] $ensure = undef,
   Boolean $enable_hardening = false,
-){
+) {
   lsys::tools::package { 'sysstat': ensure => $ensure }
 
   if $enable_hardening {

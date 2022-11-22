@@ -4,6 +4,11 @@
 #
 # @example
 #   include lsys::auto_upgrade::polkit
+#
+# @param version
+# @param corporate_repo
+# @param corporate_repo_only
+#
 class lsys::auto_upgrade::polkit (
   String $version = 'latest',
   Optional[

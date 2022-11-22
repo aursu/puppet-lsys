@@ -2,21 +2,26 @@
 #
 # Install package if ensure is set
 #
+# @example
+#   lsys::tools::package { 'sudo': }
+#
+# @param package_name
+# @param ensure
+#
 # @param corporate_repo
 #   if specified - use only this repo for installation of the package
 #
-# @example
-#   lsys::tools::package { 'sudo': }
+# @param corporate_repo_only
+#
 define lsys::tools::package (
-  String  $package_name        = $name,
-  Optional[Lsys::PackageVersion]
-          $ensure              = undef,
+  String $package_name = $name,
+  Optional[Lsys::PackageVersion] $ensure = undef,
   Optional[
     Variant[
       String,
       Array[String]
     ]
-  ]       $corporate_repo      = undef,
+  ] $corporate_repo = undef,
   Boolean $corporate_repo_only = true,
 ) {
   if  $facts['os']['name'] in ['RedHat', 'CentOS'] and $corporate_repo {

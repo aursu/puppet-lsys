@@ -4,14 +4,18 @@
 #
 # @example
 #   include lsys::repo::powertools
+#
+# @param enabled
+# @param baseurl
+# @param mirrorlist
+# @param os_name
+#
 class lsys::repo::powertools (
-  Boolean $enabled    = true,
+  Boolean $enabled = true,
   # baseurl=http://mirror.centos.org/$contentdir/$releasever/PowerTools/$basearch/os/
-  Optional[Stdlib::HTTPUrl]
-          $baseurl    = undef,
-  Stdlib::HTTPUrl
-          $mirrorlist = $lsys::params::repo_powertools_mirrorlist,
-  String  $os_name    = $lsys::params::repo_os_name,
+  Optional[Stdlib::HTTPUrl] $baseurl = undef,
+  Stdlib::HTTPUrl $mirrorlist = $lsys::params::repo_powertools_mirrorlist,
+  String  $os_name = $lsys::params::repo_os_name,
 ) inherits lsys::params {
   if $baseurl {
     $source = {

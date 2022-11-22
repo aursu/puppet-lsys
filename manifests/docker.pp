@@ -19,11 +19,10 @@
 #   daemon configuration file setup, systemd settings and Docker Compose
 #
 class lsys::docker (
-  Boolean $repo_gpgcheck   = true,
-  Boolean $repo_sslverify  = true,
-  Optional[String]
-          $dockerd_version = undef,
-  Boolean $daemon_enable   = true,
+  Boolean $repo_gpgcheck = true,
+  Boolean $repo_sslverify = true,
+  Optional[String] $dockerd_version = undef,
+  Boolean $daemon_enable = true,
 ) {
   include dockerinstall
 

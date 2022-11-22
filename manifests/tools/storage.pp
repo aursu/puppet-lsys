@@ -6,10 +6,8 @@
 #   include lsys::tools::storage
 class lsys::tools::storage (
   Boolean $enable_hardening = false,
-  Lsys::PackageVersion
-          $lvm2_ensure      = true,
-)
-{
+  Lsys::PackageVersion $lvm2_ensure = true,
+) {
   # Logical volume management tools
   lsys::tools::package { 'lvm2': ensure => $lvm2_ensure }
 
@@ -17,7 +15,7 @@ class lsys::tools::storage (
     file {
       default:
         mode  => 'o=',
-      ;
+        ;
       # lvm2
       '/usr/sbin/fsadm': ;
       '/usr/sbin/lvm': ;
