@@ -25,6 +25,7 @@
 #   Boolean, default 'true'. True means manage localhost records for IPv4 and
 #   IPv6 default loopback addressess (127.0.0.1 and ::1)
 #
+# @param aliases_network
 # @param collect_tag
 # @param ipv6_enable
 #
