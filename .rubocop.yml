@@ -431,6 +431,8 @@ Style/MultilineWhenThen:
   Enabled: false
 Style/NegatedUnless:
   Enabled: false
+Style/NumericLiterals:
+  Enabled: false
 Style/NumericPredicate:
   Enabled: false
 Style/OptionalBooleanParameter:

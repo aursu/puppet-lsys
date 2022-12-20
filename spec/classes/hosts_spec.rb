@@ -15,8 +15,8 @@ networking_facts = {
           {
             'address': '127.0.0.1',
             'netmask': '255.0.0.0',
-            'network': '127.0.0.0'
-          }
+            'network': '127.0.0.0',
+          },
         ],
         'bindings6': [
           {
@@ -29,8 +29,8 @@ networking_facts = {
             'address': 'fe80::1',
             'netmask': 'ffff:ffff:ffff:ffff::',
             'network': 'fe80::',
-            'scope6': 'link'
-          }
+            'scope6': 'link',
+          },
         ],
         'ip': '127.0.0.1',
         'netmask': '255.0.0.0',
@@ -48,16 +48,16 @@ networking_facts = {
           {
             'address': '172.16.100.49',
             'netmask': '255.255.255.0',
-            'network': '172.16.100.0'
-          }
+            'network': '172.16.100.0',
+          },
         ],
         'bindings6': [
           {
             'address': 'fe80::cac:e387:c664:e06',
             'netmask': 'ffff:ffff:ffff:ffff::',
             'network': 'fe80::',
-            'scope6': 'link'
-          }
+            'scope6': 'link',
+          },
         ],
         'ip': '172.16.100.49',
         'netmask': '255.255.255.0',
@@ -73,12 +73,12 @@ networking_facts = {
           {
             'address': '192.168.127.16',
             'netmask': '255.255.255.255',
-            'network': '192.168.127.16'
-          }
+            'network': '192.168.127.16',
+          },
         ],
         'ip': '192.168.127.16',
         'netmask': '255.255.255.255',
-        'network': '192.168.127.16'
+        'network': '192.168.127.16',
       }
     }
   }

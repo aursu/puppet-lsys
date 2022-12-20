@@ -10,7 +10,7 @@ class lsys::repo::bintray (
 ) {
   include lsys::repo
 
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['7', '8'] {
+  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['7'] {
     yumrepo { 'bintray-custom':
       baseurl       => 'https://rpmb.jfrog.io/artifactory/custom/centos/$releasever/',
       descr         => 'PHP dependencies',
