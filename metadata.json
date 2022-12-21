@@ -5,6 +5,8 @@
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
   "source": "https://github.com/aursu/puppet-lsys",
+  "project_page": "https://github.com/aursu/puppet-lsys",
+  "issues_url": "https://github.com/aursu/puppet-lsys/issues",
   "dependencies": [
     {
       "name": "puppetlabs/apache",
