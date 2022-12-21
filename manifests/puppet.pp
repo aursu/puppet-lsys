@@ -37,6 +37,10 @@
 # @param use_common_env
 # @param common_envname
 #
+# @param enc_envname
+#   Default ENC environment repo is 'enc'
+#   This parameter is to define different name for it
+#
 # @example
 #   include lsys::puppet
 class lsys::puppet (
@@ -53,6 +57,7 @@ class lsys::puppet (
   Boolean $hosts_update = false,
   Boolean $use_common_env = false,
   Optional[String] $common_envname = undef,
+  Optional[String] $enc_envname = undef,
 ) {
   if $puppetserver {
     if $sameca {
@@ -78,6 +83,7 @@ class lsys::puppet (
         manage_database => $manage_database,
         use_common_env  => $use_common_env,
         common_envname  => $common_envname,
+        enc_envname     => $enc_envname,
       }
       contain puppet::profile::server
     }
@@ -89,6 +95,7 @@ class lsys::puppet (
         use_common_env => $use_common_env,
         common_envname => $common_envname,
         use_puppetdb   => $use_puppetdb,
+        enc_envname    => $enc_envname,
       }
       contain puppet::profile::compiler
     }

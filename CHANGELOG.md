@@ -512,3 +512,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.29.4
+
+**Features**
+
+* Added ability to specify custom ENC repo name
+
+**Bugfixes**
+
+**Known Issues**
