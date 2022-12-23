@@ -12,5 +12,7 @@ class lsys::repo::epel {
       ensure => 'present',
       notify => Class['lsys::repo'],
     }
+
+    file { '/etc/yum.repos.d/epel.repo': }
   }
 }

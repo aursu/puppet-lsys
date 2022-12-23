@@ -522,3 +522,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.29.5
+
+**Features**
+
+* Added file resource for Epel repo
+  in case if /etc/yum.repos.d directory has parameter purge
+
+**Bugfixes**
+
+**Known Issues**
