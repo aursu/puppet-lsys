@@ -80,11 +80,11 @@ class lsys::params {
 
   # custom case for CentOS 8 Stream only
   if $facts['os']['name'] == 'CentOS' and $facts['os']['release']['major'] == '8' and $centos_stream {
-    $postgres_version = '12.9'
+    $postgres_version = '12.12'
     $postgres_manage_repo = false
   }
   else {
-    $postgres_version = '12.8'
+    $postgres_version = '12.13'
     $postgres_manage_repo = true
   }
 }

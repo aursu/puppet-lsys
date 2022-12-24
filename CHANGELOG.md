@@ -533,3 +533,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.29.6
+
+**Features**
+
+* Set default postgresql version to 12.13
+
+**Bugfixes**
+
+**Known Issues**
