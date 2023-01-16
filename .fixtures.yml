@@ -8,19 +8,19 @@ fixtures:
       ref: 4.0.0
     apache:
       repo: puppetlabs/apache
-      ref: 7.0.0
+      ref: 9.0.1
     archive:
       repo: puppet/archive
-      ref: 6.0.2
+      ref: 6.1.0
     augeas_core:
       repo: puppetlabs/augeas_core
       puppet_version: ">= 6.0.0"
     chrony:
       repo: puppet/chrony
-      ref: 2.1.0
+      ref: 2.6.0
     concat:
       repo: puppetlabs/concat
-      ref: 7.1.1
+      ref: 7.3.0
     cron:
       repo: puppet/cron
       ref: 3.0.0
@@ -32,7 +32,7 @@ fixtures:
       ref: 0.6.2
     dockerinstall:
       repo: aursu/dockerinstall
-      ref: 0.13.0
+      ref: 0.13.5
     elastic_stack:
       repo: elastic/elastic_stack
       ref: 7.0.0

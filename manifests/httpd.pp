@@ -21,7 +21,6 @@ class lsys::httpd (
   }
 
   class { 'apache':
-    apache_version         => '2.4',
     mpm_module             => false,
     default_mods           => [],
     use_systemd            => true,
@@ -42,18 +41,17 @@ class lsys::httpd (
     service_manage         => true,
     service_ensure         => $service_ensure,
     service_enable         => $service_enable,
-    service_restart        => true,
     manage_group           => $manage_group,
     manage_user            => $manage_user,
   }
 
   class { 'apache::mod::prefork':
-    startservers        => '5',
-    minspareservers     => '5',
-    maxspareservers     => '10',
-    serverlimit         => '256',
-    maxclients          => '256',
-    maxrequestsperchild => '0',
+    startservers        => 5,
+    minspareservers     => 5,
+    maxspareservers     => 10,
+    serverlimit         => 256,
+    maxclients          => 256,
+    maxrequestsperchild => 0,
     notify              => Class['Apache::Service'],
   }
 
@@ -66,7 +64,7 @@ class lsys::httpd (
     ssl_compression            => false,
     ssl_cipher                 => 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256', # lint:ignore:140chars
     ssl_protocol               => ['all', '-SSLv3', '-TLSv1', '-TLSv1.1'],
-    ssl_random_seed_bytes      => '1024',
+    ssl_random_seed_bytes      => 1024,
     ssl_mutex                  => 'default',
     ssl_stapling               => true,
     ssl_stapling_return_errors => false,
