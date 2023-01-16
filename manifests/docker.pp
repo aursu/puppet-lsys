@@ -18,11 +18,15 @@
 #   Whether to perform Docker daemon setup and start. Including TLS setup,
 #   daemon configuration file setup, systemd settings and Docker Compose
 #
+# @param tls_users_access
+#   Whether to allow access to Docker TLS assets to system users
+#
 class lsys::docker (
   Boolean $repo_gpgcheck = true,
   Boolean $repo_sslverify = true,
   Optional[String] $dockerd_version = undef,
   Boolean $daemon_enable = true,
+  Boolean $tls_users_access = false,
 ) {
   include dockerinstall
 
@@ -30,10 +34,15 @@ class lsys::docker (
     gpgcheck  => $repo_gpgcheck,
     sslverify => $repo_sslverify,
   }
+
   class { 'dockerinstall::profile::install':
-    dockerd_version => $dockerd_version,
+    dockerd_version  => $dockerd_version,
+    tls_users_access => $tls_users_access,
   }
+
   if $daemon_enable {
-    class { 'dockerinstall::profile::daemon': }
+    class { 'dockerinstall::profile::daemon':
+      tls_users_access => $tls_users_access,
+    }
   }
 }

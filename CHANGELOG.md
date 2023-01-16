@@ -543,3 +543,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.29.7
+
+**Features**
+
+* Added Docker TLS user access flag
+
+**Bugfixes**
+
+**Known Issues**
