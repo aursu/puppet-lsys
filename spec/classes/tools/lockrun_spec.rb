@@ -8,6 +8,27 @@ describe 'lsys::tools::lockrun' do
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
+
+      it {
+        is_expected.to contain_class('lsys::tools::system')
+      }
+
+      it {
+        is_expected.not_to contain_file('/usr/local/bin/lockrun')
+      }
+
+      context 'check lockrun installation' do
+        let(:params) do
+          {
+            custom: true,
+          }
+        end
+
+        it {
+          is_expected.to contain_file('/usr/local/bin/lockrun')
+            .with_source(%r{^puppet:///modules/lsys/lockrun/lockrun\.el[678]$})
+        }
+      end
     end
   end
 end

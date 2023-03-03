@@ -8,6 +8,11 @@ describe 'lsys::tools::system' do
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
+
+      it {
+        is_expected.to contain_package('util-linux')
+          .with_ensure('installed')
+      }
     end
   end
 end

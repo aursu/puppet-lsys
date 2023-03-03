@@ -553,3 +553,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.29.8
+
+**Features**
+
+* Added util-linux package to be installed (with flock tool)
+  instead of custom lockrun tool
+
+**Bugfixes**
+
+**Known Issues**

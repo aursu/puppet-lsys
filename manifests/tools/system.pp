@@ -10,6 +10,7 @@ class lsys::tools::system (
   Lsys::PackageVersion $file_ensure = false,
   Lsys::PackageVersion $which_ensure = false,
   Lsys::PackageVersion $quota_ensure = false,
+  Lsys::PackageVersion $util_linux_ensure = true,
   String $quota_owner = 'root',
   String $quota_group = 'root',
 ) {
@@ -24,6 +25,9 @@ class lsys::tools::system (
 
   # System administration tools for monitoring users' disk usage
   lsys::tools::package { 'quota': ensure => $quota_ensure }
+
+  # The util-linux package contains a large variety of low-level system utilities
+  lsys::tools::package { 'util-linux': ensure => $util_linux_ensure }
 
   if $enable_hardening {
     file {
