@@ -574,3 +574,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.30.0
+
+**Features**
+
+* Added Rocky Linux 8
+
+**Bugfixes**
+
+**Known Issues**
