@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.29.9",
+  "version": "0.30.0",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -94,6 +94,12 @@
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
         "8"
       ]
     }
