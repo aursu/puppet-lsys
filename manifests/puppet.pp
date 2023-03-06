@@ -74,30 +74,30 @@ class lsys::puppet (
       }
 
       class { 'puppet::profile::server':
-        platform_name   => $platform_name,
-        ca_server       => $ca_server,
-        server          => $server,
-        sameca          => $sameca,
-        hosts_update    => $hosts_update,
-        use_puppetdb    => $use_puppetdb,
-        puppetdb_local  => $puppetdb_local,
-        manage_database => $manage_database,
-        use_common_env  => $use_common_env,
-        common_envname  => $common_envname,
-        enc_envname     => $enc_envname,
+        platform_name      => $platform_name,
+        ca_server          => $ca_server,
+        server             => $server,
+        sameca             => $sameca,
+        hosts_update       => $hosts_update,
+        use_puppetdb       => $use_puppetdb,
+        puppetdb_local     => $puppetdb_local,
+        manage_database    => $manage_database,
+        use_common_env     => $use_common_env,
+        common_envname     => $common_envname,
+        enc_envname        => $enc_envname,
         r10k_crontab_setup => $r10k_crontab_setup,
       }
       contain puppet::profile::server
     }
     else {
       class { 'puppet::profile::compiler':
-        platform_name  => $platform_name,
-        ca_server      => $ca_server,
-        server         => $server,
-        use_common_env => $use_common_env,
-        common_envname => $common_envname,
-        use_puppetdb   => $use_puppetdb,
-        enc_envname    => $enc_envname,
+        platform_name      => $platform_name,
+        ca_server          => $ca_server,
+        server             => $server,
+        use_common_env     => $use_common_env,
+        common_envname     => $common_envname,
+        use_puppetdb       => $use_puppetdb,
+        enc_envname        => $enc_envname,
         r10k_crontab_setup => $r10k_crontab_setup,
       }
       contain puppet::profile::compiler

@@ -35,7 +35,7 @@ describe 'lsys::puppet' do
               r10k_crontab_setup: true,
             )
           end
-  
+
           it {
             is_expected.to contain_cron('r10k-crontab')
           }
