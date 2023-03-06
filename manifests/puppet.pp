@@ -58,6 +58,7 @@ class lsys::puppet (
   Boolean $use_common_env = false,
   Optional[String] $common_envname = undef,
   Optional[String] $enc_envname = undef,
+  Boolean $r10k_crontab_setup = false,
 ) {
   if $puppetserver {
     if $sameca {
@@ -84,6 +85,7 @@ class lsys::puppet (
         use_common_env  => $use_common_env,
         common_envname  => $common_envname,
         enc_envname     => $enc_envname,
+        r10k_crontab_setup => $r10k_crontab_setup,
       }
       contain puppet::profile::server
     }
@@ -96,6 +98,7 @@ class lsys::puppet (
         common_envname => $common_envname,
         use_puppetdb   => $use_puppetdb,
         enc_envname    => $enc_envname,
+        r10k_crontab_setup => $r10k_crontab_setup,
       }
       contain puppet::profile::compiler
     }

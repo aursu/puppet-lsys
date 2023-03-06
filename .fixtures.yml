@@ -77,7 +77,13 @@ fixtures:
       ref: 7.5.0
     puppet:
       repo: aursu/puppet
-      ref: 0.3.6
+      ref: 0.5.2
+    puppetdb:
+      repo: "puppetlabs/puppetdb"
+      ref: 7.12.0
+    r10k:
+      repo: "puppet/r10k"
+      ref: 10.3.0
     selinux:
       repo: puppet/selinux
       ref: 3.4.1

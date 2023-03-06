@@ -564,3 +564,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.29.9
+
+**Features**
+
+* Added r10k crontab into puppet::lsys
+
+**Bugfixes**
+
+**Known Issues**
