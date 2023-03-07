@@ -29,6 +29,9 @@
 # @param server
 #   Puppet server name
 #
+# @param puppetdb_server
+#   PuppetDB server name if external
+#
 # @param ca_server
 #
 # @param hosts_update
@@ -52,6 +55,7 @@ class lsys::puppet (
   Boolean $postgres_local = true,
   Boolean $manage_database = $postgres_local,
   Stdlib::Host $server = 'puppet',
+  Stdlib::Host $puppetdb_server = 'puppet',
   # https://puppet.com/docs/puppet/7/server/scaling_puppet_server.html#directing-individual-agents-to-a-central-ca
   Optional[Stdlib::Host] $ca_server = undef,
   Boolean $hosts_update = false,
@@ -80,6 +84,7 @@ class lsys::puppet (
         sameca             => $sameca,
         hosts_update       => $hosts_update,
         use_puppetdb       => $use_puppetdb,
+        puppetdb_server    => $puppetdb_server,
         puppetdb_local     => $puppetdb_local,
         manage_database    => $manage_database,
         use_common_env     => $use_common_env,
@@ -97,6 +102,7 @@ class lsys::puppet (
         use_common_env     => $use_common_env,
         common_envname     => $common_envname,
         use_puppetdb       => $use_puppetdb,
+        puppetdb_server    => $puppetdb_server,
         enc_envname        => $enc_envname,
         r10k_crontab_setup => $r10k_crontab_setup,
       }

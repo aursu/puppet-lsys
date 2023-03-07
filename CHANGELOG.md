@@ -584,3 +584,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.30.1
+
+**Features**
+
+* Added PuppetDB server name parameter into lsys::puppet
+
+**Bugfixes**
+
+**Known Issues**
