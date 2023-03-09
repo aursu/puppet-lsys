@@ -44,6 +44,12 @@
 #   Default ENC environment repo is 'enc'
 #   This parameter is to define different name for it
 #
+# @param r10k_crontab_setup
+#   Whether to setup crontab job to sync Puppet code
+#
+# @param manage_webserver_conf
+#   Whether to manage webserver.conf or not
+#
 # @example
 #   include lsys::puppet
 class lsys::puppet (
@@ -63,6 +69,7 @@ class lsys::puppet (
   Optional[String] $common_envname = undef,
   Optional[String] $enc_envname = undef,
   Boolean $r10k_crontab_setup = false,
+  Boolean $manage_webserver_conf = false,
 ) {
   if $puppetserver {
     if $sameca {
@@ -91,6 +98,7 @@ class lsys::puppet (
         common_envname     => $common_envname,
         enc_envname        => $enc_envname,
         r10k_crontab_setup => $r10k_crontab_setup,
+        manage_webserver_conf => $manage_webserver_conf,
       }
       contain puppet::profile::server
     }
@@ -105,6 +113,7 @@ class lsys::puppet (
         puppetdb_server    => $puppetdb_server,
         enc_envname        => $enc_envname,
         r10k_crontab_setup => $r10k_crontab_setup,
+        manage_webserver_conf => $manage_webserver_conf,
       }
       contain puppet::profile::compiler
     }
