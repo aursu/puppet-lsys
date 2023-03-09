@@ -594,3 +594,15 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.31.0
+
+**Features**
+
+* Added netcat package into tools
+* Added unit test for webserver.conf management
+* Added permissions set for Postfix runtime directories
+
+**Bugfixes**
+
+**Known Issues**
