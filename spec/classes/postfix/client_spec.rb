@@ -33,13 +33,13 @@ describe 'lsys::postfix::client' do
         end
 
         it {
-          is_expected.not_to contain_file('/var/spool/postfix/maildrop')
+          is_expected.to contain_file('/var/spool/postfix/maildrop')
             .with_mode('1733')
         }
-  
+
         it {
-          is_expected.not_to contain_file('/var/spool/postfix/public')
-          .with_mode('0711')
+          is_expected.to contain_file('/var/spool/postfix/public')
+            .with_mode('0711')
         }
       end
     end
