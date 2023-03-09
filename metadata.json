@@ -70,7 +70,7 @@
     },
     {
       "name": "aursu/puppet",
-      "version_requirement": ">= 0.5.2 < 1.0.0"
+      "version_requirement": ">= 0.6.1 < 1.0.0"
     },
     {
       "name": "puppetlabs/puppetdb",
