@@ -29,6 +29,23 @@ describe 'lsys::puppet' do
           is_expected.not_to contain_cron('r10k-crontab')
         }
 
+        it {
+          is_expected.not_to contain_file('/etc/puppetlabs/puppetserver/conf.d/webserver.conf')
+        }
+
+        context 'check webserver.conf management' do
+          let(:params) do
+            super().merge(
+              manage_webserver_conf: true,
+            )
+          end
+
+          it {
+            is_expected.to contain_file('/etc/puppetlabs/puppetserver/conf.d/webserver.conf')
+              .with_content(%r{ssl-ca-cert: /etc/puppetlabs/puppet/ssl/certs/ca.pem})
+          }
+        end
+
         context 'and r10k crontab enabled' do
           let(:params) do
             super().merge(
