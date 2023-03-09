@@ -25,6 +25,7 @@ class lsys::tools::network (
   Lsys::PackageVersion $tcpdump_ensure = false,
   Lsys::PackageVersion $traceroute_ensure = false,
   Lsys::PackageVersion $nmap_ncat_ensure = false,
+  Lsys::PackageVersion $netcat_ensure = false,
 ) {
   # Network monitoring tools including ping
   lsys::tools::package { 'iputils': ensure => $iputils_ensure }
@@ -50,6 +51,9 @@ class lsys::tools::network (
 
   # Nmap's Netcat replacement
   lsys::tools::package { 'nmap-ncat': ensure => $nmap_ncat_ensure }
+
+  # OpenBSD netcat to read and write data across connections using TCP or UDP
+  lsys::tools::package { 'netcat': ensure => $netcat_ensure }
 
   if $enable_hardening {
     file {
