@@ -14,7 +14,7 @@ class lsys::tools::lockrun (
 ) {
   $os_release_major = $facts['os']['release']['major']
 
-  if $custom and $facts['os']['name'] in ['RedHat', 'CentOS'] and $os_release_major in ['6', '7', '8'] {
+  if $custom and $facts['os']['family'] == 'RedHat' and $os_release_major in ['6', '7', '8'] {
     file { '/usr/local/bin/lockrun':
       ensure => file,
       source => "puppet:///modules/lsys/lockrun/lockrun.el${os_release_major}",

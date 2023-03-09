@@ -9,7 +9,7 @@ describe 'lsys::ntpdate' do
 
       it { is_expected.to compile }
 
-      if os == 'centos-8-x86_64'
+      if ['centos-8-x86_64', 'rocky-8-x86_64'].include?(os)
         it { is_expected.not_to contain_package('ntpdate') }
       else
         it {

@@ -24,13 +24,13 @@ define lsys::tools::package (
   ] $corporate_repo = undef,
   Boolean $corporate_repo_only = true,
 ) {
-  if  $facts['os']['name'] in ['RedHat', 'CentOS'] and $corporate_repo {
+  if  $facts['os']['family'] == 'RedHat' and $corporate_repo {
     $corporate_repo_list = $corporate_repo ? {
       String  => [$corporate_repo],
       default => $corporate_repo,
     }
 
-    if $facts['os']['release']['major'] == '8' {
+    if $facts['os']['release']['major'] in ['8', '9'] {
       $package_provider = 'dnf'
       if $corporate_repo_only {
         $package_install_options = $corporate_repo_list.reduce([]) |$memo, $repo| { $memo + ['--repo', $repo] }
