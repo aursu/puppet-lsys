@@ -606,3 +606,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.32.0
+
+**Features**
+
+* Added Rocky Linux 8 custom Postfix master.cf config
+* Added ability to setup maillog_file parameter into Postfix main.cf
+
+**Bugfixes**
+
+**Known Issues**

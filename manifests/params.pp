@@ -87,4 +87,11 @@ class lsys::params {
     $postgres_version = '12.13'
     $postgres_manage_repo = true
   }
+
+  if $facts['os']['name'] == 'Rocky' and $facts['os']['release']['major'] == '8' {
+    $postfix_master_os_template = 'lsys/postfix/master.cf.rocky-8.erb'
+  }
+  else {
+    $postfix_master_os_template = undef
+  }
 }

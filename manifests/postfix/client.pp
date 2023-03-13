@@ -11,17 +11,36 @@
 #   case if SGID removed from /usr/sbin/postdrop and /usr/sbin/postqueue
 #   (e.g. in scope of security hardening)
 #
+# @param custom_master_config
+#   Whether to use master.cf configuration templates defined in this module.
+#   See templates/postfix folder and lsys::params::postfix_master_os_template
+#
+# @param master_os_template
+#   Custom template for master.cf
+#
+# @param maillog_file
+#   If defined full path to log file, then set it into main.cf as maillog_file parameter
+#
 # @example
 #   include lsys::postfix::client
 class lsys::postfix::client (
-  Optional[Variant[Stdlib::Fqdn, Stdlib::IP::Address]] $relayhost = undef,
   Boolean $postdrop_nosgid = false,
-) {
+  Boolean $custom_master_config = true,
+  Optional[String] $master_os_template = $lsys::params::postfix_master_os_template,
+  Optional[Variant[Stdlib::Fqdn, Stdlib::IP::Address]] $relayhost = undef,
+  Optional[Stdlib::Unixpath] $maillog_file = undef,
+) inherits lsys::params {
   if $relayhost {
     $enable_mta = true
   }
   else {
     $enable_mta = false
+  }
+
+  if $custom_master_config and $master_os_template {
+    class { 'postfix::params':
+      master_os_template => $master_os_template,
+    }
   }
 
   class { 'postfix':
@@ -31,6 +50,13 @@ class lsys::postfix::client (
     relayhost      => $relayhost,
   }
   contain postfix
+
+  if $maillog_file {
+    postfix::config { 'maillog_file':
+      ensure => 'present',
+      value  => $maillog_file,
+    }
+  }
 
   case $facts['os']['family'] {
     'RedHat': {
@@ -53,6 +79,7 @@ class lsys::postfix::client (
         ensure => present,
         gid    => 90,
       }
+
       if $postdrop_nosgid {
         file { '/var/spool/postfix/maildrop':
           ensure  => directory,
