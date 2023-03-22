@@ -8,7 +8,8 @@
 # @param proc_mode
 #
 class lsys::hardening::file_system (
-  Lsys::FileMode $proc_mode        = '0551',
+  Lsys::FileMode $proc_mode = '0551',
+  Boolean $manage_vardb     = true,
 ) {
   lsys::hardening::chmod_directory {
     default: mode => '0711';
@@ -31,6 +32,11 @@ class lsys::hardening::file_system (
     '/var/spool/lpd': mode => '0750';
     '/var/tmp':       mode => '1773';
     '/tmp':           mode => '1773';
+  }
+  if $manage_vardb {
+    file { '/var/db': 
+      mode => '0750';
+    }
   }
 
   file {
@@ -115,7 +121,6 @@ class lsys::hardening::file_system (
     '/var/cache':             mode => '0750';
     '/var/cache/yum':         mode => '0750';
     '/var/crash':             mode => '0750';
-    '/var/db':                mode => '0750';
     '/var/empty':             mode => '0750';
     '/var/games':             mode => '0750';
     '/var/lib':               mode => '0711';
