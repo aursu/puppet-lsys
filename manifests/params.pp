@@ -18,14 +18,68 @@ class lsys::params {
     $oscode = $facts['os']['distro']['codename']
 
     $nginx_version = "1.23.1-1~${oscode}"
+
+    $syslog_default = '/var/log/syslog'
+    $logrotate_syslog_name = 'rsyslog'
+    $logrotate_default_config = {
+      'rotate'        => 7,
+      'daily'         => true,
+      'missingok'     => true,
+      'ifempty'       => false,
+      'delaycompress' => true,
+      'compress'      => true,
+      'postrotate'    => '/usr/lib/rsyslog/rsyslog-rotate',
+    }
+
+    $logrotate_syslog_path = [
+      '/var/log/mail.info',
+      '/var/log/mail.warn',
+      '/var/log/mail.err',
+      '/var/log/mail.log',
+      '/var/log/daemon.log',
+      '/var/log/kern.log',
+      '/var/log/auth.log',
+      '/var/log/user.log',
+      '/var/log/lpr.log',
+      '/var/log/cron.log',
+      '/var/log/debug',
+      '/var/log/messages',
+    ]
+
+    $logrotate_syslog_config = {
+      'rotate'        => 7,
+      'weekly'        => true,
+      'missingok'     => true,
+      'ifempty'       => false,
+      'delaycompress' => true,
+      'compress'      => true,
+      'sharedscripts' => true,
+      'postrotate'    => '/usr/lib/rsyslog/rsyslog-rotate',
+    }
   }
   else {
     $osmaj  = $facts['os']['release']['major']
 
-    $nginx_version = $facts['os']['release']['major'] ? {
+    $nginx_version = $osmaj ? {
       '6'     => '1.19.5-1.el6.ngx',
       default => "1.23.1-1.el${osmaj}.ngx",
     }
+
+    $syslog_default = '/var/log/messages'
+    $logrotate_syslog_name = 'syslog'
+    $logrotate_default_config = {
+      'missingok'     => true,
+      'sharedscripts' => true,
+      'postrotate'    => '/usr/bin/systemctl kill -s HUP rsyslog.service >/dev/null 2>&1 || true',
+    }
+    $logrotate_syslog_path = [
+      '/var/log/cron',
+      '/var/log/maillog',
+      '/var/log/messages',
+      '/var/log/secure',
+      '/var/log/spooler',
+    ]
+    $logrotate_syslog_config = $logrotate_default_config
   }
 
   $nginx_conf_dir        = $nginx::params::conf_dir
@@ -88,6 +142,7 @@ class lsys::params {
     $postgres_manage_repo = true
   }
 
+  # Rocky Linux 8
   if $facts['os']['name'] == 'Rocky' and $facts['os']['release']['major'] == '8' {
     $postfix_master_os_template = 'lsys/postfix/master.cf.rocky-8.erb'
   }
