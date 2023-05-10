@@ -617,3 +617,15 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.33.0
+
+**Features**
+
+* PDK upgrade
+* Default logrotate settings
+* Updated PostrgeSQL allowed versions to latest on this day (removed EOL)
+
+**Bugfixes**
+
+**Known Issues**
