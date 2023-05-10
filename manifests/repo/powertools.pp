@@ -30,7 +30,6 @@ class lsys::repo::powertools (
 
   # Notice: /Stage[main]/Lsys::Repo::Powertools/Yumrepo[powertools]/descr: descr changed 'CentOS Stream $releasever - PowerTools' to 'CentOS Linux $releasever - PowerTools'
   # Notice: /Stage[main]/Lsys::Repo::Powertools/Yumrepo[powertools]/mirrorlist: mirrorlist changed 'http://mirrorlist.centos.org/?release=$stream&arch=$basearch&repo=PowerTools&infra=$infra' to 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra'
-
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['8'] {
     yumrepo { 'powertools':
       *        => $source,

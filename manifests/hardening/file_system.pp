@@ -34,7 +34,7 @@ class lsys::hardening::file_system (
     '/tmp':           mode => '1773';
   }
   if $manage_vardb {
-    file { '/var/db': 
+    file { '/var/db':
       mode => '0750';
     }
   }
