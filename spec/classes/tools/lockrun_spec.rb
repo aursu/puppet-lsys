@@ -24,10 +24,15 @@ describe 'lsys::tools::lockrun' do
           }
         end
 
-        it {
-          is_expected.to contain_file('/usr/local/bin/lockrun')
-            .with_source(%r{^puppet:///modules/lsys/lockrun/lockrun\.el[678]$})
-        }
+        it { is_expected.to compile }
+
+        case os
+        when %r{^centos-[78]}, %r{^rocky-8}
+          it {
+            is_expected.to contain_file('/usr/local/bin/lockrun')
+              .with_source(%r{^puppet:///modules/lsys/lockrun/lockrun\.el[678]$})
+          }
+        end
       end
     end
   end

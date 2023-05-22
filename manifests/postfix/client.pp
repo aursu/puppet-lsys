@@ -58,45 +58,37 @@ class lsys::postfix::client (
     }
   }
 
-  case $facts['os']['family'] {
-    'RedHat': {
-      # postfix:x:89:
-      group { 'postfix':
-        ensure => present,
-        gid    => 89,
-      }
-      # postfix:x:89:89::/var/spool/postfix:/sbin/nologin
-      user { 'postfix':
-        ensure     => present,
-        uid        => 89,
-        gid        => 'postfix',
-        home       => '/var/spool/postfix',
-        managehome => false,
-        shell      => '/sbin/nologin',
-      }
-      # postdrop:x:90:
-      group { 'postdrop':
-        ensure => present,
-        gid    => 90,
-      }
+  group { 'postfix':
+    ensure => present,
+    gid    => $lsys::params::postfix_gid,
+  }
+  user { 'postfix':
+    ensure     => present,
+    uid        => $lsys::params::postfix_uid,
+    gid        => 'postfix',
+    home       => '/var/spool/postfix',
+    managehome => false,
+    shell      => $lsys::params::postfix_shell,
+  }
+  group { 'postdrop':
+    ensure => present,
+    gid    => $lsys::params::postdrop_gid,
+  }
 
-      if $postdrop_nosgid {
-        file { '/var/spool/postfix/maildrop':
-          ensure  => directory,
-          group   => 'postdrop',
-          owner   => 'postfix',
-          mode    => '1733',
-          require => Class['postfix'],
-        }
-        file { '/var/spool/postfix/public':
-          ensure  => directory,
-          group   => 'postdrop',
-          owner   => 'postfix',
-          mode    => '0711',
-          require => Class['postfix'],
-        }
-      }
+  if $postdrop_nosgid {
+    file { '/var/spool/postfix/maildrop':
+      ensure  => directory,
+      group   => 'postdrop',
+      owner   => 'postfix',
+      mode    => '1733',
+      require => Class['postfix'],
     }
-    default: {}
+    file { '/var/spool/postfix/public':
+      ensure  => directory,
+      group   => 'postdrop',
+      owner   => 'postfix',
+      mode    => '0711',
+      require => Class['postfix'],
+    }
   }
 }

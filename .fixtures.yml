@@ -3,6 +3,9 @@
 ---
 fixtures:
   forge_modules:
+    apt:
+      repo: puppetlabs/apt
+      ref: 9.0.2
     alternatives:
       repo: puppet/alternatives
       ref: 4.0.0

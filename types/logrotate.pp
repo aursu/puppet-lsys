@@ -99,7 +99,7 @@ type Lsys::Logrotate = Struct[
     # the log file is rotated. These directives may only appear inside a log file definition. Normally, the absolute path to the log
     # file is passed as first argument to the script. If sharedscripts is specified, whole pattern is passed to the script. See also
     # prerotate. See sharedscripts and nosharedscripts for error handling.
-    Optional[postrotate] => String,
+    Optional[postrotate] => Variant[String, Boolean],
     # The lines between prerotate and endscript (both of which must appear on lines by themselves) are executed (using /bin/sh) before
     # the log file is rotated and only if the log will actually be rotated. These directives  may only appear inside a log file
     # definition. Normally, the absolute path to the log file is passed as first argument to the script. If  sharedscripts is specified,
