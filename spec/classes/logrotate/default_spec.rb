@@ -72,7 +72,7 @@ describe 'lsys::logrotate::default' do
         it { is_expected.to compile.with_all_deps }
 
         case os
-        when 'redhat-8-x86_64', 'centos-8-x86_64', 'rocky-8-x86_64'
+        when 'centos-8-x86_64', 'rocky-8-x86_64'
           it {
             is_expected.to contain_file('/etc/logrotate.d/syslog')
               .with_ensure(:absent)

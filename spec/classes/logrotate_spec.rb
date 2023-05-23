@@ -21,6 +21,20 @@ describe 'lsys::logrotate' do
           .with_mode('0700')
           .with_content(%r{OUTPUT=\$\(/usr/sbin/logrotate /etc/logrotate.d/hourly 2>&1\)})
       }
+
+      case os
+      when %r{^centos-}, %r{^rocky-}
+        it {
+          is_expected.to contain_file('/etc/logrotate.conf')
+            .with_content(%r{^dateext})
+            .with_content(%r{^compress})
+        }
+      when %r{ubuntu-}
+        it {
+          is_expected.to contain_file('/etc/logrotate.conf')
+            .with_content(%r{^su root adm})
+        }
+      end
     end
   end
 end

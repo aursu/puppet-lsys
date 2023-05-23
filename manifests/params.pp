@@ -58,6 +58,17 @@ class lsys::params {
       'postrotate'    => $logrotate_postrotate,
     }
 
+    $logrotate_main_config = {
+      create       => true,
+      # keep 4 weeks worth of backlogs
+      rotate       => 4,
+      # rotate log files weekly
+      rotate_every => 'week',
+      su           => true,
+      su_user      => 'root',
+      su_group     => 'adm',
+    }
+
     $postfix_uid = 101
     $postfix_gid = 102
     $postfix_shell = '/usr/sbin/nologin'
@@ -87,6 +98,13 @@ class lsys::params {
       '/var/log/spooler',
     ]
     $logrotate_syslog_config = $logrotate_default_config
+    $logrotate_main_config = {
+      dateext      => true,
+      compress     => true,
+      create       => true,
+      rotate       => 4,
+      rotate_every => 'week',
+    }
 
     $postfix_uid = 89
     $postfix_gid = 89

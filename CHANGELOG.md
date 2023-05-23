@@ -642,4 +642,16 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-* lsys::monit is not compatible with Ubuntu 20.04+ due to dependent module 
+* lsys::monit is not compatible with Ubuntu 20.04+ due to dependent module
+
+## Release 0.35.0
+
+**Features**
+
+* Added Ubuntu specific logrotate.conf configuration
+
+**Bugfixes**
+
+* Fixed unit test for lsys::ntpdate
+
+**Known Issues**
