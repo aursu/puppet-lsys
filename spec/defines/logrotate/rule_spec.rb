@@ -16,6 +16,19 @@ describe 'lsys::logrotate::rule' do
 
       it { is_expected.to compile }
 
+      case os
+      when %r{^centos-}, %r{^rocky-}
+        it {
+          is_expected.to contain_file('/etc/logrotate.d/namevar')
+            .with_content(%r{^\s*dateext$})
+        }
+      when %r{^ubuntu-}
+        it {
+          is_expected.to contain_file('/etc/logrotate.d/namevar')
+            .with_content(%r{^\s*su root adm$})
+        }
+      end
+
       context 'when postrotate is set to true' do
         let(:params) do
           super().merge(

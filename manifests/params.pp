@@ -69,8 +69,6 @@ class lsys::params {
       su_group     => 'adm',
     }
 
-    $logrotate_su = 'root adm'
-
     $postfix_uid = 101
     $postfix_gid = 102
     $postfix_shell = '/usr/sbin/nologin'
@@ -107,8 +105,6 @@ class lsys::params {
       rotate       => 4,
       rotate_every => 'week',
     }
-
-    $logrotate_su = undef
 
     $postfix_uid = 89
     $postfix_gid = 89
