@@ -655,3 +655,13 @@ All notable changes to this project will be documented in this file.
 * Fixed unit test for lsys::ntpdate
 
 **Known Issues**
+
+## Release 0.36.0
+
+**Features**
+
+* Added default value for logrotate su directive on Ubuntu
+
+**Bugfixes**
+
+**Known Issues**
