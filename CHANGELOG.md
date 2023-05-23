@@ -629,3 +629,17 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.34.0
+
+**Features**
+
+* Added postfix client settings for Ubuntu
+
+**Bugfixes**
+
+* Fixed unit tests for Ubuntu 20.04
+
+**Known Issues**
+
+* lsys::monit is not compatible with Ubuntu 20.04+ due to dependent module 
