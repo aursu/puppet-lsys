@@ -665,3 +665,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.37.0
+
+**Features**
+
+* Added ability to merge logrotate rule with global rules
+
+**Bugfixes**
+
+**Known Issues**
