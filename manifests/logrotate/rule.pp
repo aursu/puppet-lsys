@@ -66,12 +66,33 @@ define lsys::logrotate::rule (
     $config_sharedscripts = {}
   }
 
+  if $rule_config['su'] {
+    $su_data = split($rule_config['su'], ' ')
+    $config_su = {
+      'su'       => true,
+      'su_user'  => $su_data[0],
+      'su_group' => $su_data[1],
+    }
+  }
+  elsif $rule_config['hourly'] and $lsys::params::logrotate_su {
+    $su_data = split($lsys::params::logrotate_su, ' ')
+    $config_su = {
+      'su'       => true,
+      'su_user'  => $su_data[0],
+      'su_group' => $su_data[1],
+    }
+  }
+  else {
+    $config_su = {}
+  }
+
   logrotate::rule { $title:
-    *            => $rule_config - ['hourly', 'daily', 'weekly', 'monthly', 'yearly', 'notifempty'] -
+    *            => $rule_config - ['hourly', 'daily', 'weekly', 'monthly', 'yearly', 'notifempty', 'su'] -
     $noconfig_postrotate +
     $config_ifempty +
     $config_postrotate +
-    $config_sharedscripts,
+    $config_sharedscripts +
+    $config_su,
     path         => $path,
     rotate_every => $rotate_every,
   }

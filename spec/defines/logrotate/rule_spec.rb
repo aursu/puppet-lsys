@@ -133,6 +133,48 @@ describe 'lsys::logrotate::rule' do
             .with_content(%r{^\s+nosharedscripts$})
         }
       end
+
+      context 'when su is set' do
+        let(:params) do
+          super().merge(
+            config: {
+              su: 'root adm',
+            },
+          )
+        end
+
+        it {
+          is_expected.to contain_file('/etc/logrotate.d/namevar')
+            .with_content(%r{^\s*su root adm$})
+        }
+      end
+
+      context 'when su is not set with hourly rotation' do
+        let(:params) do
+          super().merge(
+            config: {
+              hourly: true,
+            },
+          )
+        end
+
+        it {
+          is_expected.to contain_file('/etc/logrotate.d/hourly/namevar')
+        }
+
+        case os
+        when %r{^centos-}, %r{^rocky-}
+          it {
+            is_expected.to contain_file('/etc/logrotate.d/hourly/namevar')
+              .without_content(%r{^\s*su })
+          }
+        when %r{^ubuntu-}
+          it {
+            is_expected.to contain_file('/etc/logrotate.d/hourly/namevar')
+              .with_content(%r{^\s*su root adm$})
+          }
+        end
+      end
     end
   end
 end
