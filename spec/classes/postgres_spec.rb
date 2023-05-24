@@ -9,32 +9,36 @@ describe 'lsys::postgres' do
 
       it { is_expected.to compile }
 
-      it {
-        is_expected.to contain_package('postgresql-server')
-          .with_ensure('12.13')
-      }
-
       case os
-      when %r{^centos}, %r{^rocky}
+      when %r{^centos-8}
+        it {
+          is_expected.to contain_package('postgresql-server')
+            .with_ensure('15.0')
+            .with_name('postgresql-server')
+        }
+      when %r{^centos-7}
         it {
           is_expected.to contain_yumrepo('yum.postgresql.org')
-            .with_baseurl(%r{^https://download.postgresql.org/pub/repos/yum/12/redhat/rhel-\$releasever-\$basearch})
+            .with_baseurl(%r{^https://download.postgresql.org/pub/repos/yum/15/redhat/rhel-\$releasever-\$basearch})
             .that_notifies('Exec[yum-reload-e0c99ff]')
         }
 
-        if os == 'centos-8-x86_64'
-          it {
-            is_expected.to contain_package('postgresql-server')
-              .with_ensure('12.13')
-              .with_name('postgresql-server')
-          }
-        else
-          it {
-            is_expected.to contain_package('postgresql-server')
-              .with_ensure('12.13')
-              .with_name('postgresql12-server')
-          }
-        end
+        it {
+          is_expected.to contain_package('postgresql-server')
+            .with_ensure('15.3')
+            .with_name('postgresql15-server')
+        }
+      when %r{^rocky}
+        it {
+          is_expected.to contain_package('postgresql-server')
+            .with_ensure('15.2')
+            .with_name('postgresql-server')
+        }
+      else
+        it {
+          is_expected.to contain_package('postgresql-server')
+            .with_ensure('15.3')
+        }
       end
     end
   end

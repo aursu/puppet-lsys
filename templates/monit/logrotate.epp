@@ -2,7 +2,7 @@
 	Stdlib::Unixpath $logfile = '/var/log/monit.log',
 | -%>
 <%
-  if $facts['os']['name'] in ['RedHat', 'CentOS']
+  if $facts['os']['family'] == 'RedHat'
   and $facts['os']['release']['major'] in ['5', '6'] {
     $restart_command = '/sbin/service monit condrestart'
   }

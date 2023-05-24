@@ -7,37 +7,35 @@
 #
 # @param enabled
 # @param baseurl
-# @param mirrorlist
-# @param os_name
 #
 class lsys::repo::powertools (
   Boolean $enabled = true,
   # baseurl=http://mirror.centos.org/$contentdir/$releasever/PowerTools/$basearch/os/
   Optional[Stdlib::HTTPUrl] $baseurl = undef,
-  Stdlib::HTTPUrl $mirrorlist = $lsys::params::repo_powertools_mirrorlist,
-  String  $os_name = $lsys::params::repo_os_name,
 ) inherits lsys::params {
-  if $baseurl {
-    $source = {
-      'baseurl' => $baseurl,
-    }
-  }
-  elsif $mirrorlist {
-    $source = {
-      'mirrorlist' => $mirrorlist,
-    }
-  }
-
   # Notice: /Stage[main]/Lsys::Repo::Powertools/Yumrepo[powertools]/descr: descr changed 'CentOS Stream $releasever - PowerTools' to 'CentOS Linux $releasever - PowerTools'
   # Notice: /Stage[main]/Lsys::Repo::Powertools/Yumrepo[powertools]/mirrorlist: mirrorlist changed 'http://mirrorlist.centos.org/?release=$stream&arch=$basearch&repo=PowerTools&infra=$infra' to 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra'
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['8'] {
+  if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '8' {
+    $os_name = $lsys::params::repo_os_name
+
+    if $baseurl {
+      $source = {
+        'baseurl' => $baseurl,
+      }
+    }
+    else {
+      $source = {
+        'mirrorlist' => $lsys::params::repo_powertools_mirrorlist,
+      }
+    }
+
     yumrepo { 'powertools':
       *        => $source,
       ensure   => 'present',
       descr    => "${os_name} \$releasever - PowerTools",
       enabled  => '1',
       gpgcheck => '1',
-      gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial',
+      gpgkey   => $lsys::params::repo_gpgkey,
     }
   }
 }

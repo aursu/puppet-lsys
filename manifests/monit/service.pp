@@ -25,7 +25,7 @@ class lsys::monit::service (
 ) inherits lsys::params {
   include lsys::systemd
 
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {
+  if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] in ['5', '6'] {
     $init_path     = '/etc/rc.d/init.d/monit'
     $init_template = 'lsys/monit/init.erb'
   }

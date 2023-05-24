@@ -15,12 +15,18 @@ describe 'lsys::cron' do
         # by default we manage package cronie for all supported by lsys module
         # CentOS versions
 
-        it { is_expected.to contain_package('cron').with('name' => 'cronie') }
-
         case os
         when %r{^centos}, %r{^rocky}
+          it {
+            is_expected.to contain_package('cron')
+              .with('name' => 'cronie')
+          }
           it { is_expected.to contain_service('crond') }
         when %r{^ubuntu}
+          it {
+            is_expected.to contain_package('cron')
+              .with('name' => 'cron')
+          }
           it { is_expected.to contain_service('cron') }
         end
 

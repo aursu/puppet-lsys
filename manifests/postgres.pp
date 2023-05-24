@@ -44,6 +44,7 @@ class lsys::postgres (
       '7'     => false,
       default => true,
     },
+    'Rocky' => true,
     # only CentOS supported
     default => false,
   }
