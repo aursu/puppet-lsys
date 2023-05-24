@@ -675,3 +675,16 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.38.0
+
+**Features**
+
+* Upgraded PostgreSQL to version 15
+* Updated PostrgeSQL allowed versions to latest on this day
+
+**Bugfixes**
+
+* Improved Ubuntu support
+
+**Known Issues**
