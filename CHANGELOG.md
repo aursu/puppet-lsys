@@ -688,3 +688,13 @@ All notable changes to this project will be documented in this file.
 * Improved Ubuntu support
 
 **Known Issues**
+
+## Release 0.39.0
+
+**Features**
+
+* Added functionality to setup TLS assets on Web service
+
+**Bugfixes**
+
+**Known Issues**

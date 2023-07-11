@@ -102,6 +102,9 @@ fixtures:
     systemd:
       repo: puppet/systemd
       ref: 3.5.1
+    tlsinfo:
+      repo: aursu/tlsinfo
+      ref: 0.3.7
     yumrepo_core:
       repo: puppetlabs/yumrepo_core
       puppet_version: ">= 6.0.0"
@@ -113,6 +116,6 @@ fixtures:
       ref: tags/v1.5.2
     nginx:
       repo: https://github.com/aursu/puppet-nginx.git
-      ref: tags/v3.3.1-rc0.4
+      ref: tags/v4.4.1-rc0.2
     rlimits:
       repo: https://github.com/aursu/puppet-rlimits.git
