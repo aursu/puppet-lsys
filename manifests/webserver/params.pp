@@ -5,6 +5,8 @@
 # @example
 #   include lsys::webserver::params
 class lsys::webserver::params {
+  include tlsinfo::params
+
   # use directory defined by http://nginx.org/packages/
   $user_shell = $facts['os']['family'] ? {
     'RedHat' => '/sbin/nologin',
@@ -42,4 +44,8 @@ class lsys::webserver::params {
       'Strict-Transport-Security' => 'max-age=63072000',
     },
   }
+
+  # Client authentication
+  $internal_certdir = "${tlsinfo::params::certbase}/internal"
+  $internal_cacert = "${internal_certdir}/ca.pem"
 }
