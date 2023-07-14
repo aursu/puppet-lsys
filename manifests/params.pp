@@ -14,6 +14,7 @@ class lsys::params {
   $nginx_proxy_temp_path = "${nginx_cachedir}/proxy_temp"
   $nginx_user_home       = '/var/lib/nginx'
 
+  $osfam  = $facts['os']['family']
   $osname = $facts['os']['name']
   $osmaj  = $facts['os']['release']['major']
 

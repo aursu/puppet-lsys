@@ -708,3 +708,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.41.0
+
+**Features**
+
+* Manage dependency for monit binary (libnsl library for RedHat 8)
+
+**Bugfixes**
+
+**Known Issues**
