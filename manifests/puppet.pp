@@ -70,6 +70,8 @@ class lsys::puppet (
   Optional[String] $enc_envname = undef,
   Boolean $r10k_crontab_setup = false,
   Boolean $manage_webserver_conf = false,
+  Boolean $manage_fileserver_config = true,
+  Hash[String, Stdlib::Absolutepath] $mount_points = {},
 ) {
   if $puppetserver {
     if $sameca {
@@ -99,6 +101,8 @@ class lsys::puppet (
         enc_envname           => $enc_envname,
         r10k_crontab_setup    => $r10k_crontab_setup,
         manage_webserver_conf => $manage_webserver_conf,
+        manage_fileserver_config => $manage_fileserver_config,
+        mount_points             => $mount_points,
       }
       contain puppet::profile::server
     }
@@ -114,6 +118,8 @@ class lsys::puppet (
         enc_envname           => $enc_envname,
         r10k_crontab_setup    => $r10k_crontab_setup,
         manage_webserver_conf => $manage_webserver_conf,
+        manage_fileserver_config => $manage_fileserver_config,
+        mount_points             => $mount_points,
       }
       contain puppet::profile::compiler
     }

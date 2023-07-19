@@ -718,3 +718,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.42.0
+
+**Features**
+
+* Added aility to setup Puppet file server settings
+
+**Bugfixes**
+
+**Known Issues**
