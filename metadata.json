@@ -70,7 +70,7 @@
     },
     {
       "name": "aursu/puppet",
-      "version_requirement": ">= 0.7.0 < 1.0.0"
+      "version_requirement": ">= 0.7.1 < 1.0.0"
     },
     {
       "name": "puppetlabs/puppetdb",
@@ -78,7 +78,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.1.0 < 9.0.0"
+      "version_requirement": ">= 4.1.0 < 10.0.0"
     },
     {
       "name": "thias/sysctl",

@@ -5,25 +5,25 @@ fixtures:
   forge_modules:
     apt:
       repo: puppetlabs/apt
-      ref: 9.0.2
+      ref: 9.1.0
     alternatives:
       repo: puppet/alternatives
-      ref: 4.0.0
+      ref: 5.0.0
     apache:
       repo: puppetlabs/apache
-      ref: 9.0.1
+      ref: 10.1.1
     archive:
       repo: puppet/archive
-      ref: 6.1.0
+      ref: 7.0.0
     augeas_core:
       repo: puppetlabs/augeas_core
       puppet_version: ">= 6.0.0"
     chrony:
       repo: puppet/chrony
-      ref: 2.6.0
+      ref: 3.0.0
     concat:
       repo: puppetlabs/concat
-      ref: 7.3.0
+      ref: 7.3.3
     cron:
       repo: puppet/cron
       ref: 3.0.0
@@ -36,12 +36,6 @@ fixtures:
     dockerinstall:
       repo: aursu/dockerinstall
       ref: 0.13.5
-    elastic_stack:
-      repo: elastic/elastic_stack
-      ref: 7.0.0
-    elasticsearch:
-      repo: elastic/elasticsearch
-      ref: 6.4.0
     graylog:
       repo: graylog/graylog
       ref: 1.0.0
@@ -50,16 +44,13 @@ fixtures:
       puppet_version: ">= 6.0.0"
     inifile:
       repo: puppetlabs/inifile
-      ref: 5.2.0
+      ref: 6.1.0
     java:
       repo: puppetlabs/java
-      ref: 7.3.0
+      ref: 10.1.1
     logrotate:
       repo: puppet/logrotate
-      ref: 6.0.0
-    mongodb:
-      repo: puppet/mongodb
-      ref: 4.1.0
+      ref: 6.1.0
     monit:
       repo: soli/monit
       ref: 3.0.0
@@ -71,37 +62,37 @@ fixtures:
       ref: 9.0.1
     ntp:
       repo: puppetlabs/ntp
-      ref: 9.1.0
+      ref: 10.1.0
     postfix:
       repo: puppet/postfix
-      ref: 2.0.0
+      ref: 4.2.1
     postgresql:
       repo: puppetlabs/postgresql
-      ref: 7.5.0
+      ref: 9.1.0
     puppet:
       repo: aursu/puppet
-      ref: 0.6.1
+      ref: 0.7.1
     puppetdb:
-      repo: "puppetlabs/puppetdb"
-      ref: 7.12.0
+      repo: puppetlabs/puppetdb
+      ref: 7.13.0
     r10k:
-      repo: "puppet/r10k"
-      ref: 10.3.0
+      repo: puppet/r10k
+      ref: 11.0.1
     selinux:
       repo: puppet/selinux
-      ref: 3.4.1
+      ref: 4.0.0
     selinux_core:
       repo: puppetlabs/selinux_core
       puppet_version: ">= 6.0.0"
     stdlib:
       repo: puppetlabs/stdlib
-      ref: 8.1.0
+      ref: 9.2.0
     sysctl:
       repo: thias/sysctl
       ref: 1.0.7
     systemd:
       repo: puppet/systemd
-      ref: 3.5.1
+      ref: 5.2.0
     tlsinfo:
       repo: aursu/tlsinfo
       ref: 0.3.7
@@ -111,6 +102,8 @@ fixtures:
   repositories:
     grayloginstall:
       repo: https://github.com/aursu/puppet-grayloginstall.git
+    mongodb:
+      repo: https://github.com/voxpupuli/puppet-mongodb.git
     networksetup:
       repo: https://github.com/aursu/puppet-networksetup.git
       ref: tags/v1.5.2
