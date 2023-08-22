@@ -74,10 +74,10 @@ class lsys::params {
         su_group     => 'adm',
       }
 
-      $postfix_uid = 101
-      $postfix_gid = 102
+      $postfix_uid = undef
+      $postfix_gid = undef
       $postfix_shell = '/usr/sbin/nologin'
-      $postdrop_gid = 103
+      $postdrop_gid = undef
 
       $cron_package_name = 'cron'
       $centos_stream = false
