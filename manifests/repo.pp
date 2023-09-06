@@ -7,7 +7,7 @@
 class lsys::repo {
   case $facts['os']['family'] {
     'Debian': {
-      exec { 'apt-update-59b322f':
+      exec { 'apt-update-e0c99ff':
         command     => 'apt update',
         path        => '/bin:/usr/bin',
         refreshonly => true,
@@ -20,7 +20,7 @@ class lsys::repo {
         default => 'dnf clean all',
       }
 
-      exec { 'yum-reload-59b322f':
+      exec { 'yum-reload-e0c99ff':
         command     => $reload_command,
         path        => '/bin:/usr/bin',
         refreshonly => true,

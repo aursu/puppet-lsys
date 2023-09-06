@@ -730,3 +730,13 @@ All notable changes to this project will be documented in this file.
 * Added support for DNF into lsys::repo
 
 **Known Issues**
+
+## Release 0.43.0
+
+**Features**
+
+* PDK upgrade to 3.0.0
+
+**Bugfixes**
+
+**Known Issues**
