@@ -719,12 +719,14 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.42.0
+## Release 0.42.1
 
 **Features**
 
-* Added aility to setup Puppet file server settings
+* Added ability to setup Puppet file server settings
 
 **Bugfixes**
+
+* Added support for DNF into lsys::repo
 
 **Known Issues**
