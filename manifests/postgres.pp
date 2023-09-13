@@ -14,6 +14,7 @@
 #   subnet. Default value: '127.0.0.1/32'.
 #
 class lsys::postgres (
+  Boolean $manage_dnf_module = true,
   Boolean $manage_package_repo = $lsys::params::postgres_manage_repo,
   # https://www.postgresql.org/docs/11/pgupgrade.html
   Lsys::PGVersion $package_version = $lsys::params::postgres_version,
@@ -38,21 +39,21 @@ class lsys::postgres (
   # we can not use maintainer's repo on CentOS 8+ due to issue:
   # All matches were filtered out by modular filtering for argument
   # Therefore we use postgresql:12 dnf module stream
-  $manage_dnf_module = $facts['os']['name'] ? {
+  $_manage_dnf_module = $facts['os']['name'] ? {
     'CentOS' => $facts['os']['release']['major'] ? {
       '6'     => false,
       '7'     => false,
       default => true,
     },
     'Rocky' => true,
-    # only CentOS supported
+    # only CentOS and Rocky supported
     default => false,
   }
 
-  if $manage_dnf_module {
+  if $manage_dnf_module and $_manage_dnf_module {
     class { 'postgresql::globals':
       manage_package_repo => $manage_package_repo,
-      manage_dnf_module   => $manage_dnf_module,
+      manage_dnf_module   => $_manage_dnf_module,
       version             => $repo_version,
     }
   }

@@ -167,16 +167,22 @@ class lsys::params {
         $repo_os_name = 'Rocky Linux'
       }
 
-      if $osname == 'CentOS' and $osmaj == '8' and $centos_stream {
-        $postgres_version = '15.0'
+      if $osname == 'CentOS' and $centos_stream {
+        $postgres_version = $osmaj ? {
+          '8'     => '15.0',
+          default => '15.2',
+        }
         $postgres_manage_repo = false
       }
       elsif $osname == 'Rocky' {
-        $postgres_version = '15.2'
+        $postgres_version = $osmaj ? {
+          '8'     => '15.2',
+          default => '15.3',
+        }
         $postgres_manage_repo = false
       }
       else {
-        $postgres_version = '15.3'
+        $postgres_version = '15.4'
         $postgres_manage_repo = true
       }
 

@@ -728,3 +728,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.43.0
+
+**Features**
+
+* Adjusted Postgresql versions for CentOS Stream
+* Added ability to use upstream repos
+
+**Bugfixes**
+
+**Known Issues**
