@@ -741,12 +741,13 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.44.0
+## Release 0.44.1
 
 **Features**
 
 * Adjusted Postgresql versions for CentOS Stream
 * Added ability to use upstream repos
+* Added postgres 15.4 into supported versions list
 
 **Bugfixes**
 
