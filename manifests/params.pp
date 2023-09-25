@@ -82,7 +82,7 @@ class lsys::params {
       $cron_package_name = 'cron'
       $centos_stream = false
 
-      $postgres_version = '15.3'
+      $postgres_version = '15.4'
       $postgres_manage_repo = true
 
       $postfix_master_os_template = undef

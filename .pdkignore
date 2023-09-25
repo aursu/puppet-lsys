@@ -18,6 +18,7 @@
 /spec/fixtures/manifests/
 /spec/fixtures/modules/*
 /tmp/
+/tests/
 /vendor/
 /convert_report.txt
 /update_report.txt
