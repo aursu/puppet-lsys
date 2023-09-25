@@ -60,6 +60,9 @@ fixtures:
     mount_core:
       repo: puppetlabs/mount_core
       puppet_version: ">= 6.0.0"
+    nginx:
+      repo: aursu/nginx
+      ref: 4.4.2
     nodejs:
       repo: puppet/nodejs
       ref: 9.0.1
@@ -109,8 +112,5 @@ fixtures:
     networksetup:
       repo: https://github.com/aursu/puppet-networksetup.git
       ref: tags/v1.5.2
-    nginx:
-      repo: https://github.com/aursu/puppet-nginx.git
-      ref: tags/v4.4.1-rc0.2
     rlimits:
       repo: https://github.com/aursu/puppet-rlimits.git

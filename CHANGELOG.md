@@ -753,11 +753,12 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.45.0
+## Release 0.46.0
 
 **Features**
 
 * Adjusted `apache` dependency
+* Adjusted `nginx` dependency
 * Setup new apache configuration template
 
 **Bugfixes**
