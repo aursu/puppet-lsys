@@ -20,6 +20,8 @@ class lsys::httpd (
     $service_enable = false
   }
 
+  $docroot = '/var/www/html'
+
   class { 'apache':
     mpm_module             => false,
     default_mods           => [],
@@ -34,15 +36,22 @@ class lsys::httpd (
     max_keepalive_requests => 100,
     keepalive_timeout      => 5,
     root_directory_secured => true,
-    docroot                => '/var/www/html',
+    docroot                => $docroot,
     default_charset        => 'UTF-8',
-    conf_template          => 'lsys/httpd.conf.erb',
+    conf_template          => 'lsys/httpd.conf.epp',
     mime_types_additional  => undef,
     service_manage         => true,
     service_ensure         => $service_ensure,
     service_enable         => $service_enable,
     manage_group           => $manage_group,
     manage_user            => $manage_user,
+  }
+
+  apache::custom_config { 'docroot':
+    content  => epp('lsys/httpd-docroot.conf.epp', {
+        'docroot' => $docroot,
+    }),
+    priority => '00',
   }
 
   class { 'apache::mod::prefork':

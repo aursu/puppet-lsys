@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.44.1",
+  "version": "0.45.0",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/apache",
-      "version_requirement": ">= 9.0.0 < 10.0.0"
+      "version_requirement": ">= 11.0.0 < 12.0.0"
     },
     {
       "name": "puppet/archive",

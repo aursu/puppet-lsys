@@ -7,7 +7,15 @@ describe 'lsys::httpd' do
 
       it { is_expected.to compile }
 
-      if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+      if os_facts[:os]['family'] == 'RedHat'
+        context 'document root configuration' do
+          it {
+            is_expected.to contain_file('apache_docroot')
+              .with_path('/etc/httpd/conf.d/00-docroot.conf')
+              .with_content(%r{^DocumentRoot /var/www/html$})
+          }
+        end
+
         context 'with default parameters check user/group management' do
           it {
             is_expected.to contain_user('apache')

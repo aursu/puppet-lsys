@@ -752,3 +752,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.45.0
+
+**Features**
+
+* Adjusted `apache` dependency
+* Setup new apache configuration template
+
+**Bugfixes**
+
+**Known Issues**

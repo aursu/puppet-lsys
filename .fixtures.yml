@@ -11,7 +11,7 @@ fixtures:
       ref: 5.0.0
     apache:
       repo: puppetlabs/apache
-      ref: 10.1.1
+      ref: 11.1.0
     archive:
       repo: puppet/archive
       ref: 7.0.0

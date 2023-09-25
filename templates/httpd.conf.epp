@@ -1,0 +1,76 @@
+ServerName "<%= $servername %>"
+ServerRoot "<%= $server_root %>"
+
+ServerTokens <%= $server_tokens %>
+ServerSignature <%= apache::bool2httpd($server_signature) %>
+TraceEnable <%= apache::bool2httpd($trace_enable) %>
+
+PidFile <%= $pidfile %>
+Timeout <%= $timeout %>
+KeepAlive <%= $keepalive %>
+MaxKeepAliveRequests <%= $max_keepalive_requests %>
+KeepAliveTimeout <%= $keepalive_timeout %>
+
+User <%= $user %>
+Group <%= $group %>
+
+AccessFileName .htaccess
+<FilesMatch "^\.ht">
+    Require all denied
+</FilesMatch>
+
+<Directory />
+  Options <%= Array($root_directory_options).join(' ') %>
+  AllowOverride None
+<%- if $root_directory_secured { -%>
+  Require all denied
+<%- } -%>
+</Directory>
+
+<% if $default_charset { -%>
+AddDefaultCharset <%= $default_charset %>
+<% } -%>
+
+<Directory "/var/www">
+    AllowOverride None
+    Require all granted
+</Directory>
+
+<%- if $error_log.match(/^[|\/]/) or $error_log.match(/^syslog:/) { -%>
+ErrorLog "<%= $error_log %>"
+<%- }else { -%>
+ErrorLog "<%= $logroot %>/<%= $error_log %>"
+<% } -%>
+LogLevel <%= $log_level %>
+
+HostnameLookups Off
+EnableSendfile <%= $sendfile %>
+<%- if $allow_encoded_slashes { -%>
+AllowEncodedSlashes <%= $allow_encoded_slashes %>
+<%- } -%>
+
+<Directory "/var/www/cgi-bin">
+    AllowOverride None
+    Options None
+    Require all granted
+</Directory>
+
+Include "<%= $mod_load_dir %>/*.load"
+<% if $mod_load_dir != $confd_dir and $mod_load_dir != $vhost_load_dir { -%>
+Include "<%= $mod_load_dir %>/*.conf"
+<% } -%>
+Include "<%= $ports_file %>"
+
+<IfModule log_config_module>
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+    <IfModule logio_module>
+        LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
+    </IfModule>
+    CustomLog "logs/access_log" combined
+</IfModule>
+
+IncludeOptional "<%= $confd_dir %>/*.conf"
+<% if $vhost_load_dir != $confd_dir { -%>
+IncludeOptional "<%= $vhost_load_dir %>/<%= $vhost_include_pattern %>"
+<% } -%>
