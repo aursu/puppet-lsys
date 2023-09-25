@@ -762,4 +762,6 @@ All notable changes to this project will be documented in this file.
 
 **Bugfixes**
 
+* Corrected PostgreSQL version in Unit test
+
 **Known Issues**
