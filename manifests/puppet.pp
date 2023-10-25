@@ -23,8 +23,11 @@
 #   Whether to install PuppetDB on same server or not
 #
 # @param postgres_local
+#   Whether to manage PostgreSQL server installation on same server or not
+#   It has no effect if puppetdb_local is false
+#
 # @param manage_database
-#   Whether to manage Postgres and database resources for PuppetDB on same server or not
+#   Whether to manage Postgres database resources for PuppetDB on same server or not
 #
 # @param server
 #   Puppet server name
@@ -75,7 +78,7 @@ class lsys::puppet (
 ) {
   if $puppetserver {
     if $sameca {
-      if $puppetdb_local and $manage_database {
+      if $puppetdb_local and $postgres_local {
         if $platform_name == 'puppet5' {
           class { 'lsys::postgres':
             package_version => '9.6.23',

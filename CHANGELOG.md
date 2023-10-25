@@ -766,3 +766,13 @@ All notable changes to this project will be documented in this file.
 * Corrected PostgreSQL version in Unit test
 
 **Known Issues**
+
+## Release 0.47.0
+
+**Features**
+
+* Added ability to not manage Postgres core inside lsys::puppet
+
+**Bugfixes**
+
+**Known Issues**
