@@ -776,3 +776,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.47.1
+
+**Features**
+
+* Added bsys module as a dependency
+
+**Bugfixes**
+
+**Known Issues**
