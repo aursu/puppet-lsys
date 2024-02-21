@@ -8,7 +8,7 @@
 # @param package_ensure
 #
 class lsys::tools::completion (
-  Lsys::PackageVersion $package_ensure = true,
+  Bsys::PackageVersion $package_ensure = true,
 ) {
-  lsys::tools::package { 'bash-completion': ensure => $package_ensure }
+  bsys::tools::package { 'bash-completion': ensure => $package_ensure }
 }

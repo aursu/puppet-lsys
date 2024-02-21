@@ -5,10 +5,10 @@
 # @example
 #   include lsys::tools::sysstat
 class lsys::tools::sysstat (
-  Optional[Lsys::PackageVersion] $ensure = undef,
+  Optional[Bsys::PackageVersion] $ensure = undef,
   Boolean $enable_hardening = false,
 ) {
-  lsys::tools::package { 'sysstat': ensure => $ensure }
+  bsys::tools::package { 'sysstat': ensure => $ensure }
 
   if $enable_hardening {
     exec { 'chmod 0600 /var/log/sa/sa*':

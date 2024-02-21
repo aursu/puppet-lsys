@@ -16,9 +16,9 @@
 #
 class lsys::tools::psmisc (
   Boolean $enable_hardening = false,
-  Lsys::PackageVersion $package_ensure   = true,
+  Bsys::PackageVersion $package_ensure   = true,
 ) {
-  lsys::tools::package { 'psmisc': ensure => $package_ensure }
+  bsys::tools::package { 'psmisc': ensure => $package_ensure }
 
   if $enable_hardening {
     file {

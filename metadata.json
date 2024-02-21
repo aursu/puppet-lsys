@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.47.1",
+  "version": "0.48.0",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -90,7 +90,7 @@
     },
     {
       "name": "aursu/bsys",
-      "version_requirement": ">= 0.5.0 < 1.0.0"
+      "version_requirement": ">= 0.6.0 < 1.0.0"
     }
   ],
   "operatingsystem_support": [

@@ -6,10 +6,10 @@
 #   include lsys::tools::storage
 class lsys::tools::storage (
   Boolean $enable_hardening = false,
-  Lsys::PackageVersion $lvm2_ensure = true,
+  Bsys::PackageVersion $lvm2_ensure = true,
 ) {
   # Logical volume management tools
-  lsys::tools::package { 'lvm2': ensure => $lvm2_ensure }
+  bsys::tools::package { 'lvm2': ensure => $lvm2_ensure }
 
   if $enable_hardening {
     file {

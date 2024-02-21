@@ -17,43 +17,43 @@
 #
 class lsys::tools::network (
   Boolean $enable_hardening  = false,
-  Lsys::PackageVersion $iputils_ensure = true,
-  Lsys::PackageVersion $iproute_ensure = true,
-  Lsys::PackageVersion $bind_utils_ensure = false,
-  Lsys::PackageVersion $whois_ensure = false,
-  Lsys::PackageVersion $net_tools_ensure = false,
-  Lsys::PackageVersion $tcpdump_ensure = false,
-  Lsys::PackageVersion $traceroute_ensure = false,
-  Lsys::PackageVersion $nmap_ncat_ensure = false,
-  Lsys::PackageVersion $netcat_ensure = false,
+  Bsys::PackageVersion $iputils_ensure = true,
+  Bsys::PackageVersion $iproute_ensure = true,
+  Bsys::PackageVersion $bind_utils_ensure = false,
+  Bsys::PackageVersion $whois_ensure = false,
+  Bsys::PackageVersion $net_tools_ensure = false,
+  Bsys::PackageVersion $tcpdump_ensure = false,
+  Bsys::PackageVersion $traceroute_ensure = false,
+  Bsys::PackageVersion $nmap_ncat_ensure = false,
+  Bsys::PackageVersion $netcat_ensure = false,
 ) {
   # Network monitoring tools including ping
-  lsys::tools::package { 'iputils': ensure => $iputils_ensure }
+  bsys::tools::package { 'iputils': ensure => $iputils_ensure }
 
   # Advanced IP routing and network device configuration tools
-  lsys::tools::package { 'iproute': ensure => $iproute_ensure }
+  bsys::tools::package { 'iproute': ensure => $iproute_ensure }
 
   # Utilities for querying DNS name servers
   # dig, host, nslookup
-  lsys::tools::package { 'bind-utils': ensure => $bind_utils_ensure }
+  bsys::tools::package { 'bind-utils': ensure => $bind_utils_ensure }
 
   # Searches for an object in a RFC 3912 database.
-  lsys::tools::package { 'whois': ensure => $whois_ensure }
+  bsys::tools::package { 'whois': ensure => $whois_ensure }
 
   # Basic networking tools
-  lsys::tools::package { 'net-tools': ensure => $net_tools_ensure }
+  bsys::tools::package { 'net-tools': ensure => $net_tools_ensure }
 
   # A network traffic monitoring tool
-  lsys::tools::package { 'tcpdump': ensure => $tcpdump_ensure }
+  bsys::tools::package { 'tcpdump': ensure => $tcpdump_ensure }
 
   # Traces the route taken by packets over an IPv4/IPv6 network
-  lsys::tools::package { 'traceroute': ensure => $traceroute_ensure }
+  bsys::tools::package { 'traceroute': ensure => $traceroute_ensure }
 
   # Nmap's Netcat replacement
-  lsys::tools::package { 'nmap-ncat': ensure => $nmap_ncat_ensure }
+  bsys::tools::package { 'nmap-ncat': ensure => $nmap_ncat_ensure }
 
   # OpenBSD netcat to read and write data across connections using TCP or UDP
-  lsys::tools::package { 'netcat': ensure => $netcat_ensure }
+  bsys::tools::package { 'netcat': ensure => $netcat_ensure }
 
   if $enable_hardening {
     file {

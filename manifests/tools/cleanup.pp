@@ -10,19 +10,19 @@
 # @param man_pages_ensure
 #
 class lsys::tools::cleanup (
-  Lsys::PackageVersion $fprintd_ensure = absent,
-  Lsys::PackageVersion $man_ensure = absent,
-  Lsys::PackageVersion $man_pages_ensure = absent,
+  Bsys::PackageVersion $fprintd_ensure = absent,
+  Bsys::PackageVersion $man_ensure = absent,
+  Bsys::PackageVersion $man_pages_ensure = absent,
 ) {
   #  D-Bus service for Fingerprint reader access
-  lsys::tools::package {
+  bsys::tools::package {
     default:
       ensure => $fprintd_ensure;
     'fprintd': ;
     'fprintd-pam':
-      before => Lsys::Tools::Package['fprintd'];
+      before => Bsys::Tools::Package['fprintd'];
   }
 
-  lsys::tools::package { 'man-db': ensure => $man_ensure }
-  lsys::tools::package { 'man-pages': ensure => $man_pages_ensure }
+  bsys::tools::package { 'man-db': ensure => $man_ensure }
+  bsys::tools::package { 'man-pages': ensure => $man_pages_ensure }
 }

@@ -19,7 +19,7 @@ class lsys::auto_upgrade::openssl (
   ] $corporate_repo = undef,
   Boolean $corporate_repo_only = false,
 ) {
-  lsys::tools::package { 'openssl':
+  bsys::tools::package { 'openssl':
     ensure              => $version,
     corporate_repo      => $corporate_repo,
     corporate_repo_only => $corporate_repo_only,

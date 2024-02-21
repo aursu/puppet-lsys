@@ -18,7 +18,7 @@ class lsys::auto_upgrade::bash (
   ] $corporate_repo = undef,
   Boolean $corporate_repo_only = false,
 ) {
-  lsys::tools::package { 'bash':
+  bsys::tools::package { 'bash':
     ensure              => $version,
     corporate_repo      => $corporate_repo,
     corporate_repo_only => $corporate_repo_only,

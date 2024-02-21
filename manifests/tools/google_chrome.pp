@@ -10,17 +10,17 @@
 #
 class lsys::tools::google_chrome (
   Enum['unstable', 'beta', 'stable'] $release = 'stable',
-  Lsys::PackageVersion $ensure  = true,
+  Bsys::PackageVersion $ensure  = true,
 ) {
   include lsys::repo::google_chrome
   include lsys::tools::docs
 
   $package_name = "google-chrome-${release}"
 
-  lsys::tools::package { 'google-chrome':
+  bsys::tools::package { 'google-chrome':
     ensure => $ensure,
     name   => $package_name,
   }
 
-  Class['lsys::repo::google_chrome'] -> Lsys::Tools::Package['google-chrome']
+  Class['lsys::repo::google_chrome'] -> Bsys::Tools::Package['google-chrome']
 }

@@ -6,28 +6,28 @@
 #   include lsys::tools::system
 class lsys::tools::system (
   Boolean $enable_hardening = false,
-  Lsys::PackageVersion $sudo_ensure = false,
-  Lsys::PackageVersion $file_ensure = false,
-  Lsys::PackageVersion $which_ensure = false,
-  Lsys::PackageVersion $quota_ensure = false,
-  Lsys::PackageVersion $util_linux_ensure = true,
+  Bsys::PackageVersion $sudo_ensure = false,
+  Bsys::PackageVersion $file_ensure = false,
+  Bsys::PackageVersion $which_ensure = false,
+  Bsys::PackageVersion $quota_ensure = false,
+  Bsys::PackageVersion $util_linux_ensure = true,
   String $quota_owner = 'root',
   String $quota_group = 'root',
 ) {
   # Allows restricted root access for specified users
-  lsys::tools::package { 'sudo': ensure => $sudo_ensure }
+  bsys::tools::package { 'sudo': ensure => $sudo_ensure }
 
   # A utility for determining file types
-  lsys::tools::package { 'file': ensure => $file_ensure }
+  bsys::tools::package { 'file': ensure => $file_ensure }
 
   # The which command shows the full pathname of a specified program
-  lsys::tools::package { 'which': ensure => $which_ensure }
+  bsys::tools::package { 'which': ensure => $which_ensure }
 
   # System administration tools for monitoring users' disk usage
-  lsys::tools::package { 'quota': ensure => $quota_ensure }
+  bsys::tools::package { 'quota': ensure => $quota_ensure }
 
   # The util-linux package contains a large variety of low-level system utilities
-  lsys::tools::package { 'util-linux': ensure => $util_linux_ensure }
+  bsys::tools::package { 'util-linux': ensure => $util_linux_ensure }
 
   if $enable_hardening {
     file {

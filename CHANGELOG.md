@@ -777,7 +777,7 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.47.1
+## Release 0.48.0
 
 **Features**
 
