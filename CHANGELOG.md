@@ -787,11 +787,12 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.49.0
+## Release 0.49.1
 
 **Features**
 
 * Added mysql database management
+* Set utf8mb3  as default charset
 
 **Bugfixes**
 
