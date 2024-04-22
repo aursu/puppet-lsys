@@ -797,3 +797,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.50.0
+
+**Features**
+
+* Added flag `manage_sbin` to choose whether to manage `/usr/sbin` or not
+
+**Bugfixes**
+
+**Known Issues**

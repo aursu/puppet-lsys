@@ -7,9 +7,16 @@
 #
 # @param proc_mode
 #
+# @param manage_vardb
+#   Whether to manage folder /var/db or not
+#
+# @param manage_sbin
+#   Whather to manage folder /usr/sbin or not
+#
 class lsys::hardening::file_system (
   Lsys::FileMode $proc_mode = '0551',
   Boolean $manage_vardb     = true,
+  Boolean $manage_sbin      = true,
 ) {
   lsys::hardening::chmod_directory {
     default: mode => '0711';
@@ -33,9 +40,17 @@ class lsys::hardening::file_system (
     '/var/tmp':       mode => '1773';
     '/tmp':           mode => '1773';
   }
+
   if $manage_vardb {
     file { '/var/db':
       mode => '0750';
+    }
+  }
+
+  if $manage_sbin {
+    # users should have access to sendmail binary
+    file { '/usr/sbin':
+      mode => '0711';
     }
   }
 
@@ -113,8 +128,6 @@ class lsys::hardening::file_system (
     '/usr/lib64':             mode => '0751';
     '/usr/lib':               mode => '0751';
     '/usr/lib/modules': ;
-    # users should have access to sendmail binary
-    '/usr/sbin':              mode => '0711';
     '/usr/share/doc':         mode => '0711';
     '/usr/share':             mode => '0711';
     '/usr/src':               mode => '0750';
