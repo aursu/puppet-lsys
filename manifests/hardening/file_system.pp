@@ -113,7 +113,8 @@ class lsys::hardening::file_system (
     '/usr/lib64':             mode => '0751';
     '/usr/lib':               mode => '0751';
     '/usr/lib/modules': ;
-    '/usr/sbin':              mode => '0710';
+    # users should have access to sendmail binary
+    '/usr/sbin':              mode => '0711';
     '/usr/share/doc':         mode => '0711';
     '/usr/share':             mode => '0711';
     '/usr/src':               mode => '0750';
