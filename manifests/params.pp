@@ -86,6 +86,8 @@ class lsys::params {
       $postgres_manage_repo = true
 
       $postfix_master_os_template = undef
+
+      $login_defs_template = 'lsys/shadow_utils/login.defs.erb'
     }
     'CentOS', 'Rocky': {
       $nginx_version = $osmaj ? {
@@ -121,6 +123,12 @@ class lsys::params {
       $postfix_gid = 89
       $postfix_shell = '/sbin/nologin'
       $postdrop_gid = 90
+
+      $login_defs_template = $osmaj ? {
+        '8'     => 'lsys/shadow_utils/login.defs.RL8.erb',
+        '9'     => 'lsys/shadow_utils/login.defs.RL9.erb',
+        default => 'lsys/shadow_utils/login.defs.erb',
+      }
 
       $cron_package_name = $osmaj ? {
         '5'     => 'vixie-cron',

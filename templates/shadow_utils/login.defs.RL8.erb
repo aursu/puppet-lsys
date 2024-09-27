@@ -15,6 +15,20 @@
 MAIL_DIR	/var/spool/mail
 #MAIL_FILE	.mail
 
+# Default initial "umask" value used by login(1) on non-PAM enabled systems.
+# Default "umask" value for pam_umask(8) on PAM enabled systems.
+# UMASK is also used by useradd(8) and newusers(8) to set the mode for new
+# home directories if HOME_MODE is not set.
+# 022 is the default value, but 027, or even 077, could be considered
+# for increased privacy. There is no One True Answer here: each sysadmin
+# must make up their mind.
+UMASK		<%= @umask %>
+
+# HOME_MODE is used by useradd(8) and newusers(8) to set the mode for new
+# home directories.
+# If HOME_MODE is not set, the value of UMASK is used to create the mode.
+HOME_MODE	0700
+
 # Password aging controls:
 #
 #	PASS_MAX_DAYS	Maximum number of days a password may be used.
@@ -22,32 +36,28 @@ MAIL_DIR	/var/spool/mail
 #	PASS_MIN_LEN	Minimum acceptable password length.
 #	PASS_WARN_AGE	Number of days warning given before a password expires.
 #
-PASS_MAX_DAYS <%= @pass_max_days %>
-PASS_MIN_DAYS <%= @pass_min_days %>
-PASS_MIN_LEN <%= @pass_min_len %>
-PASS_WARN_AGE <%= @pass_warn_age %>
+PASS_MAX_DAYS	<%= @pass_max_days %>
+PASS_MIN_DAYS	<%= @pass_min_days %>
+PASS_MIN_LEN	<%= @pass_min_len %>
+PASS_WARN_AGE	<%= @pass_warn_age %>
 
 #
 # Min/max values for automatic uid selection in useradd
 #
-UID_MIN <%= @uid_min %>
+UID_MIN                  <%= @uid_min %>
 UID_MAX                 60000
-<% if @system_accounts -%>
 # System accounts
 SYS_UID_MIN               201
 SYS_UID_MAX               999
-<% end -%>
 
 #
 # Min/max values for automatic gid selection in groupadd
 #
-GID_MIN <%= @gid_min %>
+GID_MIN                  <%= @gid_min %>
 GID_MAX                 60000
-<% if @system_accounts -%>
 # System accounts
 SYS_GID_MIN               201
 SYS_GID_MAX               999
-<% end -%>
 
 #
 # If defined, this command is run when removing a user.
@@ -63,13 +73,25 @@ SYS_GID_MAX               999
 #
 CREATE_HOME	yes
 
-# The permission mask is initialized to this value. If not specified,
-# the permission mask will be initialized to 022.
-UMASK           <%= @umask %>
-
 # This enables userdel to remove user groups if no members exist.
 #
 USERGROUPS_ENAB yes
 
-# Use SHA512 to encrypt password.
+#
+# If set to SHA256, SHA256-based algorithm will be used for encrypting password
+# If set to SHA512, SHA512-based algorithm will be used for encrypting password
+# If set to BCRYPT, BCRYPT-based algorithm will be used for encrypting password
+#
 ENCRYPT_METHOD SHA512
+
+#
+# Only works if ENCRYPT_METHOD is set to SHA256 or SHA512.
+#
+# Define the number of SHA rounds.
+# With a lot of rounds, it is more difficult to brute-force the password.
+# However, more CPU resources will be needed to authenticate users if
+# this value is increased.
+#
+# The values must be within the 1000-999999999 range.
+#
+SHA_CRYPT_MAX_ROUNDS 5000
