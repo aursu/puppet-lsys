@@ -38,7 +38,7 @@ fixtures:
       ref: 0.6.2
     dockerinstall:
       repo: aursu/dockerinstall
-      ref: 0.13.5
+      ref: 0.20.0
     graylog:
       repo: graylog/graylog
       ref: 2.0.0

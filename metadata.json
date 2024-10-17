@@ -30,7 +30,7 @@
     },
     {
       "name": "aursu/dockerinstall",
-      "version_requirement": ">= 0.4.1 < 1.0.0"
+      "version_requirement": ">= 0.20.0 < 1.0.0"
     },
     {
       "name": "aursu/grayloginstall",
