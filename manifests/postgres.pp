@@ -23,44 +23,47 @@ class lsys::postgres (
   Variant[Integer, Pattern[/^[0-9]+$/]] $database_port = 5432,
   Optional[Integer[0,1]] $repo_sslverify = undef,
 ) inherits lsys::params {
+  include bsys::params
   include lsys::repo
 
-  $version_data = split($package_version, '[.]')
-  $major_version = $version_data[0]
-  $minor_version = $version_data[1]
+  if $package_version {
+    $version_data = split($package_version, '[.]')
+    $major_version = $version_data[0]
+    $minor_version = $version_data[1]
 
-  $repo_version = $major_version ? {
-    '9' => $minor_version ? {
-      default => "9.${minor_version}",
-    },
-    default => $major_version,
+    $repo_version = $major_version ? {
+      '9' => $minor_version ? {
+        default => "9.${minor_version}",
+      },
+      default => $major_version,
+    }
+  }
+  else {
+    $repo_version = undef
   }
 
   # we can not use maintainer's repo on CentOS 8+ due to issue:
   # All matches were filtered out by modular filtering for argument
   # Therefore we use postgresql:12 dnf module stream
-  $_manage_dnf_module = $facts['os']['name'] ? {
-    'CentOS' => $facts['os']['release']['major'] ? {
-      '6'     => false,
-      '7'     => false,
-      default => true,
-    },
-    'Rocky' => true,
-    # only CentOS and Rocky supported
+  $_manage_dnf_module = $bsys::params::osfam ? {
+    'RedHat' => $bsys::params::manage_dnf_module,
     default => false,
   }
 
-  if $manage_dnf_module and $_manage_dnf_module {
+  # if DNF system and we want to manage DNF module it and it is manageable
+  if $_manage_dnf_module and $manage_dnf_module {
     class { 'postgresql::globals':
       manage_package_repo => $manage_package_repo,
-      manage_dnf_module   => $_manage_dnf_module,
+      manage_dnf_module   => true,
       version             => $repo_version,
+      service_provider    => 'systemd',
     }
   }
   else {
     class { 'postgresql::globals':
       manage_package_repo => $manage_package_repo,
       version             => $repo_version,
+      service_provider    => 'systemd',
     }
   }
 
