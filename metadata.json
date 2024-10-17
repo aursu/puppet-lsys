@@ -66,7 +66,7 @@
     },
     {
       "name": "puppet/postfix",
-      "version_requirement": ">= 1.10.0 < 5.0.0"
+      "version_requirement": ">= 5.0.0 < 6.0.0"
     },
     {
       "name": "puppetlabs/postgresql",
@@ -74,11 +74,11 @@
     },
     {
       "name": "aursu/puppet",
-      "version_requirement": ">= 0.7.1 < 1.0.0"
+      "version_requirement": ">= 0.23.2 < 1.0.0"
     },
     {
       "name": "puppetlabs/puppetdb",
-      "version_requirement": ">= 7.5.0 < 8.0.0"
+      "version_requirement": ">= 8.1.0 < 9.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -94,7 +94,7 @@
     },
     {
       "name": "aursu/bsys",
-      "version_requirement": ">= 0.6.0 < 1.0.0"
+      "version_requirement": ">= 0.8.0 < 1.0.0"
     }
   ],
   "operatingsystem_support": [
