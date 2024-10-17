@@ -1,6 +1,10 @@
 ---
-name: postgres_bootstrap
+name: lsys_tests
 analytics: false
 modules:
 - git: https://github.com/aursu/puppet-lsys.git
-  ref: v0.51.0
+  ref: 'master'
+- name: puppetlabs-concat
+  version_requirement: "=9.0.2"
+- name: puppet-nodejs
+  version_requirement: "=11.0.0"
