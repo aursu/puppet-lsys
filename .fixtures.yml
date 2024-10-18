@@ -44,7 +44,7 @@ fixtures:
       ref: 2.0.0
     grayloginstall:
       repo: aursu/grayloginstall
-      ref: 0.2.2
+      ref: 0.2.3
     host_core:
       repo: puppetlabs/host_core
       puppet_version: ">= 6.0.0"
