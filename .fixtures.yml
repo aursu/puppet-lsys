@@ -14,7 +14,7 @@ fixtures:
       ref: 11.1.0
     archive:
       repo: puppet/archive
-      ref: 7.0.0
+      ref: 7.1.0
     augeas_core:
       repo: puppetlabs/augeas_core
       puppet_version: ">= 6.0.0"
@@ -26,10 +26,10 @@ fixtures:
       ref: 3.0.0
     concat:
       repo: puppetlabs/concat
-      ref: 9.0.0
+      ref: 9.0.2
     cron:
       repo: puppet/cron
-      ref: 4.1.0
+      ref: 4.2.0
     cron_core:
       repo: puppetlabs/cron_core
       puppet_version: ">= 6.0.0"
@@ -50,19 +50,16 @@ fixtures:
       puppet_version: ">= 6.0.0"
     inifile:
       repo: puppetlabs/inifile
-      ref: 6.1.0
-    java:
-      repo: puppetlabs/java
-      ref: 10.1.2
+      ref: 6.1.1
     logrotate:
       repo: puppet/logrotate
-      ref: 7.0.0
+      ref: 7.1.0
     mongodb:
       repo: puppet/mongodb
       ref: 6.0.1
     monit:
       repo: aursu/monit
-      ref: 3.1.0
+      ref: 3.1.1
     mount_core:
       repo: puppetlabs/mount_core
       puppet_version: ">= 6.0.0"
@@ -74,7 +71,7 @@ fixtures:
       ref: 4.4.2
     nodejs:
       repo: puppet/nodejs
-      ref: 9.0.1
+      ref: 11.0.0
     ntp:
       repo: puppetlabs/ntp
       ref: 10.1.0
@@ -101,13 +98,13 @@ fixtures:
       puppet_version: ">= 6.0.0"
     stdlib:
       repo: puppetlabs/stdlib
-      ref: 9.3.0
+      ref: 9.6.0
     sysctl:
       repo: thias/sysctl
       ref: 1.0.7
     systemd:
       repo: puppet/systemd
-      ref: 6.0.0
+      ref: 6.6.0
     tlsinfo:
       repo: aursu/tlsinfo
       ref: 0.3.7
