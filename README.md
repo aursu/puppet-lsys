@@ -15,7 +15,7 @@ include lsys::httpd
 
 ## Yum cache cleanup
 
-Via notify event send to Calss['lsys::repo']
+Via notify event send to Class['lsys::repo']
 
 ```
   package { 'epel-release':
