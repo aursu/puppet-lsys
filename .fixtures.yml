@@ -44,7 +44,7 @@ fixtures:
       ref: 2.0.0
     grayloginstall:
       repo: aursu/grayloginstall
-      ref: 0.2.1
+      ref: 0.2.2
     host_core:
       repo: puppetlabs/host_core
       puppet_version: ">= 6.0.0"
@@ -57,6 +57,9 @@ fixtures:
     logrotate:
       repo: puppet/logrotate
       ref: 7.0.0
+    mongodb:
+      repo: puppet/mongodb
+      ref: 6.0.1
     monit:
       repo: aursu/monit
       ref: 3.1.0
@@ -112,9 +115,6 @@ fixtures:
       repo: puppetlabs/yumrepo_core
       puppet_version: ">= 6.0.0"
   repositories:
-    mongodb:
-      repo: https://github.com/aursu/puppet-mongodb.git
-      ref: tags/v4.2.1
     networksetup:
       repo: https://github.com/aursu/puppet-networksetup.git
       ref: tags/v1.5.2
