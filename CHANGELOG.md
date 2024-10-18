@@ -808,12 +808,14 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.51.0
+## Release 0.51.3
 
 **Features**
 
 * Added login.defs templates for Rocky Linux 8 and 9
 
 **Bugfixes**
+
+* Fixed bolt project
 
 **Known Issues**

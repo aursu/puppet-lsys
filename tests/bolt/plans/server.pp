@@ -1,4 +1,4 @@
-plan postgres_bootstrap::server (
+plan lsys_tests::server (
   TargetSpec $targets = 'puppetservers',
 ) {
   run_task(bsys::install_yum, $targets)

@@ -3,3 +3,53 @@
 
 # The following directive installs modules to the managed moduledir.
 moduledir '.modules'
+
+# This Puppetfile is managed by Bolt. Do not edit.
+# For more information, see https://pup.pt/bolt-modules
+
+# The following directive installs modules to the managed moduledir.
+moduledir '.modules'
+
+mod 'puppet/systemd', '6.6.0'
+mod 'puppet/nodejs', '11.0.0'
+mod 'puppetlabs/concat', '9.0.2'
+mod 'lsys',
+  git: 'https://github.com/aursu/puppet-lsys.git',
+  ref: '56a93194712c97e728cbbe58f5b65c2348bd1f12'
+mod 'puppetlabs/stdlib', '9.6.0'
+mod 'puppetlabs/inifile', '6.1.1'
+mod 'puppetlabs/apache', '11.1.0'
+mod 'puppet/archive', '7.1.0'
+mod 'puppet/chrony', '3.0.0'
+mod 'puppet/cron', '4.2.0'
+mod 'aursu/dockerinstall', '0.20.1'
+mod 'aursu/grayloginstall', '0.2.3'
+mod 'puppet/logrotate', '7.1.0'
+mod 'aursu/monit', '3.1.1'
+mod 'puppetlabs/mysql', '15.0.0'
+mod 'aursu/nginx', '4.4.2'
+mod 'puppetlabs/ntp', '10.1.0'
+mod 'puppet/postfix', '5.0.0'
+mod 'puppetlabs/postgresql', '10.3.0'
+mod 'aursu/puppet', '0.22.5'
+mod 'puppetlabs/puppetdb', '8.1.0'
+mod 'thias/sysctl', '1.0.7'
+mod 'aursu/networksetup', '1.6.0'
+mod 'aursu/bsys', '0.9.0'
+mod 'aursu/lsys_nginx', '0.47.0'
+mod 'aursu/tlsinfo', '0.8.0'
+mod 'puppet/selinux', '4.1.0'
+mod 'puppetlabs/apt', '9.4.0'
+mod 'puppetlabs/puppet_agent', '4.21.0'
+mod 'puppet/mongodb', '6.0.1'
+mod 'aursu/graylog', '2.0.1'
+mod 'puppetlabs/firewall', '8.1.0'
+mod 'puppet/alternatives', '6.0.0'
+mod 'puppetlabs/mailalias_core', '1.2.0'
+mod 'puppet/r10k', '12.2.0'
+mod 'aursu/lsys_postgresql', '0.50.5'
+mod 'aursu/openssh', '0.9.5'
+mod 'puppetlabs/facts', '1.6.0'
+mod 'puppet/zypprepo', '5.0.0'
+mod 'puppetlabs/vcsrepo', '6.1.0'
+mod 'choria/mcollective', '0.14.6'
