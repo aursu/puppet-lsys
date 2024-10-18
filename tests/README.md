@@ -12,6 +12,18 @@ systemctl start sshd
 bolt plan run lsys_tests::server -t puppetservers
 ```
 
+### Run the service
+
+```
+docker compose run -v $(pwd)/tmp:/root/tmp -d rocky9puppet8bolt
+```
+
+### Enter into the container shell session
+
+```
+docker compose exec -ti  rocky9puppet8bolt /bin/bash
+```
+
 ### look for changed files
 
 ```
