@@ -41,4 +41,4 @@ COPY . /root/puppet/lsys
 WORKDIR /root/puppet/lsys/tests/bolt
 
 # Setup Puppet Bolt modules
-# RUN bolt module install --force
+RUN bolt module install --force
