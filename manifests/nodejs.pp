@@ -13,7 +13,7 @@ class lsys::nodejs (
   # 18.x - EOL 2025-04-30
   # 19.x - EOL 2023-06-01
   # 20.x - EOL 2026-04-30
-  Enum['14.x', '15.x', '16.x', '18.x', '19.x', '20.x'] $release = '18.x',
+  Enum['18.x', '20.x'] $release = '18.x',
 ) {
   class { 'nodejs':
     repo_url_suffix => $release,
