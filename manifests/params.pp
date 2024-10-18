@@ -92,7 +92,7 @@ class lsys::params {
     'CentOS', 'Rocky': {
       $nginx_version = $osmaj ? {
         '6'     => '1.19.5-1.el6.ngx',
-        default => "1.23.1-1.el${osmaj}.ngx",
+        default => "1.27.0-2.el${osmaj}.ngx",
       }
 
       $syslog_default = '/var/log/messages'
@@ -150,7 +150,7 @@ class lsys::params {
           }
         }
         else {
-          $centos_stream = $facts['os']['release']['full'] ? {
+          $centos_stream = $osmaj ? {
             # for CentOS Stream 8 it is just '8' but for CentOS Linux 8 it is 8.x.x
             '8'     => true,
             '9'     => true,
@@ -176,26 +176,20 @@ class lsys::params {
       }
 
       if $osname == 'CentOS' and $centos_stream {
-        $postgres_version = $osmaj ? {
-          '8'     => '15.0',
-          default => '15.2',
-        }
+        $postgres_version = '16.4'
         $postgres_manage_repo = false
       }
       elsif $osname == 'Rocky' {
-        $postgres_version = $osmaj ? {
-          '8'     => '15.2',
-          default => '15.3',
-        }
+        $postgres_version = '16.4'
         $postgres_manage_repo = false
       }
       else {
-        $postgres_version = '15.4'
+        $postgres_version = '15.8'
         $postgres_manage_repo = true
       }
 
-      if $osname == 'Rocky' and $osmaj == '8' {
-        $postfix_master_os_template = 'lsys/postfix/master.cf.rocky-8.erb'
+      if $osname == 'Rocky' and $osmaj in ['8', '9'] {
+        $postfix_master_os_template = 'lsys/postfix/master.cf.rocky.erb'
       }
       else {
         $postfix_master_os_template = undef
@@ -209,7 +203,7 @@ class lsys::params {
   $nginx_map_dir         = "${nginx_conf_dir}/conf.d/mapping"
 
   # monit
-  $monit_version     = '5.33.0'
+  $monit_version     = '5.34.2'
   $monit_binary_path = '/usr/local/bin/monit'
   $monit_config_dir  = '/etc/monit.d'
   $monit_config_file = '/etc/monitrc'
