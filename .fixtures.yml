@@ -83,7 +83,7 @@ fixtures:
       ref: 10.3.0
     puppet:
       repo: aursu/puppet
-      ref: 0.7.1
+      ref: 0.22.5
     puppetdb:
       repo: puppetlabs/puppetdb
       ref: 7.13.0
