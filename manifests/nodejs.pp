@@ -15,9 +15,11 @@ class lsys::nodejs (
   # 20.x - EOL 2026-04-30
   Enum['18.x', '20.x'] $release = '18.x',
 ) {
+  $version_data = split($release, '[.]')
+  $repo_version = $version_data[0]
+
   class { 'nodejs':
-    repo_url_suffix => $release,
-    repo_enable_src => false,
+    repo_version => $repo_version,
   }
 
   file { '/etc/yum.repos.d/nodesource.repo':
