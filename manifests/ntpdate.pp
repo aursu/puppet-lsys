@@ -11,8 +11,7 @@ class lsys::ntpdate (
   Boolean $enable_hardening = false,
 ) {
   $os_release_major = $facts['os']['release']['major']
-  if ($facts['os']['family'] == 'RedHat' and $os_release_major == '7')
-  or $facts['os']['name'] == 'Ubuntu' {
+  if ($facts['os']['family'] == 'RedHat' and $os_release_major == '7') {
     package { 'ntpdate':
       ensure => $package_ensure,
     }
