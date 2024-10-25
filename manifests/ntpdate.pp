@@ -10,6 +10,9 @@ class lsys::ntpdate (
   Boolean $sync_hwclock     = false,
   Boolean $enable_hardening = false,
 ) {
+  # RedHat 8+
+  # https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/system_administrators_guide/ch-configuring_ntp_using_the_chrony_suite#sect-Understanding_the_chrony_configuration_commands
+  #
   $os_release_major = $facts['os']['release']['major']
   if ($facts['os']['family'] == 'RedHat' and $os_release_major == '7') {
     package { 'ntpdate':
