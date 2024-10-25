@@ -20,7 +20,7 @@ fixtures:
       puppet_version: ">= 6.0.0"
     bsys:
       repo: aursu/bsys
-      ref: 0.8.0
+      ref: 0.10.0
     chrony:
       repo: puppet/chrony
       ref: 3.0.0

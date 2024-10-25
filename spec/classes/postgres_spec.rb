@@ -25,13 +25,13 @@ describe 'lsys::postgres' do
 
         it {
           is_expected.to contain_package('postgresql-server')
-            .with_ensure('15.4')
+            .with_ensure('15.8')
             .with_name('postgresql15-server')
         }
       when %r{^rocky}
         it {
           is_expected.to contain_package('postgresql-server')
-            .with_ensure('15.2')
+            .with_ensure('16.4')
             .with_name('postgresql-server')
         }
       else
