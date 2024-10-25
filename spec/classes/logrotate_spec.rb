@@ -15,12 +15,25 @@ describe 'lsys::logrotate' do
           .with_mode('0755')
       }
 
-      it {
-        is_expected.to contain_file('/etc/cron.hourly/logrotate')
-          .with_ensure('present')
-          .with_mode('0700')
-          .with_content(%r{OUTPUT=\$\(/usr/sbin/logrotate /etc/logrotate.d/hourly 2>&1\)})
-      }
+      case os
+      when 'rocky-9-x86_64'
+        it {
+          is_expected.to contain_file('/etc/cron.hourly/logrotate')
+            .with_ensure('absent')
+        }
+
+        it {
+          is_expected.to contain_file('/etc/systemd/system/logrotate-hourly.timer.d/hourly-timer.conf')
+            .with_content(%r{OnCalendar=hourly})
+        }
+      else
+        it {
+          is_expected.to contain_file('/etc/cron.hourly/logrotate')
+            .with_ensure('present')
+            .with_mode('0700')
+            .with_content(%r{OUTPUT=\$\(/usr/sbin/logrotate /etc/logrotate.d/hourly 2>&1\)})
+        }
+      end
 
       case os
       when %r{^centos-}, %r{^rocky-}

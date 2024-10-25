@@ -1,3 +1,4 @@
 ---
 ignore:
-- tests/bolt/plans/server.pp
+- tests/bolt/plans/logrotate.pp
+- tests/bolt/plans/postfix.pp
