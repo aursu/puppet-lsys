@@ -25,13 +25,17 @@ class lsys::hardening::shadow_utils (
   Integer $gid_min = $lsys::hardening::params::gid_min,
   Boolean $system_accounts = $lsys::hardening::params::system_accounts,
   Boolean $enable_hardening = false,
-  String $login_defs_template = $lsys::params::login_defs_template,
+  String $login_defs_template = $lsys::hardening::params::login_defs_template,
 ) inherits lsys::hardening::params {
-  file { '/etc/login.defs':
-    content => template($login_defs_template),
-    group   => 'root',
-    mode    => '0600',
-    owner   => 'root',
+  class { 'bsys::hardening::shadow_utils':
+    umask               => $umask,
+    pass_max_days       => $pass_max_days,
+    pass_min_days       => $pass_min_days,
+    pass_min_len        => $pass_min_len,
+    pass_warn_age       => $pass_warn_age,
+    uid_min             => $uid_min,
+    gid_min             => $gid_min,
+    login_defs_template => $login_defs_template,
   }
 
   if $enable_hardening {

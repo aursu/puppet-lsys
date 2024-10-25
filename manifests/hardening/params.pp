@@ -5,7 +5,9 @@
 #
 # @example
 #   include lsys::hardening::params
-class lsys::hardening::params {
+class lsys::hardening::params inherits lsys::params {
+  include bsys::hardening::params
+
   case $facts['os']['release']['major'] {
     '6': {
       $uid_min = 500
@@ -13,9 +15,11 @@ class lsys::hardening::params {
       $system_accounts = false
     }
     default:  {
-      $uid_min = 1000
-      $gid_min = 1000
+      $uid_min = $bsys::hardening::params::uid_min
+      $gid_min = $bsys::hardening::params::uid_min
       $system_accounts = true
     }
   }
+
+  $login_defs_template = $bsys::hardening::params::login_defs_template
 }
