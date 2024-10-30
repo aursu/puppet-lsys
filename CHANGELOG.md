@@ -808,11 +808,12 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.51.3
+## Release 0.51.4
 
 **Features**
 
 * Added login.defs templates for Rocky Linux 8 and 9
+* Added some Ubuntu 24.04 settings
 
 **Bugfixes**
 

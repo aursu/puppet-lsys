@@ -22,7 +22,10 @@ class lsys::params {
     'Ubuntu': {
       $oscode = $facts['os']['distro']['codename']
 
-      $nginx_version = "1.23.1-1~${oscode}"
+      $nginx_version = $oscode? {
+        'noble' => '1.27.2-1~noble',
+        default => "1.23.1-1~${oscode}",
+      }
 
       $syslog_default = '/var/log/syslog'
       $logrotate_syslog_name = 'rsyslog'
