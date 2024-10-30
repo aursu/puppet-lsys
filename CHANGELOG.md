@@ -818,5 +818,6 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 * Fixed bolt project
+* Removed outdated graylog class
 
 **Known Issues**
