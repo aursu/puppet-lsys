@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.51.3",
+  "version": "0.51.4",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -31,10 +31,6 @@
     {
       "name": "aursu/dockerinstall",
       "version_requirement": ">= 0.20.1 < 1.0.0"
-    },
-    {
-      "name": "aursu/grayloginstall",
-      "version_requirement": ">= 0.2.3 < 1.0.0"
     },
     {
       "name": "puppetlabs/inifile",
@@ -114,7 +110,8 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "20.04"
+        "22.04",
+        "24.04"
       ]
     }
   ],
