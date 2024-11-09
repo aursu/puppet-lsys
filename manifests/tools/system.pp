@@ -11,6 +11,7 @@ class lsys::tools::system (
   Bsys::PackageVersion $which_ensure = false,
   Bsys::PackageVersion $quota_ensure = false,
   Bsys::PackageVersion $util_linux_ensure = true,
+  Bsys::PackageVersion $chkconfig_ensure = false,
   String $quota_owner = 'root',
   String $quota_group = 'root',
 ) {
@@ -28,6 +29,9 @@ class lsys::tools::system (
 
   # The util-linux package contains a large variety of low-level system utilities
   bsys::tools::package { 'util-linux': ensure => $util_linux_ensure }
+
+  # Chkconfig is a basic system utility. It updates and queries runlevel information for system services
+  bsys::tools::package { 'chkconfig': ensure => $chkconfig_ensure }
 
   if $enable_hardening {
     file {
