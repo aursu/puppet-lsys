@@ -61,7 +61,7 @@ class lsys::puppet (
   Boolean $sameca = false,
   Boolean $use_puppetdb = true,
   Boolean $puppetdb_local = true,
-  Boolean $postgres_local = true,
+  Boolean $postgres_local = $puppetdb_local,
   Boolean $manage_database = $postgres_local,
   Stdlib::Host $server = 'puppet',
   Stdlib::Host $puppetdb_server = 'puppet',
