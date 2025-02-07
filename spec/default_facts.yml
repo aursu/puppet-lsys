@@ -8,6 +8,5 @@ networking:
   ip6: "FE80:0000:0000:0000:AAAA:AAAA:AAAA"
   mac: "AA:AA:AA:AA:AA:AA"
 is_pe: false
-macaddress: "AA:AA:AA:AA:AA:AA"
 
 service_provider: systemd

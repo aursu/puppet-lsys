@@ -822,3 +822,15 @@ All notable changes to this project will be documented in this file.
 * Removed outdated graylog class
 
 **Known Issues**
+
+## Release 0.52.0
+
+**Features**
+
+* PDK upgrade to 3.3.0
+
+**Bugfixes**
+
+* Removed monit support
+
+**Known Issues**

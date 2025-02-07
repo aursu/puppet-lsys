@@ -5,7 +5,7 @@ fixtures:
   forge_modules:
     apt:
       repo: puppetlabs/apt
-      ref: 9.1.0
+      ref: 10.0.1
     alternatives:
       repo: puppet/alternatives
       ref: 5.0.0
@@ -74,7 +74,7 @@ fixtures:
       ref: 5.0.0
     postgresql:
       repo: puppetlabs/postgresql
-      ref: 10.3.0
+      ref: 10.5.0
     puppet:
       repo: aursu/puppet
       ref: 0.22.5
