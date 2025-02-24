@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.51.5",
+  "version": "0.52.0",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -8,6 +8,10 @@
   "project_page": "https://github.com/aursu/puppet-lsys",
   "issues_url": "https://github.com/aursu/puppet-lsys/issues",
   "dependencies": [
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 10.0.1 < 11.0.0"
+    },
     {
       "name": "puppetlabs/apache",
       "version_requirement": ">= 11.1.0 < 13.0.0"
@@ -66,7 +70,7 @@
     },
     {
       "name": "puppetlabs/postgresql",
-      "version_requirement": ">= 10.0.0 < 11.0.0"
+      "version_requirement": ">= 10.5.0 < 11.0.0"
     },
     {
       "name": "aursu/puppet",
@@ -121,7 +125,7 @@
       "version_requirement": ">= 5.5.20 < 9.0.0"
     }
   ],
-  "pdk-version": "3.0.0",
+  "pdk-version": "3.3.0",
   "template-url": "https://github.com/puppetlabs/pdk-templates#main",
-  "template-ref": "heads/main-0-g017b84e"
+  "template-ref": "tags/3.4.0.2-0-gd5f5ac1"
 }
