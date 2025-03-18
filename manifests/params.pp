@@ -23,8 +23,8 @@ class lsys::params {
       $oscode = $facts['os']['distro']['codename']
 
       $nginx_version = $oscode? {
-        'noble' => '1.27.2-1~noble',
-        default => "1.23.1-1~${oscode}",
+        'noble' => '1.27.4-1~noble',
+        default => "1.27.4-1~${oscode}",
       }
 
       $syslog_default = '/var/log/syslog'

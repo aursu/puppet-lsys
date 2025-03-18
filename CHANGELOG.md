@@ -823,7 +823,7 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.52.0
+## Release 0.53.0
 
 **Features**
 
@@ -832,5 +832,6 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 * Removed monit support
+* Moved MySQL settings into separate module
 
 **Known Issues**
