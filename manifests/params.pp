@@ -95,7 +95,8 @@ class lsys::params {
     'CentOS', 'Rocky': {
       $nginx_version = $osmaj ? {
         '6'     => '1.19.5-1.el6.ngx',
-        default => "1.27.0-2.el${osmaj}.ngx",
+        '7'     => '1.27.0-2.el7.ngx',
+        default => "1.27.4-1.el${osmaj}.ngx",
       }
 
       $syslog_default = '/var/log/messages'
