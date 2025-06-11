@@ -1,8 +1,13 @@
 # @summary Deploys a secure Docker Registry with an Nginx reverse proxy.
 #
 # This class provides a high-level interface to deploy a complete Docker
-# Registry stack. It acts as a wrapper, composing the `dockerinstall` module's
+# Registry stack. It acts as a wrapper that composes the `dockerinstall` module's
 # profile and base classes to handle the underlying complexity.
+#
+# This profile unconditionally enables Docker token authentication in GitLab mode.
+# It assumes the GitLab instance providing authentication is on the same host as
+# the registry, and therefore disables the import of certificates and token maps
+# from PuppetDB.
 #
 # It orchestrates the deployment of:
 #   - The Docker Registry container itself, managed by `dockerinstall::registry::base`.
@@ -13,6 +18,8 @@
 # high-level parameters, such as the server name and certificate details.
 #
 # @example Basic usage with Hiera-based certificate lookup
+#   # This will deploy a registry named 'registry.example.com' with token auth
+#   # enabled, pointing to a GitLab instance on the same host.
 #   class { 'lsys::registry':
 #     server_name   => 'registry.example.com',
 #     cert_identity => 'wildcard.example.com', # Optional: use a different key for Hiera
@@ -27,7 +34,7 @@
 #
 # @param server_name
 #   The FQDN of the registry server. This is used as the `server_name` in the
-#   Nginx configuration.
+#   Nginx configuration and as the `realm_host` for token authentication.
 # @param docker_image
 #   The Docker image and tag to use for the registry container.
 # @param manage_nginx_core
