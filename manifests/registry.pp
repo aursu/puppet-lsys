@@ -25,16 +25,37 @@
 #     ssl_key     => "-----BEGIN PRIVATE KEY-----\n...",
 #   }
 #
-# @param server_name The FQDN of the registry server. This is used as the `server_name` in the Nginx configuration.
-# @param docker_image The Docker image and tag to use for the registry container.
-# @param manage_nginx_core Toggles whether the underlying `lsys_nginx` module should manage the core Nginx package and service, or just add the registry vhost configuration.
-# @param manage_cert_data Toggles whether the underlying profile should manage the SSL certificate and key files via the `tlsinfo::certpair` type.
-# @param cert_identity The identity (Common Name) to use for looking up the server's SSL certificate in Hiera. This parameter is only used if `$ssl_cert` and `$ssl_key` are not provided directly. If this parameter is also `undef`, the profile defaults to using the `$server_name`.
-# @param ssl_client_ca_auth Toggles mutual TLS (mTLS), enabling or disabling client certificate authentication in the Nginx reverse proxy.
-# @param ssl_client_ca_certs An array of FQDNs or names used to look up CA certificates from Hiera. These are used to build the trust chain for client certificate authentication. If not provided, it defaults to using the Puppet CA.
-# @param accesslog_disabled Toggles the access log within the Docker Registry container itself.
-# @param ssl_cert Allows providing the server's SSL certificate PEM data directly, bypassing Hiera lookup. Both `$ssl_cert` and `$ssl_key` must be provided together.
-# @param ssl_key Allows providing the server's SSL private key PEM data directly, bypassing Hiera lookup. Both `$ssl_cert` and `$ssl_key` must be provided together.
+# @param server_name
+#   The FQDN of the registry server. This is used as the `server_name` in the
+#   Nginx configuration.
+# @param docker_image
+#   The Docker image and tag to use for the registry container.
+# @param manage_nginx_core
+#   Toggles whether the underlying `lsys_nginx` module should manage the core
+#   Nginx package and service, or just add the registry vhost configuration.
+# @param manage_cert_data
+#   Toggles whether the underlying profile should manage the SSL certificate and
+#   key files via the `tlsinfo::certpair` type.
+# @param cert_identity
+#   The identity (Common Name) to use for looking up the server's SSL
+#   certificate in Hiera. This parameter is only used if `$ssl_cert` and
+#   `$ssl_key` are not provided directly. If this parameter is also `undef`, the
+#   profile defaults to using the `$server_name`.
+# @param ssl_client_ca_auth
+#   Toggles mutual TLS (mTLS), enabling or disabling client certificate
+#   authentication in the Nginx reverse proxy.
+# @param ssl_client_ca_certs
+#   An array of FQDNs or names used to look up CA certificates from Hiera.
+#   These are used to build the trust chain for client certificate
+#   authentication. If not provided, it defaults to using the Puppet CA.
+# @param accesslog_disabled
+#   Toggles the access log within the Docker Registry container itself.
+# @param ssl_cert
+#   Allows providing the server's SSL certificate PEM data directly, bypassing
+#   Hiera lookup. Both `$ssl_cert` and `$ssl_key` must be provided together.
+# @param ssl_key
+#   Allows providing the server's SSL private key PEM data directly, bypassing
+#   Hiera lookup. Both `$ssl_cert` and `$ssl_key` must be provided together.
 class lsys::registry (
   String  $server_name,
   String  $docker_image       = 'registry:3.0.0',
