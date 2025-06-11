@@ -7,7 +7,7 @@
 # It can be configured via the `$auth_token_enable` parameter to activate a
 # pre-defined token authentication setup. When enabled, it assumes the registry
 # is integrated with a GitLab instance running on the same host.
-
+#
 # It orchestrates the deployment of:
 #   - The Docker Registry container itself, managed by `dockerinstall::registry::base`.
 #   - A secure Nginx reverse proxy, configured by `dockerinstall::profile::registry`.
@@ -16,23 +16,20 @@
 # By using this class, you can deploy the entire stack by providing a few
 # high-level parameters, such as the server name and certificate details.
 #
-#
 # @example Basic usage without token authentication with Hiera-based certificate lookup
-#   # This will deploy a registry named 'registry.example.com' with token auth
-#   # enabled, pointing to a GitLab instance on the same host.
-#   class { 'lsys::registry':
+#   class { 'lsys::gitlab::registry':
 #     server_name   => 'registry.example.com',
 #     cert_identity => 'wildcard.example.com', # Optional: use a different key for Hiera
 #   }
 #
 # @example Enabling the pre-defined GitLab token authentication
-#   class { 'lsys::registry':
+#   class { 'lsys::gitlab::registry':
 #     server_name       => 'registry.example.com',
 #     auth_token_enable => true,
 #   }
 #
 # @example Providing certificate data directly
-#   class { 'lsys::registry':
+#   class { 'lsys::gitlab::registry':
 #     server_name => 'registry.example.com',
 #     ssl_cert    => "-----BEGIN CERTIFICATE-----\n...",
 #     ssl_key     => "-----BEGIN PRIVATE KEY-----\n...",
@@ -72,7 +69,7 @@
 # @param auth_token_enable
 #   If `true`, enables a pre-defined token authentication configuration that
 #   assumes a co-located GitLab instance is providing authentication.
-class lsys::registry (
+class lsys::gitlab::registry (
   String  $server_name,
   String  $docker_image       = 'registry:3.0.0',
   Boolean $manage_nginx_core  = true,
