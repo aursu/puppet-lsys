@@ -72,6 +72,19 @@ class lsys::registry (
   Optional[String] $ssl_cert  = undef,
   Optional[String] $ssl_key   = undef,
 ) {
+  # activate token auth on registry side
+  class { 'dockerinstall::registry::auth_token':
+    enable               => true,
+    gitlab               => true,
+    realm_host           => $server_name,
+
+    # do not import token certificate from PuppetDB - registry and GitLab are on the same host
+    registry_cert_export => false,
+
+    # do not import tokens map from PuppetDB - registry and GitLab are on the same host
+    token_map_export     => false,
+  }
+
   class { 'dockerinstall::registry::base':
     accesslog_disabled => $accesslog_disabled,
     docker_image       => $docker_image,
