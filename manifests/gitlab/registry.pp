@@ -49,8 +49,8 @@
 # @param cert_identity
 #   The identity (Common Name) to use for looking up the server's SSL
 #   certificate in Hiera. This parameter is only used if `$ssl_cert` and
-#   `$ssl_key` are not provided directly. If this parameter is also `undef`, the
-#   profile defaults to using the `$server_name`.
+#   `$ssl_key` are not provided directly. If this parameter is also `undef`,
+#   the profile defaults to using the `$server_name`.
 # @param ssl_client_ca_auth
 #   Toggles mutual TLS (mTLS), enabling or disabling client certificate
 #   authentication in the Nginx reverse proxy.
@@ -69,6 +69,16 @@
 # @param auth_token_enable
 #   If `true`, enables a pre-defined token authentication configuration that
 #   assumes a co-located GitLab instance is providing authentication.
+# @param auth_token_realm_host
+#   The FQDN of the GitLab server providing authentication. If not provided,
+#   this defaults to the value of `$server_name`.
+# @param auth_token_cert_export
+#   Toggles the collection of the token certificate from PuppetDB via exported
+#   resources. Should be `false` if GitLab and the registry are on the same host.
+# @param auth_token_map_export
+#   Toggles the collection of the token map from PuppetDB via exported resources.
+#   Should be `false` if GitLab and the registry are on the same host.
+#
 class lsys::gitlab::registry (
   String  $server_name,
   String  $docker_image       = 'registry:3.0.0',
@@ -86,20 +96,24 @@ class lsys::gitlab::registry (
   Optional[String] $ssl_key   = undef,
 
   # Token Authentication
-  Boolean $auth_token_enable  = false,
+  Boolean $auth_token_enable      = false,
+  Optional[Stdlib::Fqdn]
+  $auth_token_realm_host          = undef,
+  Boolean $auth_token_cert_export = true,
+  Boolean $auth_token_map_export  = true,
 ) {
   if $auth_token_enable {
     # activate token auth on registry side
     class { 'dockerinstall::registry::auth_token':
       enable               => true,
       gitlab               => true,
-      realm_host           => $server_name,
+      realm_host           => pick($auth_token_realm_host, $server_name),
 
       # do not import token certificate from PuppetDB - registry and GitLab are on the same host
-      registry_cert_export => false,
+      registry_cert_export => $auth_token_cert_export,
 
       # do not import tokens map from PuppetDB - registry and GitLab are on the same host
-      token_map_export     => false,
+      token_map_export     => $auth_token_map_export ,
     }
   }
 
