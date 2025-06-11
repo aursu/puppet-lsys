@@ -72,12 +72,10 @@
 # @param auth_token_realm_host
 #   The FQDN of the GitLab server providing authentication. If not provided,
 #   this defaults to the value of `$server_name`.
-# @param auth_token_cert_export
-#   Toggles the collection of the token certificate from PuppetDB via exported
-#   resources. Should be `false` if GitLab and the registry are on the same host.
-# @param auth_token_map_export
-#   Toggles the collection of the token map from PuppetDB via exported resources.
-#   Should be `false` if GitLab and the registry are on the same host.
+# @param auth_token_local_gitlab
+#   Set to `true` if GitLab and Docker Registry run on the same host.
+#   This will disable the export of certificate and token map via PuppetDB.
+#   Set to `false` for distributed setup where GitLab is on a different server.
 #
 class lsys::gitlab::registry (
   String  $server_name,
@@ -99,21 +97,25 @@ class lsys::gitlab::registry (
   Boolean $auth_token_enable      = false,
   Optional[Stdlib::Fqdn]
   $auth_token_realm_host          = undef,
-  Boolean $auth_token_cert_export = true,
-  Boolean $auth_token_map_export  = true,
+  Boolean $auth_token_local_gitlab = true,
 ) {
   if $auth_token_enable {
+    # Determine if PuppetDB synchronization is needed. Synchronization is required only
+    # when GitLab is NOT local. We export resources specifically so that another node
+    # can import them through PuppetDB.
+    $enable_puppetdb_sync = !$auth_token_local_gitlab
+
     # activate token auth on registry side
     class { 'dockerinstall::registry::auth_token':
       enable               => true,
       gitlab               => true,
       realm_host           => pick($auth_token_realm_host, $server_name),
 
-      # do not import token certificate from PuppetDB - registry and GitLab are on the same host
-      registry_cert_export => $auth_token_cert_export,
+      # Skip exporting registry token certificate to PuppetDB if GitLab is on the same host
+      registry_cert_export => $enable_puppetdb_sync,
 
-      # do not import tokens map from PuppetDB - registry and GitLab are on the same host
-      token_map_export     => $auth_token_map_export ,
+      # Skip importing token map from PuppetDB if GitLab is on the same host
+      token_map_export     => $enable_puppetdb_sync,
     }
   }
 
