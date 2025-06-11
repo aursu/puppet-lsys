@@ -4,11 +4,10 @@
 # Registry stack. It acts as a wrapper that composes the `dockerinstall` module's
 # profile and base classes to handle the underlying complexity.
 #
-# This profile unconditionally enables Docker token authentication in GitLab mode.
-# It assumes the GitLab instance providing authentication is on the same host as
-# the registry, and therefore disables the import of certificates and token maps
-# from PuppetDB.
-#
+# It can be configured via the `$auth_token_enable` parameter to activate a
+# pre-defined token authentication setup. When enabled, it assumes the registry
+# is integrated with a GitLab instance running on the same host.
+
 # It orchestrates the deployment of:
 #   - The Docker Registry container itself, managed by `dockerinstall::registry::base`.
 #   - A secure Nginx reverse proxy, configured by `dockerinstall::profile::registry`.
@@ -17,12 +16,19 @@
 # By using this class, you can deploy the entire stack by providing a few
 # high-level parameters, such as the server name and certificate details.
 #
-# @example Basic usage with Hiera-based certificate lookup
+#
+# @example Basic usage without token authentication with Hiera-based certificate lookup
 #   # This will deploy a registry named 'registry.example.com' with token auth
 #   # enabled, pointing to a GitLab instance on the same host.
 #   class { 'lsys::registry':
 #     server_name   => 'registry.example.com',
 #     cert_identity => 'wildcard.example.com', # Optional: use a different key for Hiera
+#   }
+#
+# @example Enabling the pre-defined GitLab token authentication
+#   class { 'lsys::registry':
+#     server_name       => 'registry.example.com',
+#     auth_token_enable => true,
 #   }
 #
 # @example Providing certificate data directly
@@ -34,7 +40,7 @@
 #
 # @param server_name
 #   The FQDN of the registry server. This is used as the `server_name` in the
-#   Nginx configuration and as the `realm_host` for token authentication.
+#   Nginx configuration and, if token auth is enabled, as the `realm_host`.
 # @param docker_image
 #   The Docker image and tag to use for the registry container.
 # @param manage_nginx_core
@@ -63,6 +69,9 @@
 # @param ssl_key
 #   Allows providing the server's SSL private key PEM data directly, bypassing
 #   Hiera lookup. Both `$ssl_cert` and `$ssl_key` must be provided together.
+# @param auth_token_enable
+#   If `true`, enables a pre-defined token authentication configuration that
+#   assumes a co-located GitLab instance is providing authentication.
 class lsys::registry (
   String  $server_name,
   String  $docker_image       = 'registry:3.0.0',
@@ -78,18 +87,23 @@ class lsys::registry (
   # TLS data
   Optional[String] $ssl_cert  = undef,
   Optional[String] $ssl_key   = undef,
+
+  # Token Authentication
+  Boolean $auth_token_enable  = false,
 ) {
-  # activate token auth on registry side
-  class { 'dockerinstall::registry::auth_token':
-    enable               => true,
-    gitlab               => true,
-    realm_host           => $server_name,
+  if $auth_token_enable {
+    # activate token auth on registry side
+    class { 'dockerinstall::registry::auth_token':
+      enable               => true,
+      gitlab               => true,
+      realm_host           => $server_name,
 
-    # do not import token certificate from PuppetDB - registry and GitLab are on the same host
-    registry_cert_export => false,
+      # do not import token certificate from PuppetDB - registry and GitLab are on the same host
+      registry_cert_export => false,
 
-    # do not import tokens map from PuppetDB - registry and GitLab are on the same host
-    token_map_export     => false,
+      # do not import tokens map from PuppetDB - registry and GitLab are on the same host
+      token_map_export     => false,
+    }
   }
 
   class { 'dockerinstall::registry::base':
