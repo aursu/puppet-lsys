@@ -79,26 +79,28 @@
 #     different hosts. This enables PuppetDB resource synchronization.
 #
 class lsys::gitlab::registry (
-  String  $server_name,
-  String  $docker_image       = 'registry:3.0.0',
-  Boolean $manage_nginx_core  = true,
-  Boolean $manage_cert_data   = true,
+  Stdlib::Fqdn $server_name,
+  String  $docker_image            = 'registry:3.0.0',
+  Boolean $manage_nginx_core       = true,
+  Boolean $manage_cert_data        = true,
   Optional[String]
-  $cert_identity              = undef,
-  Boolean $ssl_client_ca_auth = true,
+  $cert_identity                   = undef,
+  Boolean $ssl_client_ca_auth      = true,
   Optional[Array[Stdlib::Fqdn]]
-  $ssl_client_ca_certs        = undef,
+  $ssl_client_ca_certs             = undef,
 
-  Boolean $accesslog_disabled = true,
+  Boolean $accesslog_disabled      = true,
   # TLS data
-  Optional[String] $ssl_cert  = undef,
-  Optional[String] $ssl_key   = undef,
+  Optional[String] $ssl_cert       = undef,
+  Optional[String] $ssl_key        = undef,
 
   # Token Authentication
-  Boolean $auth_token_enable      = false,
+  Boolean $auth_token_enable       = false,
   Optional[Stdlib::Fqdn]
-  $auth_token_realm_host          = undef,
+  $auth_token_realm_host           = undef,
   Boolean $auth_token_local_gitlab = true,
+  Optional[Stdlib::Fqdn]
+  $gitlab_server_name              = undef,
 ) {
   # --- Token Authentication Logic ---
   # If enabled, declare the auth_token class with the correct parameters.
@@ -111,7 +113,7 @@ class lsys::gitlab::registry (
     class { 'dockerinstall::registry::auth_token':
       enable               => true,
       gitlab               => true, # This profile is hardcoded to GitLab auth mode.
-      realm_host           => pick($auth_token_realm_host, $server_name),
+      realm_host           => pick($auth_token_realm_host, $gitlab_server_name),
       registry_cert_export => $enable_puppetdb_sync,
       token_map_export     => $enable_puppetdb_sync,
     }

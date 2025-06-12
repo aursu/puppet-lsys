@@ -836,12 +836,14 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.54.0
+## Release 0.54.1
 
 **Features**
 
 * Added GitLab and Registry installation
 
 **Bugfixes**
+
+* Fixed gitlab name for registry
 
 **Known Issues**

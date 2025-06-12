@@ -13,7 +13,8 @@ describe 'lsys::gitlab::registry' do
       let(:facts) { os_facts.merge(stype: 'web') }
       let(:params) do
         {
-          server_name: 'ci.domain.tld',
+          server_name: 'registry.domain.tld',
+          gitlab_server_name: 'ci.domain.tld',
         }
       end
 
