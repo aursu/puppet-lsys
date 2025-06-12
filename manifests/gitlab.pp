@@ -251,7 +251,6 @@ class lsys::gitlab (
     monitoring                  => $monitoring,
     external_postgresql_service => $external_postgresql_service,
     manage_postgresql_core      => true,
-    # use bundled Nginx to check settings
     non_bundled_web_server      => true,
     manage_nginx_core           => $manage_nginx_core,
     manage_cert_data            => $manage_cert_data,
