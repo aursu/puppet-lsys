@@ -1,20 +1,20 @@
-# @summary A short summary of the purpose of this class
+# @summary
+#   Manages the main cron job directories and optionally purges unmanaged jobs.
 #
-# A description of what this class does
-#
-# @param manage
-#   Whether to manage cron jobs directories or not
+# @description
+#   This class ensures that the main cron job directories exist with the desired mode.
+#   It can also purge unmanaged files from these directories, except for system defaults.
+#   By default, it manages `/etc/cron.d`, `/etc/cron.hourly`, `/etc/cron.daily`,
+#   `/etc/cron.weekly`, and `/etc/cron.monthly`.
 #
 # @param items
-#   Whether to mange cron jobs directories which are /etc/cron.d
-#   /etc/cron.hourly, /etc/cron.daily, /etc/cron.weekly are
-#   /etc/cron.monthly
-#
+#   The list of cron job directories to manage. Defaults to the standard cron directories.
+# @param manage
+#   Whether to manage the cron job directories. If false, no resources are applied.
 # @param mode
-#   Directory mode for cron jobs directories
-#
+#   The file mode to set on the cron job directories (e.g., '0750').
 # @param purge
-#   Whether to purge all non-managed cron jobs
+#   Whether to purge all unmanaged files from the cron job directories, except system defaults.
 #
 # @example
 #   include lsys::cron::cronjobs_directory

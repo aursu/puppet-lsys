@@ -1,13 +1,28 @@
-# @summary Auto-upgrade for bash package
+# @summary
+#   Manages the installation and upgrade of the bash package.
 #
-# Auto-upgrade for bash package
+# @description
+#   This class ensures that the `bash` package is installed and kept at the
+#   specified version. It supports installation from a corporate repository if
+#   required. The class is useful for enforcing a specific version of bash or
+#   ensuring it is always up to date as part of automated system maintenance.
 #
-# @example
+# @example Install the latest version of bash
 #   include lsys::auto_upgrade::bash
 #
-# @param corporate_repo
-# @param corporate_repo_only
+# @example Install a specific version of bash from a corporate repository
+#   class { 'lsys::auto_upgrade::bash':
+#     version        => '5.1.8-2',
+#     corporate_repo => 'corp-repo',
+#   }
 #
+# @param version
+#   The version of the bash package to ensure is installed. Defaults to 'latest'.
+# @param corporate_repo
+#   The name or list of names of corporate repositories to use for installation.
+#   If not specified, the default system repositories are used.
+# @param corporate_repo_only
+#   If true, only the specified corporate repositories will be used for installation.
 class lsys::auto_upgrade::bash (
   String $version = 'latest',
   Optional[
