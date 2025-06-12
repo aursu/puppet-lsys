@@ -126,11 +126,12 @@
 #   The content of the private key in PEM format. Takes precedence over Hiera lookup.
 # @param external_registry_service
 #   If `true`, configures integration with an external Docker Registry.
+# @param database_max_connections
+#   The maximum number of allowed database connections for GitLab.
 class lsys::gitlab (
   String  $external_url,
   String  $registry_host,
   String  $database_password,
-
   String  $registry_api_url                    = 'http://localhost:5000',
   Boolean $ldap_enabled                        = false,
   # Your configuration file must contain the following basic configuration settings:
@@ -150,7 +151,6 @@ class lsys::gitlab (
   Boolean $manage_postgres_package_repo        = false,
   Boolean $smtp_enabled                        = false,
   Boolean $manage_cert_data                    = true,
-
   Integer $default_token_threshold             = 600, # 10 minutes
   Boolean $backup_cron_enable                  = false,
   Boolean $pg_tools_setup                      = true,
@@ -163,6 +163,8 @@ class lsys::gitlab (
   Boolean $non_bundled_web_server              = true,
   Boolean $manage_nginx_core                   = true,
   String  $jwt_gem_version                     = 'installed',
+  Boolean $external_registry_service           = true,
+  Integer $database_max_connections            = 200,
   Optional[String] $gitlab_package_ensure      = undef,
   Optional[String] $smtp_user_name             = undef,
   Optional[String] $smtp_password              = undef,
@@ -181,7 +183,6 @@ class lsys::gitlab (
   Optional[String] $cert_identity              = undef,
   Optional[String] $ssl_cert                   = undef,
   Optional[String] $ssl_key                    = undef,
-  Boolean $external_registry_service           = true,
 ) {
   if $ldap_enabled and $ldap_host and $ldap_password and $ldap_base {
     class { 'gitlabinstall::ldap':
@@ -260,7 +261,7 @@ class lsys::gitlab (
     external_registry_service   => $external_registry_service,
     repo_sslverify              => 0,
     ldap_enabled                => $ldap_enabled,
-    database_max_connections    => 200,
+    database_max_connections    => $database_max_connections,
   }
   contain gitlabinstall::gitlab
 
