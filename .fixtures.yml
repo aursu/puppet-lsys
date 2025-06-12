@@ -17,10 +17,9 @@ fixtures:
       ref: 7.1.0
     augeas_core:
       repo: puppetlabs/augeas_core
-      puppet_version: ">= 6.0.0"
     bsys:
       repo: aursu/bsys
-      ref: 0.10.0
+      ref: 0.11.3
     chrony:
       repo: puppet/chrony
       ref: 3.0.0
@@ -32,16 +31,17 @@ fixtures:
       ref: 4.2.0
     cron_core:
       repo: puppetlabs/cron_core
-      puppet_version: ">= 6.0.0"
     datacat:
       repo: richardc/datacat
       ref: 0.6.2
     dockerinstall:
       repo: aursu/dockerinstall
       ref: 0.23.3
+    gitlab:
+      repo: puppet/gitlab
+      ref: 10.3.0
     host_core:
       repo: puppetlabs/host_core
-      puppet_version: ">= 6.0.0"
     inifile:
       repo: puppetlabs/inifile
       ref: 6.1.1
@@ -51,18 +51,20 @@ fixtures:
     lsys_nginx:
       repo: aursu/lsys_nginx
       ref: 0.48.0
+    lsys_postgresql:
+      repo: aursu/lsys_postgresql
+      ref: 0.53.1
     mongodb:
       repo: puppet/mongodb
       ref: 6.0.1
     mount_core:
       repo: puppetlabs/mount_core
-      puppet_version: ">= 6.0.0"
     mysql:
       repo: puppetlabs/mysql
       ref: 16.2.0
     nginx:
       repo: aursu/nginx
-      ref: 4.4.2
+      ref: 6.0.2
     nodejs:
       repo: puppet/nodejs
       ref: 11.0.0
@@ -89,13 +91,12 @@ fixtures:
       ref: 4.0.0
     selinux_core:
       repo: puppetlabs/selinux_core
-      puppet_version: ">= 6.0.0"
     stdlib:
       repo: puppetlabs/stdlib
       ref: 9.6.0
     sysctl:
       repo: thias/sysctl
-      ref: 1.0.7
+      ref: 1.0.8
     systemd:
       repo: puppet/systemd
       ref: 6.6.0
@@ -104,7 +105,9 @@ fixtures:
       ref: 0.3.7
     yumrepo_core:
       repo: puppetlabs/yumrepo_core
-      puppet_version: ">= 6.0.0"
+    gitlabinstall:
+      repo: aursu/gitlabinstall
+      ref: 1.17.0
   repositories:
     networksetup:
       repo: https://github.com/aursu/puppet-networksetup.git
