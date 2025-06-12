@@ -11,6 +11,7 @@
 # @param strace_ensure
 # @param perf_ensure
 # @param procps_ensure
+# @param htop_ensure
 #
 class lsys::tools::diagnostic (
   Boolean $enable_hardening = false,
@@ -19,6 +20,7 @@ class lsys::tools::diagnostic (
   Bsys::PackageVersion $strace_ensure = false,
   Bsys::PackageVersion $perf_ensure = false,
   Bsys::PackageVersion $procps_ensure = false,
+  Bsys::PackageVersion $htop_ensure = false,
 ) {
   # Top like utility for I/O
   bsys::tools::package { 'iotop': ensure => $iotop_ensure }
@@ -34,6 +36,9 @@ class lsys::tools::diagnostic (
 
   # System and process monitoring utilities
   bsys::tools::package { 'procps-ng': ensure => $procps_ensure }
+
+  # Interactive process viewer
+  bsys::tools::package { 'htop': ensure => $htop_ensure }
 
   if $enable_hardening {
     file {
@@ -63,6 +68,9 @@ class lsys::tools::diagnostic (
 
       # lsof
       '/usr/sbin/lsof': ;
+
+      # htop
+      '/usr/bin/htop': ;
     }
   }
 }
