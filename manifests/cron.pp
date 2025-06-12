@@ -11,16 +11,12 @@
 # @param package_name
 #   Real cron daemon package name (either cronie or vixie-cron)
 #
-# @param enable_monit
-#   Whether to monitor crond service with Monit or not
-#
 # @example
 #   include lsys::cron
 class lsys::cron (
   Boolean $manage_package = true,
   String  $package_ensure = 'installed',
   String  $package_name = $lsys::params::cron_package_name,
-  Boolean $enable_monit = false,
   Boolean $enable_hardening = false,
   Boolean $file_system_hardening = true,
   Array[String] $users_allow = ['root'],
@@ -65,9 +61,7 @@ class lsys::cron (
   }
 
   class { 'lsys::cron::cronjobs_directory': }
-  class { 'lsys::cron::service':
-    enable_monit => $enable_monit,
-  }
+  class { 'lsys::cron::service': }
 
   if $manage_package {
     package { 'cron':
