@@ -40,6 +40,9 @@ fixtures:
     gitlab:
       repo: puppet/gitlab
       ref: 10.3.0
+    gitlabinstall:
+      repo: aursu/gitlabinstall
+      ref: 1.17.0
     host_core:
       repo: puppetlabs/host_core
     inifile:
@@ -105,9 +108,6 @@ fixtures:
       ref: 0.3.7
     yumrepo_core:
       repo: puppetlabs/yumrepo_core
-    gitlabinstall:
-      repo: aursu/gitlabinstall
-      ref: 1.17.0
   repositories:
     networksetup:
       repo: https://github.com/aursu/puppet-networksetup.git

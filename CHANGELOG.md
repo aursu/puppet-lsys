@@ -835,3 +835,13 @@ All notable changes to this project will be documented in this file.
 * Moved MySQL settings into separate module
 
 **Known Issues**
+
+## Release 0.54.0
+
+**Features**
+
+* Added GitLab and Registry installation
+
+**Bugfixes**
+
+**Known Issues**
