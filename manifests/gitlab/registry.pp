@@ -94,6 +94,8 @@ class lsys::gitlab::registry (
   Optional[String] $ssl_cert       = undef,
   Optional[String] $ssl_key        = undef,
 
+  Boolean $global_ssl_redirect     = true,
+
   # Token Authentication
   Boolean $auth_token_enable       = false,
   Optional[Stdlib::Fqdn]
@@ -139,5 +141,6 @@ class lsys::gitlab::registry (
     ssl_key             => $ssl_key,
     ssl_client_ca_auth  => $ssl_client_ca_auth,
     ssl_client_ca_certs => $ssl_client_ca_certs,
+    global_ssl_redirect => $global_ssl_redirect,
   }
 }
