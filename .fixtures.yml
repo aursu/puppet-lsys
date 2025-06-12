@@ -38,7 +38,7 @@ fixtures:
       ref: 0.6.2
     dockerinstall:
       repo: aursu/dockerinstall
-      ref: 0.20.1
+      ref: 0.23.3
     host_core:
       repo: puppetlabs/host_core
       puppet_version: ">= 6.0.0"
@@ -48,12 +48,12 @@ fixtures:
     logrotate:
       repo: puppet/logrotate
       ref: 7.1.0
+    lsys_nginx:
+      repo: aursu/lsys_nginx
+      ref: 0.48.0
     mongodb:
       repo: puppet/mongodb
       ref: 6.0.1
-    monit:
-      repo: aursu/monit
-      ref: 3.1.1
     mount_core:
       repo: puppetlabs/mount_core
       puppet_version: ">= 6.0.0"
