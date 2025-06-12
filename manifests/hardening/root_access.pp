@@ -23,7 +23,7 @@ class lsys::hardening::root_access (
     #   (https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-controlling_root_access#sec-Protecting_Hard_and_Symbolic_Links)
     # [RHEL 8 must enable kernel parameters to enforce discretionary access control on symlinks]
     #   (https://www.stigviewer.com/stig/red_hat_enterprise_linux_8/2021-06-14/finding/V-230267)
-    if  $facts['os']['name'] in ['RedHat', 'CentOS'] and
+    if $facts['os']['family'] == 'RedHat' and
     $facts['os']['release']['major'] in ['7', '8'] {
       sysctl { 'fs.protected_symlinks':
         value => '0',

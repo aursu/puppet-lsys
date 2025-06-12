@@ -10,8 +10,8 @@ class lsys::hardening::tcp_wrappers::noop {
   # - tcp_wrappers has been replaced with firewalld.
   # - There is no reason why the /etc/hosts.{allow,deny} are provided by the
   #   default setup package.
-  if  $facts['os']['name'] in ['RedHat', 'CentOS'] and
-  $facts['os']['release']['major'] in ['6', '7'] {
+  if $facts['os']['family'] == 'RedHat' and
+  versioncmp($facts['os']['release']['major'], '7') <= 0 {
     file {
       default:
         ensure => file,
