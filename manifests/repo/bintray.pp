@@ -5,14 +5,19 @@
 # @example
 #   include lsys::repo::bintray
 class lsys::repo::bintray (
-  Boolean $php74_enable = false,
-  Boolean $php81_enable  = false,
+  Boolean $php82_enable = false,
+  Boolean $php83_enable  = false,
 ) {
   include lsys::repo
 
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['7'] {
+  if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] in ['8', '9'] {
+    $ospath = $facts['os']['name'] ? {
+      'Rocky' => 'rocky',
+      default => 'centos'
+    }
+
     yumrepo { 'bintray-custom':
-      baseurl       => 'https://rpmb.jfrog.io/artifactory/custom/centos/$releasever/',
+      baseurl       => "https://rpmb.jfrog.io/artifactory/custom/${ospath}/\$releasever/",
       descr         => 'PHP dependencies',
       enabled       => '0',
       gpgcheck      => '0',
@@ -22,30 +27,30 @@ class lsys::repo::bintray (
     }
     file { '/etc/yum.repos.d/bintray-custom.repo': }
 
-    if $php74_enable {
-      yumrepo { 'bintray-php74custom':
-        baseurl       => 'https://rpmb.jfrog.io/artifactory/php74custom/centos/$releasever/',
-        descr         => 'PHP 7.4 packages and extensions',
+    if $php82_enable {
+      yumrepo { 'bintray-php82custom':
+        baseurl       => "https://rpmb.jfrog.io/artifactory/php82custom/${ospath}/\$releasever/",
+        descr         => 'PHP 8.2 packages and extensions',
         enabled       => '0',
         gpgcheck      => '0',
         repo_gpgcheck => '0',
         sslverify     => '0',
         notify        => Class['lsys::repo'],
       }
-      file { '/etc/yum.repos.d/bintray-php74custom.repo': }
+      file { '/etc/yum.repos.d/bintray-php82custom.repo': }
     }
 
-    if $php81_enable {
-      yumrepo { 'bintray-php81custom':
-        baseurl       => 'https://rpmb.jfrog.io/artifactory/php81custom/centos/$releasever/',
-        descr         => 'PHP 8.1 packages and extensions',
+    if $php83_enable {
+      yumrepo { 'bintray-php83custom':
+        baseurl       => "https://rpmb.jfrog.io/artifactory/php83custom/${ospath}/\$releasever/",
+        descr         => 'PHP 8.3 packages and extensions',
         enabled       => '0',
         gpgcheck      => '0',
         repo_gpgcheck => '0',
         sslverify     => '0',
         notify        => Class['lsys::repo'],
       }
-      file { '/etc/yum.repos.d/bintray-php81custom.repo': }
+      file { '/etc/yum.repos.d/bintray-php83custom.repo': }
     }
   }
 }
