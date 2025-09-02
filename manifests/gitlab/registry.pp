@@ -90,6 +90,8 @@ class lsys::gitlab::registry (
   $ssl_client_ca_certs             = undef,
 
   Boolean $accesslog_disabled      = true,
+  Boolean $traces_disabled         = true,
+
   # TLS data
   Optional[String] $ssl_cert       = undef,
   Optional[String] $ssl_key        = undef,
@@ -127,6 +129,7 @@ class lsys::gitlab::registry (
   # This class handles the Docker image and runtime environment for the registry service itself.
   class { 'dockerinstall::registry::base':
     accesslog_disabled => $accesslog_disabled,
+    traces_disabled    => $traces_disabled,
     docker_image       => $docker_image,
   }
 

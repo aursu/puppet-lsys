@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.54.2
+
+**Features**
+
+* Added `global_ssl_redirect` flag for GitLab registry configuration
+* Added `traces_disabled` parameter to GitLab registry class for OpenTelemetry traces control
+
+**Bugfixes**
+
+**Known Issues**
+
 ## Release 0.5.4
 
 **Features**
