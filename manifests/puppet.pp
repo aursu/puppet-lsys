@@ -79,14 +79,7 @@ class lsys::puppet (
   if $puppetserver {
     if $sameca {
       if $puppetdb_local and $postgres_local {
-        if $platform_name == 'puppet5' {
-          class { 'lsys::postgres':
-            package_version => '9.6.23',
-          }
-        }
-        else {
-          class { 'lsys::postgres': }
-        }
+        class { 'lsys::postgres': }
       }
 
       class { 'puppet::profile::server':
