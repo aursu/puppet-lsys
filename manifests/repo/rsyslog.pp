@@ -16,7 +16,7 @@ class lsys::repo::rsyslog {
         baseurl   => 'http://rpms.adiscon.com/v8-stable/epel-$releasever/$basearch',
         enabled   => '0',
         gpgcheck  => '1',
-        gpgkey    => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
+        gpgkey    => 'https://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
         sslverify => '0',
         notify    => Class['lsys::repo'],
       }
