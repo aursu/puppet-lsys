@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.54.3
+
+**Features**
+
+* Added Rocky Linux support to `lsys::repo::rsyslog` class
+* Extended rsyslog repository configuration to work with Rocky Linux systems
+
+**Bugfixes**
+
+**Known Issues**
+
 ## Release 0.54.2
 
 **Features**

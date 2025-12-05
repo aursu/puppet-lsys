@@ -9,7 +9,7 @@ class lsys::repo::rsyslog {
   include lsys::repo
 
   case $facts['os']['name'] {
-    'RedHat', 'CentOS': {
+    'RedHat', 'CentOS', 'Rocky': {
       yumrepo { 'rsyslog_v8':
         ensure    => 'present',
         descr     => 'Adiscon CentOS-$releasever - local packages for $basearch',
