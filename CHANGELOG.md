@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.54.4
+
+**Features**
+
+* Updated RPM-GPG-KEY-Adiscon with newer 2023 signing key for rsyslog packages
+* Enhanced security with updated GPG key for package verification
+
+**Bugfixes**
+
+**Known Issues**
+
 ## Release 0.54.3
 
 **Features**
