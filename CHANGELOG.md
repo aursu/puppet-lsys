@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.54.5
+
+**Features**
+
+**Bugfixes**
+
+* Fixed GPG key package name to match updated 2023 Adiscon signing key
+* Corrected key package reference from 'gpg-pubkey-e00b8985-512dde96' to 'gpg-pubkey-8f67ef64-63ea3eff'
+
+**Known Issues**
+
 ## Release 0.54.4
 
 **Features**

@@ -25,7 +25,7 @@ class lsys::repo::rsyslog {
         mode => '0640',
       }
 
-      $key_package_name = 'gpg-pubkey-e00b8985-512dde96'
+      $key_package_name = 'gpg-pubkey-8f67ef64-63ea3eff'
       $rsyslog_gpg_key = '/etc/pki/rpm-gpg/RPM-GPG-KEY-Adiscon'
 
       file { $rsyslog_gpg_key:
