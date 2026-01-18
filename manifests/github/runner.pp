@@ -2,47 +2,57 @@
 #
 # Manages GitHub Actions self-hosted runner as a Docker Compose service
 #
-# @example Basic usage
+# @example Basic usage with token
 #   lsys::github::runner { 'runner1':
-#     runner_image => 'ghcr.io/aursu/rockylinux:10-actions-runner-2.320.0',
-#     runner_name  => 'github-actions-runner-001',
-#     secrets      => {
-#       'GITHUB_TOKEN' => 'ghp_xxxxx',
-#     },
+#     url                => 'https://github.com/myorg',
+#     registration_token => 'ABCD1234567890',
 #   }
 #
-# @param runner_image
-#   Docker image for GitHub Actions runner
+# @example Using GitHub App authentication
+#   lsys::github::runner { 'runner2':
+#     url       => 'https://github.com/myorg',
+#     client_id => '123456',
+#     app_key   => $github_app_private_key,
+#   }
+#
+# @param url
+#   GitHub URL (organization or repository)
+#
+# @param registration_token
+#   GitHub runner registration token
+#
+# @param remove_token
+#   GitHub runner removal token
+#
+# @param pat
+#   Personal Access Token for GitHub API
+#
+# @param client_id
+#   GitHub App Client ID
+#
+# @param app_key
+#   GitHub App private key content
 #
 # @param runner_name
 #   Unique name for the runner instance
 #
+# @param runner_volume
+#   Docker volume name for runner data
+#
 # @param project_name
-#   Docker Compose project name (default: 'github')
+#   Docker Compose project name
 #
 # @param env_name
-#   Environment name for secrets file (default: 'jwt')
-#
-# @param secrets
-#   Hash of secret environment variables
+#   Environment name for secrets file
 #
 # @param environment
-#   Hash of environment variables
+#   Additional environment variables
 #
 # @param docker_volumes
-#   Array of volume mounts
+#   Additional volume mounts
 #
 # @param docker_command
 #   Command to run in the container
-#
-# @param github_app_key_path
-#   Path to GitHub App private key inside container
-#
-# @param docker_host
-#   Docker host connection string
-#
-# @param docker_cert_path
-#   Path to Docker TLS certificates
 #
 define lsys::github::runner (
   String $url = 'https://github.com/rpmbsys',
@@ -94,13 +104,15 @@ define lsys::github::runner (
   }
 
   if $app_key {
-    $project_secrets = {
-      'name'     => 'github_key',
-      'type'     => 'file',
-      'setup'    => true,
-      'value'    => $app_key,
-      'filename' => 'private-key.pem',
-    }
+    $project_secrets = [
+      {
+        'name'     => 'github_key',
+        'type'     => 'file',
+        'setup'    => true,
+        'value'    => $app_key,
+        'filename' => 'private-key.pem',
+      },
+    ]
     $docker_secret = ['github_key']
     $runner_environment = {
       'RUNNER_NAME'         => $runner_name,
@@ -108,8 +120,8 @@ define lsys::github::runner (
     }
   }
   else {
-    $project_secrets = {}
-    $docker_secret = []
+    $project_secrets = undef
+    $docker_secret = undef
     $runner_environment = {
       'RUNNER_NAME' => $runner_name,
     }
