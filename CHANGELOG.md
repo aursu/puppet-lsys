@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.55.0
+
+**Features**
+
+* Added lsys::github::runner define for managing self-hosted GitHub Actions runners
+* Support for multiple authentication methods: registration token, PAT, and GitHub App
+* Configurable runner resources with custom volumes and Docker access
+
+**Bugfixes**
+
+* Fixed puppet-lint warnings for github::runner parameters
+* Updated .fixtures.yml to use dockerinstall v0.27.0 from GitHub
+* Fixed test assertions to handle default Docker access environment variables
+
+**Known Issues**
+
 ## Release 0.54.5
 
 **Features**
