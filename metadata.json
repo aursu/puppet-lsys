@@ -34,7 +34,7 @@
     },
     {
       "name": "aursu/dockerinstall",
-      "version_requirement": ">= 0.23.3 < 1.0.0"
+      "version_requirement": ">= 0.27.0 < 1.0.0"
     },
     {
       "name": "puppet/gitlab",

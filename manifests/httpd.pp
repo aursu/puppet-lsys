@@ -65,7 +65,7 @@ class lsys::httpd (
   }
 
   apache::listen { "${listen_port}": # lint:ignore:only_variable_string
-    notify  => Class['Apache::Service'],
+    notify => Class['Apache::Service'],
   }
 
   # apache::mod::mime included by SSL module

@@ -17,7 +17,7 @@ class lsys::tools::lang (
 
   # GCC/CPP/C++
   bsys::tools::package {
-    default: ensure  => $gcc_ensure;
+    default: ensure => $gcc_ensure;
     'gcc':   require => Bsys::Tools::Package['gcc-c++'];
     'cpp':   require => Bsys::Tools::Package['gcc-c++'];
     'gcc-c++': ;

@@ -60,9 +60,9 @@ define lsys::github::runner (
   Optional[String] $registration_token = undef,
   Optional[String] $remove_token = undef,
   # personal access token auth
-  String $pat = '',
+  Optional[String] $pat = undef,
   # github app auth
-  String $client_id = '',
+  Optional[String] $client_id = undef,
   Optional[String] $app_key = undef,
   # runner settings
   String $runner_name = "github-actions-runner-${name}",
@@ -130,8 +130,8 @@ define lsys::github::runner (
   $runner_env_secrets = {
     'GITHUB_URL'       => $url,
     'GITHUB_TOKEN'     => $token,
-    'GITHUB_PAT'       => $pat,
-    'GITHUB_CLIENT_ID' => $client_id,
+    'GITHUB_PAT'       => $pat ? { undef => '', default => $pat },
+    'GITHUB_CLIENT_ID' => $client_id ? { undef => '', default => $client_id },
   }
 
   $runner_volumes = [

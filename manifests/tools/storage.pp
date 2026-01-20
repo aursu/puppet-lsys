@@ -14,7 +14,7 @@ class lsys::tools::storage (
   if $enable_hardening {
     file {
       default:
-        mode  => 'o=',
+        mode => 'o=',
         ;
       # lvm2
       '/usr/sbin/fsadm': ;

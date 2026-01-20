@@ -199,6 +199,9 @@ class lsys::params {
         $postfix_master_os_template = undef
       }
     }
+    default: {
+      fail("Unsupported OS: ${osname}")
+    }
   }
 
   $nginx_conf_dir        = $nginx::params::conf_dir
