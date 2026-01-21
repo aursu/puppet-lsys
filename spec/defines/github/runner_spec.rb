@@ -23,7 +23,7 @@ describe 'lsys::github::runner' do
       it {
         is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
           .with_docker_image(%r{^ghcr\.io/aursu/rockylinux:.+-actions-runner-.+$})
-          .with_manage_image(true)
+          .with_manage_image(false)
           .with_project_name('github')
           .with_service_name('githubrunner')
           .with_env_name('jwt')
@@ -195,6 +195,20 @@ describe 'lsys::github::runner' do
                 'githubrunner:/home/runner',
               ],
             )
+        }
+      end
+
+      context 'when manage_image is true' do
+        let(:params) do
+          super().merge(
+            registration_token: 'ABCD1234567890',
+            manage_image: true,
+          )
+        end
+
+        it {
+          is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
+            .with_manage_image(true)
         }
       end
     end

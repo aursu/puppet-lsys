@@ -72,6 +72,7 @@ define lsys::github::runner (
   Hash $environment = {},
   Array[String] $docker_volumes = [],
   String $docker_command = '/usr/local/runner/runner.py',
+  Boolean $manage_image = false,
 ) {
   # constants
   $runner_repo    = 'ghcr.io/aursu/rockylinux'
@@ -140,7 +141,7 @@ define lsys::github::runner (
 
   dockerinstall::webservice { $runner_name:
     docker_image    => $runner_image,
-    manage_image    => true,
+    manage_image    => $manage_image,
     docker_command  => $docker_command,
     project_name    => $project_name,
     service_name    => 'githubrunner',
