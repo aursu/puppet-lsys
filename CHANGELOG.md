@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.55.1
+
+**Features**
+
+* Added runner_labels parameter to lsys::github::runner with default value 'self-hosted,linux,x64'
+* RUNNER_LABELS environment variable now configurable for GitHub Actions runners
+* Type-safe Hash[String, String] for environment parameter in lsys::github::runner
+
+**Bugfixes**
+
+**Known Issues**
+
 ## Release 0.55.0
 
 **Features**
