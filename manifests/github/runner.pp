@@ -150,6 +150,11 @@ define lsys::github::runner (
     service_name    => 'githubrunner',
     environment     => $runner_environment + $docker_access_environment,
     docker_volume   => $docker_access_volumes + $runner_volumes + $docker_volumes,
+    project_volumes => [
+      {
+        $runner_volume => { 'name' => $runner_volume, }
+      },
+    ],
     # app key setup
     project_secrets => $project_secrets,
     docker_secret   => $docker_secret,

@@ -256,6 +256,38 @@ describe 'lsys::github::runner' do
             )
         }
       end
+
+      context 'when checking project_volumes configuration' do
+        it {
+          is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
+            .with_project_volumes(
+              [
+                {
+                  'githubrunner' => { 'name' => 'githubrunner' },
+                },
+              ],
+            )
+        }
+      end
+
+      context 'when checking project_volumes with custom runner_volume' do
+        let(:params) do
+          super().merge(
+            runner_volume: 'my-runner-volume',
+          )
+        end
+
+        it {
+          is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
+            .with_project_volumes(
+              [
+                {
+                  'my-runner-volume' => { 'name' => 'my-runner-volume' },
+                },
+              ],
+            )
+        }
+      end
     end
   end
 end

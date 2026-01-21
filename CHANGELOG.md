@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.55.2
+
+**Features**
+
+* Added project_volumes support to lsys::github::runner for Docker Compose volume management
+* Runner volumes now use named volumes with proper Docker Compose configuration
+* Added comprehensive unit tests for project_volumes configuration with default and custom runner_volume
+
+**Improvements**
+
+* Enhanced test coverage for volume configuration in github::runner (73 examples passing)
+* Improved Docker Compose integration with proper volume naming and management
+
+**Known Issues**
+
 ## Release 0.55.1
 
 **Features**
