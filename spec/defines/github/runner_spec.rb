@@ -288,6 +288,46 @@ describe 'lsys::github::runner' do
             )
         }
       end
+
+      context 'when using custom runner_os' do
+        let(:params) do
+          super().merge(
+            runner_os: '9.7.20251123',
+          )
+        end
+
+        it {
+          is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
+            .with_docker_image('ghcr.io/aursu/rockylinux:9.7.20251123-actions-runner-2.331.0')
+        }
+      end
+
+      context 'when using custom runner_version' do
+        let(:params) do
+          super().merge(
+            runner_version: '2.330.0',
+          )
+        end
+
+        it {
+          is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
+            .with_docker_image('ghcr.io/aursu/rockylinux:10.1.20251126-actions-runner-2.330.0')
+        }
+      end
+
+      context 'when using custom runner_os and runner_version' do
+        let(:params) do
+          super().merge(
+            runner_os: '9.7.20251123',
+            runner_version: '2.332.0',
+          )
+        end
+
+        it {
+          is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
+            .with_docker_image('ghcr.io/aursu/rockylinux:9.7.20251123-actions-runner-2.332.0')
+        }
+      end
     end
   end
 end

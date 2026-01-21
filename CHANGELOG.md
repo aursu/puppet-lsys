@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.55.3
+
+**Features**
+
+* Added runner_os parameter to lsys::github::runner for configurable Rocky Linux base image version (default: '10.1.20251126')
+* Added runner_version parameter to lsys::github::runner for configurable GitHub Actions runner version (default: '2.331.0')
+* Enhanced flexibility in runner Docker image selection with independent OS and runner version control
+* Added comprehensive unit tests for custom runner_os, runner_version, and combined configuration
+
+**Improvements**
+
+* Improved test coverage for runner image configuration in github::runner (85 total examples)
+* Enhanced Docker image naming flexibility for different Rocky Linux versions and runner releases
+
+**Known Issues**
+
 ## Release 0.55.2
 
 **Features**

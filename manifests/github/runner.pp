@@ -75,11 +75,11 @@ define lsys::github::runner (
   String $docker_command = '/usr/local/runner/runner.py',
   Boolean $manage_image = false,
   String $docker_host = 'tcp://localhost:2376',
+  String $runner_os = '10.1.20251126',
+  String $runner_version = '2.331.0',
 ) {
   # constants
   $runner_repo    = 'ghcr.io/aursu/rockylinux'
-  $runner_os      = '10.1.20251126'
-  $runner_version = '2.331.0'
   $runner_image   = "${runner_repo}:${runner_os}-actions-runner-${runner_version}"
 
   $docker_cert_path = '/certs/client'
