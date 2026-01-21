@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 
 **Improvements**
 
-* Enhanced test coverage for volume configuration in github::runner (73 examples passing)
+* Enhanced test coverage for volume configuration in github::runner
 * Improved Docker Compose integration with proper volume naming and management
 
 **Known Issues**
