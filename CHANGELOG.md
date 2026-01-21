@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 
 **Improvements**
 
-* Improved test coverage for runner image configuration in github::runner (85 total examples)
+* Improved test coverage for runner image configuration in github::runner
 * Enhanced Docker image naming flexibility for different Rocky Linux versions and runner releases
 
 **Known Issues**
