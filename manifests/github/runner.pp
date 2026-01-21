@@ -69,10 +69,12 @@ define lsys::github::runner (
   String $runner_volume = 'githubrunner',
   String $project_name = 'github',
   String $env_name = 'jwt',
-  Hash $environment = {},
+  Hash[String, String] $environment = {},
+  String $runner_labels = 'self-hosted,linux,x64',
   Array[String] $docker_volumes = [],
   String $docker_command = '/usr/local/runner/runner.py',
   Boolean $manage_image = false,
+  String $docker_host = 'tcp://localhost:2376',
 ) {
   # constants
   $runner_repo    = 'ghcr.io/aursu/rockylinux'
@@ -81,7 +83,6 @@ define lsys::github::runner (
   $runner_image   = "${runner_repo}:${runner_os}-actions-runner-${runner_version}"
 
   $docker_cert_path = '/certs/client'
-  $docker_host = 'tcp://localhost:2376'
   $docker_access_volumes = [
     '/etc/docker/certs.d:/etc/docker/certs.d',
     '/var/run/docker.sock:/var/run/docker.sock',
@@ -115,17 +116,14 @@ define lsys::github::runner (
       },
     ]
     $docker_secret = ['github_key']
-    $runner_environment = {
-      'RUNNER_NAME'         => $runner_name,
+    $runner_auth_environment = {
       'GITHUB_APP_KEY_PATH' => '/run/secrets/github_key',
     }
   }
   else {
     $project_secrets = undef
     $docker_secret = undef
-    $runner_environment = {
-      'RUNNER_NAME' => $runner_name,
-    }
+    $runner_auth_environment = {}
   }
 
   $runner_env_secrets = {
@@ -134,6 +132,11 @@ define lsys::github::runner (
     'GITHUB_PAT'       => $pat ? { undef => '', default => $pat },
     'GITHUB_CLIENT_ID' => $client_id ? { undef => '', default => $client_id },
   }
+
+  $runner_environment = {
+    'RUNNER_NAME'   => $runner_name,
+    'RUNNER_LABELS' => $runner_labels,
+  } + $runner_auth_environment
 
   $runner_volumes = [
     "${runner_volume}:/home/runner",

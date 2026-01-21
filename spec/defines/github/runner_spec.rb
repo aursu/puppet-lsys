@@ -93,6 +93,7 @@ describe 'lsys::github::runner' do
           is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
             .with_environment(
               'RUNNER_NAME' => 'github-actions-runner-runner1',
+              'RUNNER_LABELS' => 'self-hosted,linux,x64',
               'GITHUB_APP_KEY_PATH' => '/run/secrets/github_key',
               'DOCKER_TLS_CERTDIR' => '/certs',
               'DOCKER_CERT_PATH' => '/certs/client',
@@ -113,6 +114,7 @@ describe 'lsys::github::runner' do
           is_expected.to contain_dockerinstall__webservice('custom-runner-001')
             .with_environment(
               'RUNNER_NAME' => 'custom-runner-001',
+              'RUNNER_LABELS' => 'self-hosted,linux,x64',
               'DOCKER_TLS_CERTDIR' => '/certs',
               'DOCKER_CERT_PATH' => '/certs/client',
               'DOCKER_TLS_VERIFY' => '1',
@@ -178,6 +180,7 @@ describe 'lsys::github::runner' do
           is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
             .with_environment(
               'RUNNER_NAME' => 'github-actions-runner-runner1',
+              'RUNNER_LABELS' => 'self-hosted,linux,x64',
               'DOCKER_TLS_CERTDIR' => '/certs',
               'DOCKER_CERT_PATH' => '/certs/client',
               'DOCKER_TLS_VERIFY' => '1',
@@ -209,6 +212,48 @@ describe 'lsys::github::runner' do
         it {
           is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
             .with_manage_image(true)
+        }
+      end
+
+      context 'when using custom docker_host' do
+        let(:params) do
+          super().merge(
+            registration_token: 'ABCD1234567890',
+            docker_host: 'tcp://docker.example.com:2376',
+          )
+        end
+
+        it {
+          is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
+            .with_environment(
+              'RUNNER_NAME' => 'github-actions-runner-runner1',
+              'RUNNER_LABELS' => 'self-hosted,linux,x64',
+              'DOCKER_TLS_CERTDIR' => '/certs',
+              'DOCKER_CERT_PATH' => '/certs/client',
+              'DOCKER_TLS_VERIFY' => '1',
+              'DOCKER_HOST' => 'tcp://docker.example.com:2376',
+            )
+        }
+      end
+
+      context 'when using custom runner_labels' do
+        let(:params) do
+          super().merge(
+            registration_token: 'ABCD1234567890',
+            runner_labels: 'self-hosted,linux,arm64,gpu',
+          )
+        end
+
+        it {
+          is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
+            .with_environment(
+              'RUNNER_NAME' => 'github-actions-runner-runner1',
+              'RUNNER_LABELS' => 'self-hosted,linux,arm64,gpu',
+              'DOCKER_TLS_CERTDIR' => '/certs',
+              'DOCKER_CERT_PATH' => '/certs/client',
+              'DOCKER_TLS_VERIFY' => '1',
+              'DOCKER_HOST' => 'tcp://localhost:2376',
+            )
         }
       end
     end
