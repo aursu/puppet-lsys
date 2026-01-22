@@ -81,6 +81,8 @@ describe 'lsys::github::runner' do
                 {
                   'name' => 'github_key',
                   'type' => 'file',
+                  'uid' => '1000',
+                  'gid' => '1000',
                   'setup' => true,
                   'value' => 'my-github-app-private-key-content',
                   'filename' => 'private-key.pem',
@@ -326,6 +328,45 @@ describe 'lsys::github::runner' do
         it {
           is_expected.to contain_dockerinstall__webservice('github-actions-runner-runner1')
             .with_docker_image('ghcr.io/aursu/rockylinux:9.7.20251123-actions-runner-2.332.0')
+        }
+      end
+
+      context 'when manage_user is false (default)' do
+        it { is_expected.to contain_class('dockerinstall::config') }
+        it { is_expected.not_to contain_group('runner') }
+        it { is_expected.not_to contain_user('runner') }
+      end
+
+      context 'when manage_user is true' do
+        let(:params) do
+          super().merge(
+            manage_user: true,
+          )
+        end
+
+        it { is_expected.to contain_class('dockerinstall::config') }
+
+        it {
+          is_expected.to contain_group('runner')
+            .with_ensure('present')
+            .with_gid(1000)
+            .with_system(false)
+            .with_allowdupe(true)
+            .that_requires('Class[dockerinstall::config]')
+        }
+
+        it {
+          is_expected.to contain_user('runner')
+            .with_ensure('present')
+            .with_uid(1000)
+            .with_gid(1000)
+            .with_home('/home/runner')
+            .with_managehome(true)
+            .with_shell('/bin/bash')
+            .with_groups(['docker'])
+            .with_membership('minimum')
+            .with_allowdupe(true)
+            .that_requires('Group[runner]')
         }
       end
     end

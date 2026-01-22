@@ -21,12 +21,17 @@
 # @param tls_users_access
 #   Whether to allow access to Docker TLS assets to system users
 #
+# @param tls_enable
+#   Enable TLS protection for Docker daemon socket. When enabled, Docker daemon
+#   will listen on TCP port 2376 with TLS verification using Puppet certificates
+#
 class lsys::docker (
   Boolean $repo_gpgcheck = true,
   Boolean $repo_sslverify = true,
   Optional[String] $dockerd_version = undef,
   Boolean $daemon_enable = true,
   Boolean $tls_users_access = false,
+  Boolean $tls_enable = false,
 ) {
   include dockerinstall
 
@@ -43,6 +48,7 @@ class lsys::docker (
   if $daemon_enable {
     class { 'dockerinstall::profile::daemon':
       tls_users_access => $tls_users_access,
+      tls_enable       => $tls_enable,
     }
   }
 }

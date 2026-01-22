@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.55.5
+
+**Features**
+
+* Added `tls_enable` parameter to `lsys::docker` class for enabling TLS protection on Docker daemon socket
+* Enhanced Docker daemon security configuration with optional TLS support on TCP port 2376
+* Added `manage_user` parameter to `lsys::github::runner` for optional host-side runner user management
+* Added automatic creation of runner user (uid=1000) and group (gid=1000) matching Docker image configuration
+* Enhanced runner user management with docker group membership for container access
+* Added dependency management ensuring dockerinstall::config is loaded before runner user creation
+
+**Known Issues**
+
 ## Release 0.55.4
 
 **Features**

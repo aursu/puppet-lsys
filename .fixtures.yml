@@ -36,7 +36,7 @@ fixtures:
       ref: 0.6.2
     dockerinstall:
       repo: aursu/dockerinstall
-      ref: 0.28.0
+      ref: 0.28.4
     gitlab:
       repo: puppet/gitlab
       ref: 10.3.0
@@ -108,6 +108,7 @@ fixtures:
       ref: 0.3.7
     yumrepo_core:
       repo: puppetlabs/yumrepo_core
+      ref: 3.0.1
   repositories:
     networksetup:
       repo: https://github.com/aursu/puppet-networksetup.git

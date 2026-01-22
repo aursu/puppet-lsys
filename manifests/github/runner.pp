@@ -54,6 +54,9 @@
 # @param docker_command
 #   Command to run in the container
 #
+# @param manage_user
+#   Whether to manage runner user and group on the host system
+#
 define lsys::github::runner (
   String $url = 'https://github.com/rpmbsys',
   # token auth (either registration or removal)
@@ -77,7 +80,42 @@ define lsys::github::runner (
   String $docker_host = 'tcp://localhost:2376',
   String $runner_os = '10.1.20251126',
   String $runner_version = '2.331.0',
+  Boolean $manage_user = false,
 ) {
+  # User and group settings (matching Dockerfile ARG values)
+  $runner_user = 'runner'
+  $runner_group = 'runner'
+  $runner_home = '/home/runner'
+  $runner_uid = 1000
+  $runner_gid = 1000
+
+  # Ensure dockerinstall::config is included for docker group management
+  include dockerinstall::config
+
+  # Manage runner user and group if requested
+  if $manage_user {
+    group { $runner_group:
+      ensure    => present,
+      gid       => $runner_gid,
+      system    => false,
+      allowdupe => true,
+      require   => Class['dockerinstall::config'],
+    }
+
+    user { $runner_user:
+      ensure     => present,
+      uid        => $runner_uid,
+      gid        => $runner_gid,
+      home       => $runner_home,
+      managehome => true,
+      shell      => '/bin/bash',
+      groups     => ['docker'],
+      membership => 'minimum',
+      allowdupe  => true,
+      require    => Group[$runner_group],
+    }
+  }
+
   # constants
   $runner_repo    = 'ghcr.io/aursu/rockylinux'
   $runner_image   = "${runner_repo}:${runner_os}-actions-runner-${runner_version}"
