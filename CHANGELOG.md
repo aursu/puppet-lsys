@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.55.6
+
+**Features**
+
+* Changed `docker_host` parameter default in `lsys::github::runner` from `tcp://localhost:2376` to use host IP address from facts
+* Enhanced Docker connectivity for runners by using `$facts['networking']['ip']` for DOCKER_HOST environment variable
+* Improved runner-to-host Docker daemon connectivity for remote Docker access scenarios
+
+**Known Issues**
+
 ## Release 0.55.5
 
 **Features**
