@@ -110,6 +110,8 @@ define lsys::github::runner (
       {
         'name'     => 'github_key',
         'type'     => 'file',
+        'uid'      => '1000',
+        'gid'      => '1000',
         'setup'    => true,
         'value'    => $app_key,
         'filename' => 'private-key.pem',
