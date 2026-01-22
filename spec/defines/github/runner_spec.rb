@@ -100,7 +100,7 @@ describe 'lsys::github::runner' do
               'DOCKER_TLS_CERTDIR' => '/certs',
               'DOCKER_CERT_PATH' => '/certs/client',
               'DOCKER_TLS_VERIFY' => '1',
-              'DOCKER_HOST' => 'tcp://localhost:2376',
+              'DOCKER_HOST' => "tcp://172.16.254.254:2376",
             )
         }
       end
@@ -120,7 +120,7 @@ describe 'lsys::github::runner' do
               'DOCKER_TLS_CERTDIR' => '/certs',
               'DOCKER_CERT_PATH' => '/certs/client',
               'DOCKER_TLS_VERIFY' => '1',
-              'DOCKER_HOST' => 'tcp://localhost:2376',
+              'DOCKER_HOST' => "tcp://172.16.254.254:2376",
             )
         }
       end
@@ -186,7 +186,7 @@ describe 'lsys::github::runner' do
               'DOCKER_TLS_CERTDIR' => '/certs',
               'DOCKER_CERT_PATH' => '/certs/client',
               'DOCKER_TLS_VERIFY' => '1',
-              'DOCKER_HOST' => 'tcp://localhost:2376',
+              'DOCKER_HOST' => "tcp://172.16.254.254:2376",
             )
         }
 
@@ -254,7 +254,7 @@ describe 'lsys::github::runner' do
               'DOCKER_TLS_CERTDIR' => '/certs',
               'DOCKER_CERT_PATH' => '/certs/client',
               'DOCKER_TLS_VERIFY' => '1',
-              'DOCKER_HOST' => 'tcp://localhost:2376',
+              'DOCKER_HOST' => "tcp://172.16.254.254:2376",
             )
         }
       end

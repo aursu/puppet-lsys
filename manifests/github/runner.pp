@@ -77,7 +77,7 @@ define lsys::github::runner (
   Array[String] $docker_volumes = [],
   String $docker_command = '/usr/local/runner/runner.py',
   Boolean $manage_image = false,
-  String $docker_host = 'tcp://localhost:2376',
+  String $docker_host = "tcp://${facts['networking']['ip']}:2376",
   String $runner_os = '10.1.20251126',
   String $runner_version = '2.331.0',
   Boolean $manage_user = false,
