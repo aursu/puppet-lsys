@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.55.4
+
+**Features**
+
+* Added `uid` and `gid` parameters for GitHub key file in runner definition to set file ownership
+
+**Known Issues**
+
 ## Release 0.55.3
 
 **Features**
