@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.55.7
+
+**Features**
+
+* Changed `docker_host` parameter in `lsys::github::runner` to use FQDN instead of IP address for better TLS certificate validation
+* Updated DOCKER_HOST environment variable to use `$facts['networking']['fqdn']` for proper hostname-based certificate verification
+* Removed unused `/etc/docker/certs.d:/etc/docker/certs.d` volume mount from github runner configuration
+
+**Bugfixes**
+
+* Fixed TLS certificate validation errors when connecting to Docker daemon via remote API (x509 certificate validation now works correctly with hostname instead of IP)
+
+**Known Issues**
+
 ## Release 0.55.6
 
 **Features**
