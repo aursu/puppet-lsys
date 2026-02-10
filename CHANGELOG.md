@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 **Bugfixes**
 
-* Fixed `lsys::webserver::client_auth` class to use `puppet::globals` instead of deprecated `puppet::params`
+* Fixed `lsys::webserver::client_auth` class to use `puppet::globals` instead of `puppet::params`
 * Fixed trailing whitespace in class documentation
 
 ## Release 0.55.7
