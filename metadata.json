@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.55.7",
+  "version": "0.56.9",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -74,7 +74,7 @@
     },
     {
       "name": "aursu/puppet",
-      "version_requirement": ">= 0.22.5 < 1.0.0"
+      "version_requirement": ">= 0.30.0 < 1.0.0"
     },
     {
       "name": "puppetlabs/puppetdb",
@@ -125,7 +125,7 @@
       "version_requirement": ">= 5.5.20 < 9.0.0"
     }
   ],
-  "pdk-version": "3.3.0",
-  "template-url": "https://github.com/puppetlabs/pdk-templates#main",
-  "template-ref": "tags/3.4.0.2-0-gd5f5ac1"
+  "pdk-version": "3.6.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#3.6.1",
+  "template-ref": "tags/3.6.1-0-gb9426e5"
 }

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.56.9
+
+**Features**
+
+* PDK upgrade with updated testing dependencies and rubocop rules
+* Updated gitlabinstall module dependency to version 1.19.3 in fixtures
+
+**Bugfixes**
+
+* Fixed `lsys::webserver::client_auth` class to use `puppet::globals` instead of deprecated `puppet::params`
+* Fixed trailing whitespace in class documentation
+
 ## Release 0.55.7
 
 **Features**

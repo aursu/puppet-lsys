@@ -1,7 +1,7 @@
 # @summary Enables verification of client certificates
 #
 # Setup certificates in predefined location
-# Provides 2 variables 
+# Provides 2 variables
 #
 # @param ssl_client_ca_certs
 #   list of certificates' lookup keys to look for in Hiera
@@ -12,10 +12,10 @@
 class lsys::webserver::client_auth (
   Optional[Array[Stdlib::Fqdn]] $ssl_client_ca_certs = undef,
 ) {
-  include puppet::params
+  include puppet::globals
   include lsys::webserver::params
 
-  $localcacert = $puppet::params::localcacert
+  $localcacert = $puppet::globals::localcacert
   $internal_certdir = $lsys::webserver::params::internal_certdir
   $internal_cacert  = $lsys::webserver::params::internal_cacert
 

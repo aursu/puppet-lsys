@@ -42,7 +42,7 @@ fixtures:
       ref: 10.3.0
     gitlabinstall:
       repo: aursu/gitlabinstall
-      ref: 1.17.0
+      ref: 1.19.3
     host_core:
       repo: puppetlabs/host_core
     inifile:
@@ -82,7 +82,7 @@ fixtures:
       ref: 10.5.0
     puppet:
       repo: aursu/puppet
-      ref: 0.22.5
+      ref: 0.37.0
     puppetdb:
       repo: puppetlabs/puppetdb
       ref: 7.13.0
