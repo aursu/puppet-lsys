@@ -49,6 +49,8 @@
 #
 # @param r10k_crontab_setup
 #   Whether to setup crontab job to sync Puppet code
+# @param r10k_crontab_decomission
+#   Whether to remove crontab job to sync Puppet code
 #
 # @param manage_webserver_conf
 #   Whether to manage webserver.conf or not
@@ -72,6 +74,7 @@ class lsys::puppet (
   Optional[String] $common_envname = undef,
   Optional[String] $enc_envname = undef,
   Boolean $r10k_crontab_setup = false,
+  Boolean $r10k_crontab_decomission = false,
   Boolean $manage_webserver_conf = false,
   Boolean $manage_fileserver_config = true,
   Hash[String, Stdlib::Absolutepath] $mount_points = {},
@@ -96,6 +99,7 @@ class lsys::puppet (
         common_envname           => $common_envname,
         enc_envname              => $enc_envname,
         r10k_crontab_setup       => $r10k_crontab_setup,
+        r10k_crontab_decomission => $r10k_crontab_decomission,
         manage_webserver_conf    => $manage_webserver_conf,
         manage_fileserver_config => $manage_fileserver_config,
         mount_points             => $mount_points,
@@ -113,6 +117,7 @@ class lsys::puppet (
         puppetdb_server          => $puppetdb_server,
         enc_envname              => $enc_envname,
         r10k_crontab_setup       => $r10k_crontab_setup,
+        r10k_crontab_decomission => $r10k_crontab_decomission,
         manage_webserver_conf    => $manage_webserver_conf,
         manage_fileserver_config => $manage_fileserver_config,
         mount_points             => $mount_points,

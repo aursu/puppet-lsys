@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.56.10
+
+**Features**
+
+* Added `r10k_crontab_decomission` parameter to `lsys::puppet`
+* Propagated `r10k_crontab_decomission` to both `puppet::profile::server` and `puppet::profile::compiler`
+
+**Bugfixes**
+
+* Added documentation for `r10k_crontab_decomission` parameter in `lsys::puppet`
+
 ## Release 0.56.9
 
 **Features**
