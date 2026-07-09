@@ -1,0 +1,16 @@
+<%- | String $restic_run,
+      String $repo_envfile,
+      String $lockfile,
+| -%>
+#!/usr/bin/env bash
+# MANAGED BY PUPPET — restic repository prune
+set -euo pipefail
+
+# Exclusive with backup jobs (shared lock, fd 9).
+exec 9>'<%= $lockfile %>'
+if ! flock -w 3600 9; then
+  echo "restic prune: repository lock busy, skipping" >&2
+  exit 1
+fi
+
+exec '<%= $restic_run %>' '<%= $repo_envfile %>' prune

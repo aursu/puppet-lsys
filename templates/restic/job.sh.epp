@@ -1,0 +1,27 @@
+<%- | String        $restic_run,
+      String        $repo_envfile,
+      Array[String] $command,
+      String        $stdin_filename,
+      String        $tag,
+      String        $lockfile,
+      Array[String] $forget_flags,
+| -%>
+#!/usr/bin/env bash
+# MANAGED BY PUPPET — restic backup job (<%= $tag %>)
+set -euo pipefail
+
+# Serialise against the repository prune (shared lock, fd 9).
+exec 9>'<%= $lockfile %>'
+if ! flock -w 600 9; then
+  echo "restic backup <%= $tag %>: repository lock busy, skipping" >&2
+  exit 1
+fi
+
+# restic runs the dump itself; a non-zero dump aborts the snapshot.
+'<%= $restic_run %>' '<%= $repo_envfile %>' backup --stdin-from-command \
+  --stdin-filename '<%= $stdin_filename %>' \
+  --tag '<%= $tag %>' \
+  -- <%= ($command.map |$arg| { "'${arg}'" }).join(' ') %>
+
+# Per-tag retention; prune runs separately (repository owns the prune cron).
+'<%= $restic_run %>' '<%= $repo_envfile %>' forget --tag '<%= $tag %>' <%= $forget_flags.join(' ') %>

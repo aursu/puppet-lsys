@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# MANAGED BY PUPPET (lsys::restic) — restic runner.
+#
+# Loads a restic repository environment file (RESTIC_REPOSITORY / RESTIC_PASSWORD
+# and any backend credentials), then execs `restic` with the remaining arguments.
+# Centralises the "source the repo env, then run restic" step so it is written
+# once instead of being inlined into every Puppet exec/cron.
+#
+# Usage: restic-run <repo-env-file> <restic-args...>
+#   restic-run /etc/restic/mariadb.env init
+#   restic-run /etc/restic/mariadb.env cat config
+#   restic-run /etc/restic/mariadb.env prune
+set -euo pipefail
+
+if [ "$#" -lt 1 ]; then
+  echo "usage: $(basename "$0") <repo-env-file> <restic-args...>" >&2
+  exit 2
+fi
+
+envfile="$1"
+shift
+
+if [ ! -r "$envfile" ]; then
+  echo "restic-run: cannot read env file: ${envfile}" >&2
+  exit 2
+fi
+
+# restic may be the packaged /usr/bin/restic or the archive /usr/local/bin/restic.
+export PATH="/usr/local/bin:/usr/bin:/bin:${PATH:-}"
+
+set -a
+# shellcheck disable=SC1090
+source "$envfile"
+set +a
+
+exec restic "$@"
