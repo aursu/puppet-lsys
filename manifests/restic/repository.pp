@@ -59,10 +59,10 @@ define lsys::restic::repository (
     mode      => '0600',
     show_diff => false,
     content   => Sensitive(epp('lsys/restic/repository.env.epp', {
-        repository => $repository,
-        password   => $pass,
-        env        => $env,
-        cache_dir  => $cache_dir,
+          repository => $repository,
+          password   => $pass,
+          env        => $env,
+          cache_dir  => $cache_dir,
     })),
     require   => Class['lsys::restic'],
   }
