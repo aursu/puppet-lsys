@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.58.0
+
+**Backwards-incompatible changes**
+
+* Removed `lsys::restic`, `lsys::restic::repository` and `lsys::restic::job`, the `restic-run` runner and the `restic/*` templates — this code moved to the dedicated `aursu/restic` module. Consumers must switch `lsys::restic*` references to `restic*` and add the `aursu/restic` dependency.
+
+**Features**
+
+* Added `aursu/restic` as a dependency
+
 ## Release 0.57.0
 
 **Features**
