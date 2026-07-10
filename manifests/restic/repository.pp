@@ -17,6 +17,7 @@
 # @param env           extra backend env vars (e.g. AWS_ACCESS_KEY_ID); land
 #                      in the 0600 env file.
 # @param init          run `restic init` if the repository is not yet present.
+# @param manage_directory  create the local repo's backing dir tree before init (no-op for remote s3: backends).
 # @param cache_dir     optional RESTIC_CACHE_DIR.
 # @param manage_prune  install the prune cron for this repository.
 # @param prune_minute  prune cron minute.
@@ -32,8 +33,9 @@ define lsys::restic::repository (
   String                              $repository,
   Variant[String, Sensitive[String]] $password,
   Hash[String, String]                $env           = {},
-  Boolean                             $init          = true,
-  Optional[String]                    $cache_dir     = undef,
+  Boolean                             $init             = true,
+  Boolean                             $manage_directory = true,
+  Optional[String]                    $cache_dir        = undef,
   Boolean                             $manage_prune  = true,
   String                              $prune_minute  = '20',
   String                              $prune_hour    = '4',
@@ -67,13 +69,38 @@ define lsys::restic::repository (
     require   => Class['lsys::restic'],
   }
 
+  # For a local (file-based) repository, ensure the backing directory tree
+  # exists before init. Remote backends (s3:, …) are not absolute paths.
+  if $manage_directory and $repository =~ Stdlib::Absolutepath {
+    $repo_parent = dirname($repository)
+
+    exec { "lsys-restic-mkdir-${title}":
+      command => "mkdir -p '${repo_parent}'",
+      creates => $repo_parent,
+      path    => ['/usr/bin', '/bin'],
+    }
+
+    file { $repository:
+      ensure  => directory,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0700',
+      require => Exec["lsys-restic-mkdir-${title}"],
+    }
+
+    $init_require = [File[$env_file], File[$restic_run], File[$repository]]
+  }
+  else {
+    $init_require = [File[$env_file], File[$restic_run]]
+  }
+
   if $init {
     # `restic cat config` succeeds only when the repo exists AND the
     # password matches, so it is a safe idempotency guard for init.
     exec { "lsys-restic-init-${title}":
       command => "${restic_run} ${env_file} init",
       unless  => "${restic_run} ${env_file} cat config",
-      require => [File[$env_file], File[$restic_run]],
+      require => $init_require,
     }
   }
 

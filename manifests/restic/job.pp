@@ -21,6 +21,7 @@
 # @param monthday        cron monthday.
 # @param month           cron month.
 # @param weekday         cron weekday.
+# @param crontab         whole `minute hour monthday month weekday` string; when set it overrides the discrete cron fields.
 # @param keep            forget retention policy, keyed by restic keep-* class.
 # @param user            cron user (must reach the DB socket/creds).
 #
@@ -42,6 +43,7 @@ define lsys::restic::job (
   String            $monthday      = '*',
   String            $month         = '*',
   String            $weekday       = '*',
+  Optional[String]  $crontab       = undef,
   Hash[Enum['last', 'hourly', 'daily', 'weekly', 'monthly', 'yearly'], Integer] $keep = {
     'hourly' => 24,
     'daily'  => 7,
@@ -57,6 +59,24 @@ define lsys::restic::job (
   $restic_run = "${bin_dir}/restic-run"
 
   $forget_flags = $keep.map |$rule, $count| { "--keep-${rule} ${count}" }
+
+  # A whole crontab string (as commonly stored in Hiera) overrides the
+  # discrete fields: `minute hour monthday month weekday`.
+  if $crontab =~ String {
+    $fields        = split($crontab, /\s+/)
+    $cron_minute   = $fields[0]
+    $cron_hour     = $fields[1]
+    $cron_monthday = $fields[2]
+    $cron_month    = $fields[3]
+    $cron_weekday  = $fields[4]
+  }
+  else {
+    $cron_minute   = $minute
+    $cron_hour     = $hour
+    $cron_monthday = $monthday
+    $cron_month    = $month
+    $cron_weekday  = $weekday
+  }
 
   file { $script:
     ensure  => file,
@@ -78,11 +98,11 @@ define lsys::restic::job (
   cron { "restic backup ${title}":
     command  => "${script} 2>&1 | /usr/bin/logger -t restic-backup-${title}",
     user     => $user,
-    minute   => $minute,
-    hour     => $hour,
-    monthday => $monthday,
-    month    => $month,
-    weekday  => $weekday,
+    minute   => $cron_minute,
+    hour     => $cron_hour,
+    monthday => $cron_monthday,
+    month    => $cron_month,
+    weekday  => $cron_weekday,
     require  => File[$script],
   }
 }
