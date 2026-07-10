@@ -1,0 +1,17 @@
+<%- | String                     $user,
+      String                     $password,
+      Optional[Stdlib::Unixpath] $socket = undef,
+      Optional[Stdlib::Host]     $host   = undef,
+| -%>
+### MANAGED BY PUPPET (lsys::mysql::backup) — backup credentials (0600) ###
+<%- ['client', 'mysqldump'].each |$section| { -%>
+[<%= $section %>]
+user=<%= $user %>
+password="<%= $password %>"
+<%- if $socket { -%>
+socket=<%= $socket %>
+<%- } -%>
+<%- if $host { -%>
+host=<%= $host %>
+<%- } -%>
+<%- } -%>
