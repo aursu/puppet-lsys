@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.57.0
+
+**Features**
+
+* Added `lsys::restic` class to install the restic backup client (pinned binary via puppet-archive by default, or distro package) and a shared `restic-run` runner wrapper
+* Added `lsys::restic::repository` defined type — encrypted repository env file, idempotent `restic init`, a dedicated `prune` cron, and local backing-directory management
+* Added `lsys::restic::job` defined type — logical backups via `restic backup --stdin-from-command` with per-tag `forget`; accepts either discrete cron fields or a whole `crontab` string
+* Added `lsys::mysql::backup` class — writes a `mysqldump`/`mariadb-dump` `--defaults-extra-file` credentials file with OS-aware socket detection and exposes the dump command prefix
+
 ## Release 0.56.10
 
 **Features**
