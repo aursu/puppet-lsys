@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.59.0
+
+**Features**
+
+* Added `lsys::tools::archive` — an archive/compression CLI-tool menu class (same convention as `lsys::tools::diagnostic`). Ships a `bzip2_ensure` parameter (off by default) to install `bzip2`/`bunzip2`; useful to satisfy restic's archive install without the restic module owning the dependency.
+
 ## Release 0.58.0
 
 **Backwards-incompatible changes**
