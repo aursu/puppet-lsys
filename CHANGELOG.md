@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.62.0
+
+**Features**
+
+* `lsys::puppet` threads **`manage_nginx`** and **`manage_nginx_core`** to `puppet::profile::server`, which now declares the proxy and derives `tls_offload` and `allow_header_cert_info` from the switch. Callers set one boolean instead of wiring three settings consistently by hand. Requires `aursu/puppet` >= 1.2.0.
+
 ## Release 0.61.0
 
 **Features**

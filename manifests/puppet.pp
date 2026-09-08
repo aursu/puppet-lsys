@@ -59,6 +59,17 @@
 #   enabling it turns that same request into an issued certificate. Changing
 #   this is a security decision. Accepts a path for policy-based autosigning.
 #
+# @param manage_nginx
+#   Front Puppet Server with the nginx proxy, so client-certificate policy can
+#   differ per request path. The single switch for that arrangement:
+#   `tls_offload` and `allow_header_cert_info` follow it, and the proxy class is
+#   declared by `puppet::profile::server`, so the half-configured states are not
+#   reachable from here.
+#
+# @param manage_nginx_core
+#   Whether that proxy manages nginx core, or leaves it to whatever already owns
+#   nginx on the host.
+#
 # @param client_auth
 #   Whether Puppet Server requires a client certificate at the TLS layer. `need`
 #   rejects a certificate-less client during the handshake, before any
@@ -110,7 +121,9 @@ class lsys::puppet (
   # not depend on that module's type aliases being loadable.
   Variant[Boolean, Stdlib::Absolutepath] $autosign = false,
   Enum['need', 'want', 'none'] $client_auth = 'want',
-  Boolean $tls_offload = false,
+  Boolean $manage_nginx = false,
+  Boolean $manage_nginx_core = true,
+  Boolean $tls_offload = $manage_nginx,
   Stdlib::IP::Address $webserver_host = '127.0.0.1',
   Optional[Boolean] $allow_header_cert_info = undef,
   Boolean $restrict_csr_read = false,
@@ -141,6 +154,8 @@ class lsys::puppet (
         r10k_crontab_decomission => $r10k_crontab_decomission,
         autosign                 => $autosign,
         client_auth              => $client_auth,
+        manage_nginx             => $manage_nginx,
+        manage_nginx_core        => $manage_nginx_core,
         tls_offload              => $tls_offload,
         webserver_host           => $webserver_host,
         allow_header_cert_info   => $allow_header_cert_info,
