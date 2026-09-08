@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.63.0
+
+**Features**
+
+* **`lsys::hardening::nfs`** - stop and mask the `rpcbind` units on a host that does not need RPC. `rpcbind` is pulled in by NFS client tooling and enabled as soon as that tooling is installed, whether or not anything mounts a share; it binds `0.0.0.0:111` and `[::]:111`, reports the RPC program map to any caller, and is a long-standing participant in reflection and amplification attacks. On a host with no NFS mounts and no registered RPC program it is a listener with no consumer, and masking removes it where a firewall rule would only hide it.
+* ⚠ **Both units, deliberately.** `rpcbind.socket` is socket-activated, so stopping only `rpcbind.service` leaves `:111` listening and systemd restarts the service on the next connection. `rpcbind_units` defaults to both, and is parameterised so a caller can add `rpc-statd` and friends.
+* `mask_rpcbind` defaults to `true` - including the class is the statement of intent - so a host that genuinely is an NFS client sets it `false` rather than omitting the class.
+* The service provider is named explicitly: Puppet's default on Debian is `debian`, which wraps update-rc.d, has no `maskable` feature and fails outright on `enable => mask`.
+
 ## Release 0.62.0
 
 **Features**
