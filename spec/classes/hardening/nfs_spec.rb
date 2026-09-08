@@ -12,7 +12,7 @@ describe 'lsys::hardening::nfs' do
       # Both units, not just the service: rpcbind.socket is socket-activated, so
       # masking the service alone leaves :111 listening and systemd restarts it.
       it {
-        is_expected.to contain_service('rpcbind.service')
+        is_expected.to contain_service('rpcbind')
           .with(
             ensure: 'stopped',
             enable: 'mask',
@@ -37,7 +37,7 @@ describe 'lsys::hardening::nfs' do
         it { is_expected.to compile }
 
         it {
-          is_expected.not_to contain_service('rpcbind.service')
+          is_expected.not_to contain_service('rpcbind')
         }
 
         it {
@@ -49,7 +49,7 @@ describe 'lsys::hardening::nfs' do
         let(:params) do
           {
             rpcbind_units: [
-              'rpcbind.service',
+              'rpcbind',
               'rpcbind.socket',
               'rpc-statd.service',
             ],
@@ -75,7 +75,7 @@ describe 'lsys::hardening::nfs' do
         it { is_expected.to compile }
 
         it {
-          is_expected.not_to contain_service('rpcbind.service')
+          is_expected.not_to contain_service('rpcbind')
         }
       end
     end

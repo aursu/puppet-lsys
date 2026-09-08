@@ -30,15 +30,26 @@
 #   class is a statement that the host does not need RPC.
 #
 # @param rpcbind_units
-#   The systemd units to act on. Defaults to both the service and its socket, and
+#   The systemd units to act on. Defaults to the service and its socket, and
 #   ⚠ **both are required**: `rpcbind.socket` is socket-activated, so stopping only
-#   `rpcbind.service` leaves the socket listening on `:111` and systemd starts the
+#   the service leaves the socket listening on `:111` and systemd starts the
 #   service again on the next connection. Masking the service alone produces a host
 #   that still answers on the port.
 #
+#   ⚠ The service is titled **`rpcbind`**, deliberately matching the title
+#   `Nfs::Client::Service` uses in `derdanne/nfs`. That module declares
+#   `Service[rpcbind]` with `ensure => running`, which is the exact opposite of this
+#   class. Sharing the title makes the two **mutually exclusive at compile time** -
+#   declaring both raises a duplicate-declaration error, which is a catalogue that
+#   fails loudly and immediately. Titling this `rpcbind.service` instead would
+#   compile cleanly and produce a host where the two resources manage the same unit
+#   with opposite intent: one stops and masks it, the other tries to start it and
+#   fails, every run, forever. A host that mounts NFS should enable the client and
+#   set `mask_rpcbind` false; a host that does not should do neither.
+#
 class lsys::hardening::nfs (
   Boolean $mask_rpcbind = true,
-  Array[String[1]] $rpcbind_units = ['rpcbind.service', 'rpcbind.socket'],
+  Array[String[1]] $rpcbind_units = ['rpcbind', 'rpcbind.socket'],
 ) {
   if $mask_rpcbind {
     # The provider is named explicitly because Puppet's default on Debian is

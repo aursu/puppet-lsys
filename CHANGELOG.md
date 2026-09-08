@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.64.0
+
+**Bugfixes**
+
+* ⚠ **`lsys::hardening::nfs` now titles the service `rpcbind`, matching `Nfs::Client::Service` in `derdanne/nfs`.** That module declares `Service[rpcbind]` with `ensure => running`; this class wants it stopped and masked. Titled `rpcbind.service`, as in 0.63.0, the two are *different resources managing the same systemd unit with opposite intent* - Puppet raises no duplicate declaration, compiles happily, and produces a host where one resource masks the unit and the other fails to start it, on every run. Measured: `Error: /Stage[main]/Nfs::Client::Service/Service[rpcbind]/ensure: change from 'stopped' to 'running' failed: Systemd start for rpcbind failed!`, hourly, with the agent exiting 6.
+* **Sharing the title makes the two mutually exclusive at compile time**, which is the point: declaring both now fails the catalogue with a duplicate-declaration error instead of yielding a host that flaps. A host that mounts NFS enables the client and sets `mask_rpcbind` false; a host that does not does neither. The socket keeps its own title, `rpcbind.socket`, because nothing else manages it.
+
 ## Release 0.63.0
 
 **Features**
