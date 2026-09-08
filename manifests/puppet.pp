@@ -52,6 +52,13 @@
 # @param r10k_crontab_decomission
 #   Whether to remove crontab job to sync Puppet code
 #
+# @param autosign
+#   Whether the CA signs certificate requests without review. Defaults to
+#   `false`, deliberately: with autosign off an unauthenticated certificate
+#   request only creates a pending CSR that an operator must approve, while
+#   enabling it turns that same request into an issued certificate. Changing
+#   this is a security decision. Accepts a path for policy-based autosigning.
+#
 # @param manage_webserver_conf
 #   Whether to manage webserver.conf or not
 #
@@ -75,6 +82,10 @@ class lsys::puppet (
   Optional[String] $enc_envname = undef,
   Boolean $r10k_crontab_setup = false,
   Boolean $r10k_crontab_decomission = false,
+  # Variant rather than the Puppet::Autosign alias: this module declares
+  # classes from aursu/puppet but does not list it in metadata.json, so it must
+  # not depend on that module's type aliases being loadable.
+  Variant[Boolean, Stdlib::Absolutepath] $autosign = false,
   Boolean $manage_webserver_conf = false,
   Boolean $manage_fileserver_config = true,
   Hash[String, Stdlib::Absolutepath] $mount_points = {},
@@ -100,6 +111,7 @@ class lsys::puppet (
         enc_envname              => $enc_envname,
         r10k_crontab_setup       => $r10k_crontab_setup,
         r10k_crontab_decomission => $r10k_crontab_decomission,
+        autosign                 => $autosign,
         manage_webserver_conf    => $manage_webserver_conf,
         manage_fileserver_config => $manage_fileserver_config,
         mount_points             => $mount_points,
