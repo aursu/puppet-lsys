@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.61.0
+
+**Features**
+
+* `lsys::puppet` threads five more Puppet Server settings through to `puppet::profile::server`, so a site profile can state them in code rather than reaching component classes through data: **`client_auth`**, **`tls_offload`**, **`webserver_host`**, **`allow_header_cert_info`** and **`restrict_csr_read`**. Defaults preserve current behaviour (`want`, no offload, unmanaged header trust, unrestricted CSR read).
+* Together these describe one arrangement rather than five knobs: with a TLS-terminating proxy in front, Puppet Server serves plain HTTP on loopback and takes the client identity from headers the proxy sets. ⚠ `tls_offload` without `allow_header_cert_info` means every request arrives unauthenticated; `allow_header_cert_info` without the loopback binding means anything able to reach Puppet Server can claim to be any node. Set them together. Requires `aursu/puppet` >= 1.1.0.
+
 ## Release 0.60.0
 
 **Features**

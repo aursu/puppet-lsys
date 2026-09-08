@@ -59,6 +59,29 @@
 #   enabling it turns that same request into an issued certificate. Changing
 #   this is a security decision. Accepts a path for policy-based autosigning.
 #
+# @param client_auth
+#   Whether Puppet Server requires a client certificate at the TLS layer. `need`
+#   rejects a certificate-less client during the handshake, before any
+#   authorisation rule is consulted. Ignored when `tls_offload` is set.
+#
+# @param tls_offload
+#   Render Puppet Server's listener as plain HTTP on `webserver_host` rather than
+#   SSL, for use behind a TLS-terminating proxy. Threaded through so a site
+#   profile can state it in code beside the proxy it belongs with.
+#
+# @param webserver_host
+#   Address for that plain HTTP listener. Loopback by default, and with TLS
+#   offloaded that binding is the control that stops anyone forging the identity
+#   headers the proxy sets.
+#
+# @param allow_header_cert_info
+#   Whether Puppet Server reads client identity from `X-Client-*` headers.
+#   `undef` leaves it unmanaged. One arrangement with the two above.
+#
+# @param restrict_csr_read
+#   Require authorisation to read certificate requests while leaving submission
+#   open, so enrolment still works.
+#
 # @param manage_webserver_conf
 #   Whether to manage webserver.conf or not
 #
@@ -86,6 +109,11 @@ class lsys::puppet (
   # classes from aursu/puppet but does not list it in metadata.json, so it must
   # not depend on that module's type aliases being loadable.
   Variant[Boolean, Stdlib::Absolutepath] $autosign = false,
+  Enum['need', 'want', 'none'] $client_auth = 'want',
+  Boolean $tls_offload = false,
+  Stdlib::IP::Address $webserver_host = '127.0.0.1',
+  Optional[Boolean] $allow_header_cert_info = undef,
+  Boolean $restrict_csr_read = false,
   Boolean $manage_webserver_conf = false,
   Boolean $manage_fileserver_config = true,
   Hash[String, Stdlib::Absolutepath] $mount_points = {},
@@ -112,6 +140,11 @@ class lsys::puppet (
         r10k_crontab_setup       => $r10k_crontab_setup,
         r10k_crontab_decomission => $r10k_crontab_decomission,
         autosign                 => $autosign,
+        client_auth              => $client_auth,
+        tls_offload              => $tls_offload,
+        webserver_host           => $webserver_host,
+        allow_header_cert_info   => $allow_header_cert_info,
+        restrict_csr_read        => $restrict_csr_read,
         manage_webserver_conf    => $manage_webserver_conf,
         manage_fileserver_config => $manage_fileserver_config,
         mount_points             => $mount_points,
