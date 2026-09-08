@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.60.0
+
+**Features**
+
+* `lsys::puppet` exposes **`autosign`**, defaulting to `false`, and threads it to `puppet::profile::server`. The CA's signing behaviour is now stated at every layer a site profile passes through, instead of being inherited from a module data default several classes below where nobody reading the profile would see it. Treat a change as a security decision: with autosign off an unauthenticated certificate request creates only a pending CSR that an operator must approve, while enabling it turns the same request into an issued certificate. Typed as `Variant[Boolean, Stdlib::Absolutepath]` rather than the `Puppet::Autosign` alias, because this module declares classes from `aursu/puppet` without listing it in `metadata.json` and must not depend on that module's type aliases being loadable. Passed only in the `sameca` branch — the compiler branch runs no CA, so autosign has nothing to act on there. Requires `aursu/puppet` >= 0.43.0.
+
 ## Release 0.59.0
 
 **Features**
