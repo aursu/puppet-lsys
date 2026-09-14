@@ -1,0 +1,88 @@
+#!/bin/bash
+#
+# vault-snapshot-cleanup - remove both copies of the snapshot taken by
+# vault-snapshot, on the host and inside the container.
+#
+# Managed by Puppet (lsys::vault::backup). Do not edit on the host.
+#
+# Intended as a backup tool's post-command, which such tools run from a trap on
+# EXIT - so this executes whether the backup succeeded or failed.
+#
+# Two consequences follow, and they are the reason this is a separate script
+# rather than the tail of vault-snapshot:
+#
+#   1. It must be idempotent. There may be nothing to remove.
+#   2. It must exit zero. A non-zero exit here would replace the real error from
+#      the backup with a cleanup error, and the real cause would be lost.
+#
+# Hence no `set -e`. Each step reports what it did and carries on.
+#
+set -uo pipefail
+
+readonly PROGRAM=vault-snapshot-cleanup
+ENV_FILE="${VAULT_BACKUP_ENV:-/etc/vault/vault-backup.env}"
+
+log() {
+  printf '%s: %s\n' "$PROGRAM" "$*" >&2
+}
+
+compose() {
+  docker compose \
+    --file "$COMPOSE_FILE" \
+    --project-name "$COMPOSE_PROJECT" \
+    "$@"
+}
+
+if [ ! -r "$ENV_FILE" ]; then
+  log "cannot read $ENV_FILE - nothing cleaned up"
+  exit 0
+fi
+
+# shellcheck source=/dev/null
+. "$ENV_FILE"
+
+# Host copy. shred comes from coreutils, so it is always present; no fallback
+# is needed for its absence.
+#
+# Be clear about what it buys, though: SNAPSHOT_PATH defaults to /run, which is
+# tmpfs, and overwriting a tmpfs file achieves nothing beyond what unlink does.
+# shred is used because the path is a parameter and may be pointed at a real
+# filesystem, where it is at least a partial measure - on journalled and
+# copy-on-write filesystems, and on SSDs, it is not a guarantee either. The
+# snapshot holds Vault's data in encrypted form, so this is defence in depth
+# rather than the thing that keeps it safe.
+if [ -n "${SNAPSHOT_PATH:-}" ] && [ -e "$SNAPSHOT_PATH" ]; then
+  if shred --remove "$SNAPSHOT_PATH"; then
+    log "removed $SNAPSHOT_PATH"
+  else
+    log "WARNING: could not remove $SNAPSHOT_PATH"
+  fi
+fi
+
+# Copy inside the container. Absent configuration or a stopped service is the
+# normal case when the snapshot step itself failed, and is not reported as an
+# error - the snapshot script has already said why it failed.
+if [ -z "${COMPOSE_FILE:-}" ] || [ -z "${COMPOSE_PROJECT:-}" ] || [ -z "${COMPOSE_SERVICE:-}" ]; then
+  log "compose settings incomplete in $ENV_FILE - container copy not cleaned up"
+  exit 0
+fi
+
+if [ ! -f "$COMPOSE_FILE" ]; then
+  log "compose file $COMPOSE_FILE does not exist - container copy not cleaned up"
+  exit 0
+fi
+
+container_id=$(compose ps --quiet "$COMPOSE_SERVICE")
+
+if [ -z "$container_id" ]; then
+  log "service $COMPOSE_SERVICE is not running - container copy not cleaned up"
+  exit 0
+fi
+
+if compose exec --no-TTY "$COMPOSE_SERVICE" rm -f "${CONTAINER_PATH:-/tmp/raft.snap}"; then
+  log "removed ${CONTAINER_PATH:-/tmp/raft.snap} inside $COMPOSE_SERVICE"
+else
+  log "WARNING: could not remove ${CONTAINER_PATH:-/tmp/raft.snap} inside $COMPOSE_SERVICE"
+fi
+
+exit 0

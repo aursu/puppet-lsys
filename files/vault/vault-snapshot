@@ -1,0 +1,106 @@
+#!/bin/bash
+#
+# vault-snapshot - take a consistent Raft snapshot of a Vault running under
+# docker compose and leave it on disk for a backup tool to read.
+#
+# Managed by Puppet (lsys::vault::backup). Do not edit on the host.
+#
+# Configuration is read from an environment file, by default
+# /etc/vault/vault-backup.env; override with VAULT_BACKUP_ENV.
+#
+# Exits non-zero on every failure. That matters: a backup tool invoking this as
+# a pre-command would otherwise store whatever happens to be at SNAPSHOT_PATH,
+# including the previous run's snapshot, and the problem would surface only at
+# restore time.
+#
+set -euo pipefail
+
+readonly PROGRAM=vault-snapshot
+ENV_FILE="${VAULT_BACKUP_ENV:-/etc/vault/vault-backup.env}"
+
+log() {
+  printf '%s: %s\n' "$PROGRAM" "$*" >&2
+}
+
+fail() {
+  log "$*"
+  exit 1
+}
+
+require_set() {
+  local name=$1
+  local value=$2
+
+  if [ -z "$value" ]; then
+    fail "$name is not set in $ENV_FILE"
+  fi
+}
+
+# Run docker compose against the configured project. Long option names are used
+# throughout so the command reads the same as the documentation.
+compose() {
+  docker compose \
+    --file "$COMPOSE_FILE" \
+    --project-name "$COMPOSE_PROJECT" \
+    "$@"
+}
+
+if [ ! -r "$ENV_FILE" ]; then
+  fail "cannot read $ENV_FILE"
+fi
+
+# shellcheck source=/dev/null
+. "$ENV_FILE"
+
+require_set COMPOSE_PROJECT "${COMPOSE_PROJECT:-}"
+require_set COMPOSE_SERVICE "${COMPOSE_SERVICE:-}"
+require_set COMPOSE_FILE    "${COMPOSE_FILE:-}"
+require_set TOKEN_FILE      "${TOKEN_FILE:-}"
+require_set SNAPSHOT_PATH   "${SNAPSHOT_PATH:-}"
+require_set CONTAINER_PATH  "${CONTAINER_PATH:-}"
+
+if [ ! -f "$COMPOSE_FILE" ]; then
+  fail "compose file $COMPOSE_FILE does not exist"
+fi
+
+if [ ! -r "$TOKEN_FILE" ]; then
+  fail "token file $TOKEN_FILE is missing or unreadable"
+fi
+
+# The container name is not predictable. Compose derives it as
+# <project>-<service>-<index> unless the compose file sets container_name, so
+# the id is asked for rather than assumed.
+container_id=$(compose ps --quiet "$COMPOSE_SERVICE")
+
+if [ -z "$container_id" ]; then
+  fail "service $COMPOSE_SERVICE is not running in compose project $COMPOSE_PROJECT"
+fi
+
+# Remove any earlier snapshot before writing a new one. Without this a failure
+# part way through would leave the previous run's file in place, and the backup
+# tool would store it again as though it were current.
+umask 077
+rm -f "$SNAPSHOT_PATH"
+
+# VAULT_TOKEN is exported rather than passed as an argument so that it does not
+# appear in the container's process list.
+VAULT_TOKEN=$(cat "$TOKEN_FILE")
+export VAULT_TOKEN
+
+compose exec --no-TTY --env VAULT_TOKEN "$COMPOSE_SERVICE" \
+  vault operator raft snapshot save "$CONTAINER_PATH"
+
+docker cp "${container_id}:${CONTAINER_PATH}" "$SNAPSHOT_PATH"
+
+if [ ! -s "$SNAPSHOT_PATH" ]; then
+  fail "$SNAPSHOT_PATH is empty after copying it out of the container"
+fi
+
+# A Vault Raft snapshot is a gzip archive. Testing it catches a truncated or
+# partial copy cheaply. This is a structural check, not a restore test - only a
+# real restore proves the snapshot is usable, and that belongs in a rehearsal.
+if ! gzip --test "$SNAPSHOT_PATH"; then
+  fail "$SNAPSHOT_PATH is not a valid gzip archive - the snapshot is corrupt"
+fi
+
+log "wrote $(stat --format=%s "$SNAPSHOT_PATH") bytes to $SNAPSHOT_PATH"

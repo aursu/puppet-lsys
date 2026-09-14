@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.65.0
+
+**Features**
+
+* **New class `lsys::vault::backup`** - consistent Raft snapshots of a HashiCorp Vault running under docker compose. Installs two scripts and a 0600 environment file; exposes `$snapshot_script`, `$cleanup_script` and `$snapshot_path` so the caller can pipe the snapshot into any backup tool. Holds no knowledge of restic, of a schedule, or of any site, in the same shape as `lsys::mysql::backup`.
+* **The container is resolved, never named.** Compose derives a container name as `<project>-<service>-<index>` unless the compose file sets `container_name`, so the scripts ask `docker compose ps --quiet` for the id. A hardcoded name breaks the first time the scheme changes or a second replica appears.
+* **Two scripts rather than one, on purpose.** The cleanup half is invoked from a backup tool's trap on EXIT, so it runs whether the backup succeeded or failed; it is therefore not `set -e` and always exits zero, because a cleanup error there would replace the real error and the cause would be lost. The snapshot half is `set -euo pipefail` and fails loudly - it removes any earlier snapshot before writing, so a partial failure cannot leave the previous run's file to be stored again as though it were current, and it checks the result is non-empty and a valid gzip archive before handing it on.
+* **Directory ownership is parameterised, not discovered.** `manage_bin_dir` and `manage_config_dir` let the caller say who owns `$bin_dir` and `$config_dir`; `defined()` is not used anywhere, because it depends on evaluation order and would make the class behave differently according to where it happens to be declared.
+
+**Known requirements, not created by this class**
+
+* A token at `$token_file` with `read` on `sys/storage/raft/snapshot`. It cannot exist before Vault is initialised.
+* The Vault listener certificate must be valid for the address the CLI uses inside the container - by default `https://127.0.0.1:8200`, which needs an `IP:127.0.0.1` subject alternative name. Without it the failure is a TLS error that reads like a connection fault.
+
 ## Release 0.64.0
 
 **Bugfixes**

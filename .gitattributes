@@ -3,3 +3,8 @@
 *.pp eol=lf
 *.sh eol=lf
 *.epp eol=lf
+
+# Shipped shell scripts carry no extension, so the *.sh rule above misses them.
+# A CRLF checkout would break the shebang on the hosts they are deployed to.
+files/vault/vault-snapshot eol=lf
+files/vault/vault-snapshot-cleanup eol=lf
