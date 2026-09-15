@@ -29,6 +29,15 @@
 # @param manage_database
 #   Whether to manage Postgres database resources for PuppetDB on same server or not
 #
+# @param postgres_database_host
+#   Host PuppetDB connects to for its PostgreSQL database. Defaults to
+#   `localhost`, matching the component class beneath. Threaded through so a
+#   site profile can state an address in code rather than rely on name
+#   resolution: `localhost` is not uniform across hosts - it can resolve to
+#   `::1`, to `127.0.0.1`, or, where `/etc/hosts` carries no entry, only to
+#   whatever the stub resolver synthesises - and PuppetDB and any co-located
+#   service can end up on different loopback families under the same name.
+#
 # @param server
 #   Puppet server name
 #
@@ -106,6 +115,7 @@ class lsys::puppet (
   Boolean $puppetdb_local = true,
   Boolean $postgres_local = $puppetdb_local,
   Boolean $manage_database = $postgres_local,
+  Stdlib::Host $postgres_database_host = 'localhost',
   Stdlib::Host $server = 'puppet',
   Stdlib::Host $puppetdb_server = 'puppet',
   # https://puppet.com/docs/puppet/7/server/scaling_puppet_server.html#directing-individual-agents-to-a-central-ca
@@ -147,6 +157,7 @@ class lsys::puppet (
         puppetdb_server          => $puppetdb_server,
         puppetdb_local           => $puppetdb_local,
         manage_database          => $manage_database,
+        postgres_database_host   => $postgres_database_host,
         use_common_env           => $use_common_env,
         common_envname           => $common_envname,
         enc_envname              => $enc_envname,

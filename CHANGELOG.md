@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.66.0
+
+**Features**
+
+* **`lsys::puppet` threads `postgres_database_host` through to `puppet::profile::server`.** Default `localhost`, so nothing changes for an existing consumer. Threaded so a site profile can state the database address in code, beside the rest of its Puppet Server policy, instead of reaching for Hiera on a component class.
+* **Why an address rather than the name.** `localhost` is not uniform across hosts: it can resolve to `::1`, to `127.0.0.1`, or - where `/etc/hosts` carries no entry at all - only to whatever the stub resolver synthesises. Two services on one machine can therefore reach the same PostgreSQL over different loopback families under the same name, which makes narrowing `listen_addresses` unsafe in a way nothing in the catalogue reveals. Stating the address takes `/etc/hosts` and the resolver off that path.
+
 ## Release 0.65.0
 
 **Features**
