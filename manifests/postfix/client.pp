@@ -21,6 +21,11 @@
 # @param maillog_file
 #   If defined full path to log file, then set it into main.cf as maillog_file parameter
 #
+# @param lookup_table_type
+#   The Postfix lookup table type used for generated maps and for alias_maps.
+#   Defaults per OS release, because Postfix on EL10 is built without Berkeley
+#   DB and offers lmdb in place of hash.
+#
 # @example
 #   include lsys::postfix::client
 class lsys::postfix::client (
@@ -29,6 +34,7 @@ class lsys::postfix::client (
   Optional[String] $master_os_template = $lsys::params::postfix_master_os_template,
   Optional[Variant[Stdlib::Fqdn, Stdlib::IP::Address]] $relayhost = undef,
   Optional[Stdlib::Unixpath] $maillog_file = undef,
+  String[1] $lookup_table_type = $lsys::params::postfix_lookup_table_type,
 ) inherits lsys::params {
   if $relayhost {
     $enable_mta = true
@@ -44,10 +50,12 @@ class lsys::postfix::client (
   }
 
   class { 'postfix':
-    manage_mailx   => false,
-    manage_aliases => false,
-    mta            => $enable_mta,
-    relayhost      => $relayhost,
+    manage_mailx      => false,
+    manage_aliases    => false,
+    mta               => $enable_mta,
+    relayhost         => $relayhost,
+    lookup_table_type => $lookup_table_type,
+    alias_maps        => "${lookup_table_type}:/etc/aliases",
   }
   contain postfix
 

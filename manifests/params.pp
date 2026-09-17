@@ -89,6 +89,7 @@ class lsys::params {
       $postgres_manage_repo = true
 
       $postfix_master_os_template = undef
+      $postfix_lookup_table_type = 'hash'
 
       $login_defs_template = 'lsys/shadow_utils/login.defs.erb'
     }
@@ -192,11 +193,22 @@ class lsys::params {
         $postgres_manage_repo = true
       }
 
-      if $osname == 'Rocky' and $osmaj in ['8', '9'] {
+      # Release 10 is included: the template already carries the postlogd
+      # service, and the postfix module's own RedHat template does not gain it
+      # before its v5.1.0. Without it maillog_file has nothing writing to it.
+      if $osname == 'Rocky' and $osmaj in ['8', '9', '10'] {
         $postfix_master_os_template = 'lsys/postfix/master.cf.rocky.erb'
       }
       else {
         $postfix_master_os_template = undef
+      }
+
+      # Release 10 ships Postfix built without Berkeley DB: `postconf -m` no
+      # longer offers `hash`, only `lmdb`, and the distribution's own main.cf
+      # already reads `lmdb:/etc/aliases`.
+      $postfix_lookup_table_type = $osmaj ? {
+        '10'    => 'lmdb',
+        default => 'hash',
       }
     }
     default: {

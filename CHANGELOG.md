@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.67.0
+
+**Features**
+
+* Rocky Linux 10 support for `lsys::postfix::client`. Postfix on that release
+  is built without Berkeley DB, so `postconf -m` no longer offers `hash`, only
+  `lmdb`, and the distribution's own main.cf already reads
+  `lmdb:/etc/aliases`. The class now passes `lookup_table_type` and
+  `alias_maps` to the postfix class, derived per release in `lsys::params`, and
+  takes a `lookup_table_type` parameter for anything else. Releases 8 and 9 are
+  unchanged - the expression yields `hash`, which is the postfix module's own
+  default
+* `lsys::params` hands its `master.cf.rocky.erb` template to release 10 as
+  well. That template carries the `postlogd` service; the postfix module's own
+  RedHat template does not gain it before its v5.1.0, and without it the
+  `maillog_file` parameter has nothing writing to it
+
+**Bugfixes**
+
+**Known Issues**
+
 ## Release 0.66.0
 
 **Features**
