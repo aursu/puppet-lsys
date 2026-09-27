@@ -7,7 +7,9 @@
 #   include lsys::hardening::root_access
 #
 # @param unprotect_symbolic_links
-#   Set to true to override the default settings and disable the protection for symbolic links
+#   Set to true to disable the kernel's symlink protection
+#   (`fs.protected_symlinks = 0`). Takes effect on RedHat release 8 only: 9 and
+#   later keep the protection, deliberately.
 #
 # @param manage_password
 # @param password_hash
@@ -23,8 +25,13 @@ class lsys::hardening::root_access (
     #   (https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-controlling_root_access#sec-Protecting_Hard_and_Symbolic_Links)
     # [RHEL 8 must enable kernel parameters to enforce discretionary access control on symlinks]
     #   (https://www.stigviewer.com/stig/red_hat_enterprise_linux_8/2021-06-14/finding/V-230267)
+    #
+    # Release 8 only. On 9 and later the protection stays on whatever this says:
+    # it is what stops a symlink race in a world-writable sticky directory
+    # such as /tmp, no server type there has been shown to need it off, and
+    # extending the switch would weaken every EL9/EL10 node that inherits it.
     if $facts['os']['family'] == 'RedHat' and
-    $facts['os']['release']['major'] in ['7', '8'] {
+    $facts['os']['release']['major'] == '8' {
       sysctl { 'fs.protected_symlinks':
         value => '0',
       }
