@@ -50,4 +50,28 @@ describe 'lsys::logrotate' do
       end
     end
   end
+
+  # facterdb ~> 3.0 ships no rocky-10 factset (see postfix/client_spec.rb), so a
+  # real rocky-9 set moved forward.
+  _os, rocky9 = on_supported_os.find { |os, _facts| os.start_with?('rocky-9') }
+
+  context 'on Rocky 10' do
+    let(:facts) do
+      rocky9.merge(
+        os: rocky9[:os].merge(
+          'release' => rocky9[:os]['release'].merge('major' => '10', 'full' => '10.2'),
+        ),
+      )
+    end
+
+    it { is_expected.to compile }
+
+    # logrotate.timer runs it, as on EL9: no cron copies beside the timer.
+    it { is_expected.to contain_file('/etc/cron.daily/logrotate').with_ensure('absent') }
+    it { is_expected.to contain_file('/etc/cron.hourly/logrotate').with_ensure('absent') }
+    it {
+      is_expected.to contain_file('/etc/systemd/system/logrotate-hourly.timer.d/hourly-timer.conf')
+        .with_content(%r{OnCalendar=hourly})
+    }
+  end
 end
