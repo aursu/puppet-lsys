@@ -1,0 +1,266 @@
+# @summary Keycloak as a native service behind a local reverse proxy
+#
+# Wraps the `keycloak` class of treydock-keycloak with safe defaults for a
+# single-node Keycloak that listens on loopback only, uses a PostgreSQL
+# database on the same host and is published by a reverse proxy (TLS ends at
+# the proxy):
+#
+# * the release archive is downloaded by this class and **verified against a
+#   mandatory SHA-256**; the keycloak module only unpacks the verified local
+#   file (it does not check a digest itself);
+# * HTTP and the management interface (health, metrics) bind to `http_host`,
+#   127.0.0.1 by default; `proxy-headers` is set for the proxy;
+# * local cache (`cache=local`), no cluster ports;
+# * explicit JVM heap limits instead of a percentage of the host RAM;
+# * the database, its login role and a loopback pg_hba line come from
+#   `lsys_postgresql::database` (the keycloak module's own database management
+#   is switched off);
+# * a systemd drop-in hardens the unit shipped by the keycloak module.
+#
+# The PostgreSQL server itself must be declared on the node (`lsys_postgresql`)
+# when `manage_database` is true.
+#
+# @example
+#   class { 'lsys::keycloak':
+#     archive_sha256 => 'dd124787283918bc597628887168333465ee2a811a389e0003569e52be7e487f',
+#     hostname       => 'https://sso.example.com',
+#     admin_password => Sensitive('...'),
+#     db_password    => Sensitive('...'),
+#   }
+#
+# @param archive_sha256
+#   SHA-256 of `keycloak-<version>.tar.gz`. Mandatory: a version change without
+#   a new digest fails the download.
+#
+# @param admin_password
+#   Password of the bootstrap admin of the `master` realm (also used by the
+#   keycloak module's kcadm wrapper for its resource types).
+#
+# @param db_password
+#   Password of the database login role.
+#
+# @param version
+#   Keycloak version.
+#
+# @param base_url
+#   Where release archives are downloaded from: `<base_url>/<version>/keycloak-<version>.tar.gz`.
+#
+# @param download_dir
+#   Directory that keeps the verified archives.
+#
+# @param hostname
+#   Keycloak `hostname` option: the public URL (recommended, e.g.
+#   `https://sso.example.com`) or host name. It becomes part of the token issuer.
+#
+# @param http_host
+#   Address HTTP and the management interface listen on.
+#
+# @param http_port
+#   HTTP port.
+#
+# @param management_port
+#   Port of the management interface (`/health`, `/metrics`).
+#
+# @param proxy_headers
+#   Which forwarding headers of the reverse proxy Keycloak trusts.
+#
+# @param admin_user
+#   Name of the bootstrap admin.
+#
+# @param manage_database
+#   Create the database, role and pg_hba line through `lsys_postgresql::database`.
+#
+# @param db_name
+#   Database name.
+#
+# @param db_user
+#   Database login role.
+#
+# @param db_host
+#   Database host as Keycloak connects to it.
+#
+# @param db_port
+#   Database port.
+#
+# @param db_client_addresses
+#   pg_hba addresses for the role (see `lsys_postgresql::database`).
+#
+# @param heap_min
+#   JVM `-Xms`.
+#
+# @param heap_max
+#   JVM `-Xmx`.
+#
+# @param java_package
+#   Java package for the keycloak module's `java` class. Defaults to the
+#   headless JRE 21 on Debian/Ubuntu; module default elsewhere.
+#
+# @param java_home
+#   JAVA_HOME for that package.
+#
+# @param java_alternative
+#   Name of the Java alternative.
+#
+# @param java_alternative_path
+#   Path the `java` alternative must point to.
+#
+# @param service_hardening
+#   `[Service]` settings of the hardening drop-in. An empty hash removes the
+#   drop-in. `MemoryDenyWriteExecute` is deliberately absent: the JVM JIT needs
+#   writable and executable memory.
+#
+# @param extra_configs
+#   Further `keycloak.conf` options (strings, booleans or arrays), merged last.
+#
+class lsys::keycloak (
+  Pattern[/\A[0-9a-f]{64}\z/] $archive_sha256,
+  Variant[String[1], Sensitive[String[1]]] $admin_password,
+  Variant[String[1], Sensitive[String[1]]] $db_password,
+  String[1] $version = '26.8.2',
+  Stdlib::HTTPSUrl $base_url = 'https://github.com/keycloak/keycloak/releases/download',
+  Stdlib::Absolutepath $download_dir = '/var/cache/keycloak',
+  Variant[Stdlib::Host, Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $hostname = $facts['networking']['fqdn'],
+  Stdlib::IP::Address $http_host = '127.0.0.1',
+  Stdlib::Port $http_port = 8080,
+  Stdlib::Port $management_port = 9000,
+  Enum['forwarded', 'xforwarded'] $proxy_headers = 'xforwarded',
+  String[1] $admin_user = 'admin',
+  Boolean $manage_database = true,
+  String[1] $db_name = 'keycloak',
+  String[1] $db_user = 'keycloak',
+  Stdlib::Host $db_host = '127.0.0.1',
+  Stdlib::Port $db_port = 5432,
+  Array[Postgresql::Pg_hba_rule_address] $db_client_addresses = ['127.0.0.1/32'],
+  Pattern[/\A[0-9]+[kmg]\z/] $heap_min = '512m',
+  Pattern[/\A[0-9]+[kmg]\z/] $heap_max = '2g',
+  Optional[String[1]] $java_package = undef,
+  Optional[Stdlib::Absolutepath] $java_home = undef,
+  Optional[String[1]] $java_alternative = undef,
+  Optional[Stdlib::Absolutepath] $java_alternative_path = undef,
+  Hash[String[1], String] $service_hardening = {
+    'NoNewPrivileges'         => 'yes',
+    'PrivateTmp'              => 'yes',
+    'PrivateDevices'          => 'yes',
+    'ProtectSystem'           => 'full',
+    'ProtectHome'             => 'yes',
+    'ProtectKernelTunables'   => 'yes',
+    'ProtectKernelModules'    => 'yes',
+    'ProtectKernelLogs'       => 'yes',
+    'ProtectControlGroups'    => 'yes',
+    'ProtectClock'            => 'yes',
+    'ProtectHostname'         => 'yes',
+    'RestrictSUIDSGID'        => 'yes',
+    'RestrictRealtime'        => 'yes',
+    'RestrictNamespaces'      => 'yes',
+    'LockPersonality'         => 'yes',
+    'RestrictAddressFamilies' => 'AF_UNIX AF_INET AF_INET6',
+    'SystemCallArchitectures' => 'native',
+    'CapabilityBoundingSet'   => '',
+    'AmbientCapabilities'     => '',
+    'UMask'                   => '0027',
+  },
+  Hash[String[1], Variant[String[1], Boolean, Array]] $extra_configs = {},
+) {
+  # the keycloak module takes these as plain strings
+  $_admin_password = $admin_password ? {
+    Sensitive => $admin_password.unwrap,
+    default   => $admin_password,
+  }
+  $_db_password = $db_password ? {
+    Sensitive => $db_password.unwrap,
+    default   => $db_password,
+  }
+
+  # Debian/Ubuntu: the headless JRE 21; the alternative is normally already set,
+  # so the java class's update-java-alternatives exec stays idle
+  if $facts['os']['family'] == 'Debian' {
+    $arch = $facts['os']['architecture']
+    $_java_package = pick($java_package, 'openjdk-21-jre-headless')
+    $_java_home = pick($java_home, "/usr/lib/jvm/java-21-openjdk-${arch}")
+    $_java_alternative = pick($java_alternative, "java-1.21.0-openjdk-${arch}")
+    $_java_alternative_path = pick($java_alternative_path, "${_java_home}/bin/java")
+  }
+  else {
+    $_java_package = $java_package
+    $_java_home = $java_home
+    $_java_alternative = $java_alternative
+    $_java_alternative_path = $java_alternative_path
+  }
+
+  # verified archive
+  $archive_file = "${download_dir}/keycloak-${version}.tar.gz"
+
+  file { $download_dir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }
+
+  archive { $archive_file:
+    ensure          => present,
+    source          => "${base_url}/${version}/keycloak-${version}.tar.gz",
+    checksum        => $archive_sha256,
+    checksum_type   => 'sha256',
+    checksum_verify => true,
+    extract         => false,
+    cleanup         => false,
+    require         => File[$download_dir],
+    before          => Class['keycloak'],
+  }
+
+  if $manage_database {
+    lsys_postgresql::database { $db_name:
+      user             => $db_user,
+      password         => $db_password,
+      client_addresses => $db_client_addresses,
+      before           => Class['keycloak'],
+    }
+  }
+
+  class { 'keycloak':
+    version               => $version,
+    package_url           => $archive_file,
+    java_declare_method   => 'class',
+    java_package          => $_java_package,
+    java_home             => $_java_home,
+    java_alternative      => $_java_alternative,
+    java_alternative_path => $_java_alternative_path,
+    java_opts             => "-Xms${heap_min} -Xmx${heap_max}",
+    hostname              => $hostname,
+    http_enabled          => true,
+    http_host             => $http_host,
+    http_port             => $http_port,
+    proxy_headers         => $proxy_headers,
+    admin_user            => $admin_user,
+    admin_user_password   => $_admin_password,
+    manage_db             => false,
+    manage_db_server      => false,
+    db                    => 'postgres',
+    db_url_host           => $db_host,
+    db_url_port           => $db_port,
+    db_url_database       => $db_name,
+    db_username           => $db_user,
+    db_password           => $_db_password,
+    configs               => {
+      'cache'                => 'local',
+      'health-enabled'       => true,
+      'metrics-enabled'      => true,
+      'http-management-port' => $management_port,
+    },
+    extra_configs         => { 'http-management-host' => $http_host } + $extra_configs,
+  }
+
+  # not a selector on {}: a hash case option matches any hash that contains its
+  # keys, so {} would match every value
+  $hardening_ensure = $service_hardening.empty ? {
+    true    => 'absent',
+    default => 'present',
+  }
+
+  systemd::dropin_file { 'hardening.conf':
+    ensure  => $hardening_ensure,
+    unit    => 'keycloak.service',
+    content => epp('lsys/keycloak/hardening.conf.epp', { 'settings' => $service_hardening }),
+  }
+}

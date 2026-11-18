@@ -1,0 +1,8 @@
+<%- |
+  Hash[String[1], String] $settings,
+| -%>
+# File managed by Puppet
+[Service]
+<% $settings.each |$key, $value| { -%>
+<%= $key %>=<%= $value %>
+<% } -%>

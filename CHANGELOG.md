@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.68.0
+
+**Features**
+
+* New class `lsys::keycloak`: a single-node Keycloak through treydock-keycloak
+  14.2.0 with safe defaults. The release archive is downloaded by the class and
+  verified against a mandatory SHA-256 (`archive_sha256`); the keycloak module
+  only unpacks the verified local file. HTTP and the management interface bind
+  to 127.0.0.1, `proxy-headers` for a local reverse proxy, `cache=local`,
+  health and metrics enabled, explicit JVM heap. The database, role and a
+  loopback pg_hba line come from `lsys_postgresql::database`; a systemd drop-in
+  hardens the unit (`service_hardening`, without `MemoryDenyWriteExecute`,
+  which the JVM cannot run with). On Debian and Ubuntu the headless JRE 21 is
+  used. New dependencies `treydock/keycloak` and `aursu/lsys_postgresql`
+  (already used by `lsys::gitlab`, now declared).
+
+**Bugfixes**
+
+* Requires `aursu/bsys` 0.14.1 or later (`Bsys::PGVersion` accepts PostgreSQL
+  18.7). Unit tests run against puppetlabs-postgresql 10.8.0.
+
 ## Release 0.67.0
 
 **Features**
