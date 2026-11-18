@@ -104,6 +104,9 @@ fixtures:
       repo: puppetlabs/yumrepo_core
       ref: 3.0.1
   repositories:
+    restic:
+      repo: https://github.com/aursu/puppet-restic.git
+      ref: tags/v0.3.0
     lsys_nginx:
       repo: https://github.com/aursu/puppet-lsys_nginx.git
       ref: tags/v0.50.0

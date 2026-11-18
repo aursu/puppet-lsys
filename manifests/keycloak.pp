@@ -139,6 +139,36 @@
 #   Addresses (CIDR) allowed to reach `/health` and `/metrics` of the management
 #   interface through nginx. Empty: these paths are not published.
 #
+# @param backup_password
+#   restic repository password. When set, the database is backed up: a
+#   `pg_dump` (`lsys_postgresql::backup`) into a local restic repository, and,
+#   with `backup_offsite_repository`, a daily `restic copy` to it. Keep this
+#   password outside the host as well - without it the backups are unreadable.
+#
+# @param backup_repository
+#   Local restic repository (path).
+#
+# @param backup_minute
+#   Minute of the hourly dump.
+#
+# @param backup_keep
+#   Retention of the local repository.
+#
+# @param backup_offsite_repository
+#   restic URL of the off-site copy, e.g. `s3:https://s3.example.com/bucket/host/keycloak`.
+#
+# @param backup_offsite_env
+#   Environment for the off-site repository (S3 credentials, region).
+#
+# @param backup_offsite_keep
+#   Retention of the off-site repository.
+#
+# @param backup_offsite_minute
+#   Minute of the daily copy.
+#
+# @param backup_offsite_hour
+#   Hour of the daily copy.
+#
 class lsys::keycloak (
   Pattern[/\A[0-9a-f]{64}\z/] $archive_sha256,
   Variant[String[1], Sensitive[String[1]]] $admin_password,
@@ -194,6 +224,20 @@ class lsys::keycloak (
   Boolean $manage_nginx_core = false,
   Boolean $ssl_stapling = false,
   Array[Stdlib::IP::Address] $management_allow = [],
+  Optional[Variant[String[1], Sensitive[String[1]]]] $backup_password = undef,
+  Stdlib::Absolutepath $backup_repository = '/var/backups/restic/keycloak',
+  String[1] $backup_minute = '47',
+  Hash[Enum['last', 'hourly', 'daily', 'weekly', 'monthly', 'yearly'], Integer] $backup_keep = {
+    'hourly' => 24,
+    'daily'  => 7,
+  },
+  Optional[String[1]] $backup_offsite_repository = undef,
+  Hash[String[1], String] $backup_offsite_env = {},
+  Hash[Enum['last', 'hourly', 'daily', 'weekly', 'monthly', 'yearly'], Integer] $backup_offsite_keep = {
+    'daily' => 14,
+  },
+  String[1] $backup_offsite_minute = '45',
+  String[1] $backup_offsite_hour = '3',
 ) {
   # the keycloak module takes these as plain strings
   $_admin_password = $admin_password ? {
@@ -364,6 +408,8 @@ class lsys::keycloak (
       ssl_only            => true,
       proxy               => "http://${http_host}:${http_port}",
       proxy_set_header    => $proxy_headers_set,
+      # nginx sends its own HSTS (ssl_add_header); Keycloak's would be a second one
+      proxy_hide_header   => ['Strict-Transport-Security'],
       location_cfg_append => $proxy_buffers,
     }
 
@@ -379,6 +425,41 @@ class lsys::keycloak (
           location_allow   => $management_allow,
           location_deny    => ['all'],
         }
+      }
+    }
+  }
+
+  # database backup: hourly pg_dump into a local restic repository, daily copy off-site
+  if $backup_password {
+    restic::repository { 'keycloak':
+      repository   => $backup_repository,
+      password     => $backup_password,
+      prune_minute => '35',
+      prune_hour   => '4',
+    }
+
+    lsys_postgresql::backup { $db_name:
+      repository => 'keycloak',
+      minute     => $backup_minute,
+      keep       => $backup_keep,
+    }
+
+    if $backup_offsite_repository {
+      restic::repository { 'keycloak-offsite':
+        repository   => $backup_offsite_repository,
+        password     => $backup_password,
+        env          => $backup_offsite_env,
+        init         => false,
+        prune_minute => '50',
+        prune_hour   => '4',
+      }
+
+      restic::copy { 'keycloak-offsite':
+        source_repository => 'keycloak',
+        dest_repository   => 'keycloak-offsite',
+        keep              => $backup_offsite_keep,
+        minute            => $backup_offsite_minute,
+        hour              => $backup_offsite_hour,
       }
     }
   }

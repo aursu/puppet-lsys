@@ -168,6 +168,65 @@ describe 'lsys::keycloak' do
         end
 
         it { is_expected.not_to contain_tlsinfo__certpair('registry.domain.tld') }
+
+        it {
+          is_expected.to contain_nginx__resource__location('keycloak-root')
+            .with_proxy_hide_header(['Strict-Transport-Security'])
+        }
+      end
+
+      context 'with backup' do
+        let(:params) do
+          base_params.merge(
+            backup_password: 'restic-secret',
+            backup_offsite_repository: 's3:https://s3.example.com/backup/host/keycloak',
+            backup_offsite_env: { 'AWS_ACCESS_KEY_ID' => 'id', 'AWS_SECRET_ACCESS_KEY' => 'secret' },
+          )
+        end
+
+        it { is_expected.to compile.with_all_deps }
+
+        it {
+          is_expected.to contain_restic__repository('keycloak')
+            .with_repository('/var/backups/restic/keycloak')
+        }
+
+        it {
+          is_expected.to contain_lsys_postgresql__backup('keycloak')
+            .with(
+              repository: 'keycloak',
+              minute: '47',
+              keep: { 'hourly' => 24, 'daily' => 7 },
+            )
+        }
+
+        it { is_expected.to contain_restic__job('postgres-keycloak') }
+
+        it {
+          is_expected.to contain_restic__repository('keycloak-offsite')
+            .with(
+              repository: 's3:https://s3.example.com/backup/host/keycloak',
+              init: false,
+            )
+        }
+
+        it {
+          is_expected.to contain_restic__copy('keycloak-offsite')
+            .with(
+              source_repository: 'keycloak',
+              dest_repository: 'keycloak-offsite',
+              keep: { 'daily' => 14 },
+              minute: '45',
+              hour: '3',
+            )
+        }
+      end
+
+      context 'without backup_password' do
+        let(:params) { base_params }
+
+        it { is_expected.not_to contain_restic__repository('keycloak') }
+        it { is_expected.not_to contain_lsys_postgresql__backup('keycloak') }
       end
 
       context 'with server_name but no cert_identity' do

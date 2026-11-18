@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.70.0
+
+**Features**
+
+* `lsys::keycloak` backs up its database when `backup_password` is set: an
+  hourly `pg_dump` (`lsys_postgresql::backup`, minute `backup_minute`) into a
+  local restic repository (`backup_repository`, retention `backup_keep`), and
+  with `backup_offsite_repository` a daily `restic copy` to it
+  (`backup_offsite_env` for the S3 credentials, retention
+  `backup_offsite_keep`). Pruning at 04:35 / 04:50.
+* Requires `aursu/restic` 0.3.0 or later (`restic::copy`).
+
+**Bugfixes**
+
+* `lsys::keycloak` nginx front: Keycloak's own `Strict-Transport-Security`
+  header is hidden, so only the nginx one is sent (two different HSTS headers
+  before).
+
+**Known Issues**
+
 ## Release 0.69.0
 
 **Features**
