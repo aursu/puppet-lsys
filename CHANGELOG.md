@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.70.1
+
+**Bugfixes**
+
+* `lsys::keycloak` nginx front: `/health` and `/metrics` answered 400. The
+  Keycloak management interface rejects any `Host` but its own address, and
+  the locations passed the public name. They now send `Host $proxy_host`.
+
+**Known Issues**
+
 ## Release 0.70.0
 
 **Features**

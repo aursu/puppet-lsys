@@ -163,6 +163,7 @@ describe 'lsys::keycloak' do
                 proxy: 'http://127.0.0.1:9000',
                 location_allow: ['10.0.1.0/24'],
                 location_deny: ['all'],
+                proxy_set_header: ['Host $proxy_host', 'X-Real-IP $remote_addr'],
               )
           }
         end

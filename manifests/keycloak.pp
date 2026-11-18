@@ -421,7 +421,8 @@ class lsys::keycloak (
           ssl              => true,
           ssl_only         => true,
           proxy            => "http://${http_host}:${management_port}",
-          proxy_set_header => $proxy_headers_set,
+          # the management interface answers 400 to any Host but its own address
+          proxy_set_header => ['Host $proxy_host', 'X-Real-IP $remote_addr'],
           location_allow   => $management_allow,
           location_deny    => ['all'],
         }
