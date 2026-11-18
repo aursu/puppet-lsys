@@ -48,9 +48,6 @@ fixtures:
     logrotate:
       repo: puppet/logrotate
       ref: 7.1.0
-    lsys_nginx:
-      repo: aursu/lsys_nginx
-      ref: 0.48.0
     mongodb:
       repo: puppet/mongodb
       ref: 6.0.1
@@ -68,9 +65,6 @@ fixtures:
     mysql:
       repo: puppetlabs/mysql
       ref: 16.2.0
-    nginx:
-      repo: aursu/nginx
-      ref: 6.0.2
     nodejs:
       repo: puppet/nodejs
       ref: 11.0.0
@@ -106,13 +100,19 @@ fixtures:
     systemd:
       repo: puppet/systemd
       ref: 6.6.0
-    tlsinfo:
-      repo: aursu/tlsinfo
-      ref: 0.3.7
     yumrepo_core:
       repo: puppetlabs/yumrepo_core
       ref: 3.0.1
   repositories:
+    lsys_nginx:
+      repo: https://github.com/aursu/puppet-lsys_nginx.git
+      ref: tags/v0.50.0
+    nginx:
+      repo: https://github.com/aursu/puppet-nginx.git
+      ref: tags/v8.2.1
+    tlsinfo:
+      repo: https://github.com/aursu/puppet-tlsinfo.git
+      ref: tags/v0.12.3
     bsys:
       repo: https://github.com/aursu/puppet-bsys.git
       ref: tags/v0.14.1

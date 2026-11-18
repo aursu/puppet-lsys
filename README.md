@@ -40,3 +40,15 @@ class { 'lsys::keycloak':
   db_password    => Sensitive('...'),
 }
 ```
+
+With an nginx front (TLS on 443, HTTP redirects, Keycloak stays on loopback):
+
+```
+class { 'lsys::keycloak':
+  # ...as above, plus
+  http_port     => 8180,               # 8080 is PuppetDB's on a Puppet master
+  server_name   => 'sso.example.com',
+  listen_ip     => '10.0.0.13',
+  cert_identity => '*.example.com',     # tlsinfo identity
+}
+```

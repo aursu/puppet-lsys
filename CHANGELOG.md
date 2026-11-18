@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.69.0
+
+**Features**
+
+* `lsys::keycloak` can publish Keycloak through nginx: set `server_name` and
+  `cert_identity` (tlsinfo; `manage_certificate` declares the certificate
+  pair). HTTPS on 443 with the Mozilla intermediate settings of
+  `lsys::webserver::params`, HTTP on 80 redirects, `listen_ip` to bind one
+  address; the whole site is proxied to the loopback HTTP port with the
+  forwarded host, proto and port headers Keycloak expects
+  (`proxy-headers xforwarded`) and larger proxy buffers. `/health` and
+  `/metrics` of the management interface are published only for the
+  addresses in `management_allow` (empty by default). OCSP stapling is off by
+  default (`ssl_stapling`): Let's Encrypt certificates no longer carry an
+  OCSP responder URL.
+
+**Bugfixes**
+
+* `metadata.json` matches what the class and the fleet use: `aursu/nginx`
+  8.2.1 or later (was `< 7`), `aursu/tlsinfo` and `aursu/lsys_nginx` declared.
+  Unit test fixtures raised to nginx 8.2.1, tlsinfo 0.12.3, lsys_nginx 0.50.0.
+
+**Known Issues**
+
+* With treydock-keycloak 14.2.0 the class declares `java` through that module,
+  and puppetlabs-java writes `JAVA_HOME=` to `/etc/environment`. To be dropped
+  when a keycloak module release offers `java_declare_method => 'none'`.
+* Keycloak's default HTTP port 8080 is also PuppetDB's plain HTTP port; set
+  `http_port` (e.g. 8180) on a Puppet master.
+
 ## Release 0.68.0
 
 **Features**

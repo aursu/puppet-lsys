@@ -106,6 +106,76 @@ describe 'lsys::keycloak' do
         it { is_expected.to contain_systemd__dropin_file('hardening.conf').with_ensure('absent') }
       end
 
+      context 'without server_name' do
+        let(:params) { base_params }
+
+        it { is_expected.not_to contain_nginx__resource__server('keycloak') }
+      end
+
+      context 'with the nginx front' do
+        let(:facts) { os_facts.merge(stype: 'web') }
+        let(:params) do
+          base_params.merge(
+            http_port: 8180,
+            server_name: 'sso.example.com',
+            listen_ip: '10.0.0.13',
+            cert_identity: 'registry.domain.tld',
+            manage_certificate: false,
+            manage_nginx_core: true,
+            management_allow: ['10.0.1.0/24'],
+          )
+        end
+
+        it { is_expected.to compile.with_all_deps }
+
+        it {
+          is_expected.to contain_nginx__resource__server('keycloak')
+            .with(
+              listen_ip: '10.0.0.13',
+              listen_port: 80,
+              ssl: true,
+              ssl_port: 443,
+              ssl_redirect: true,
+              server_name: ['sso.example.com'],
+              ssl_protocols: 'TLSv1.2 TLSv1.3',
+              ssl_stapling: 'off',
+            )
+            .with_ssl_cert(%r{\.pem$})
+            .with_ssl_key(%r{\.key$})
+        }
+
+        it {
+          is_expected.to contain_nginx__resource__location('keycloak-root')
+            .with(
+              server: 'keycloak',
+              location: '/',
+              ssl_only: true,
+              proxy: 'http://127.0.0.1:8180',
+            )
+            .with_proxy_set_header(%r{X-Forwarded-Proto \$scheme})
+        }
+
+        ['health', 'metrics'].each do |path|
+          it {
+            is_expected.to contain_nginx__resource__location("keycloak-management-#{path}")
+              .with(
+                location: "/#{path}",
+                proxy: 'http://127.0.0.1:9000',
+                location_allow: ['10.0.1.0/24'],
+                location_deny: ['all'],
+              )
+          }
+        end
+
+        it { is_expected.not_to contain_tlsinfo__certpair('registry.domain.tld') }
+      end
+
+      context 'with server_name but no cert_identity' do
+        let(:params) { base_params.merge(server_name: 'sso.example.com') }
+
+        it { is_expected.to compile.and_raise_error(%r{cert_identity is required}) }
+      end
+
       context 'with an invalid digest' do
         let(:params) { base_params.merge(archive_sha256: 'not-a-digest') }
 

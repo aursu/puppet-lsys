@@ -1,6 +1,6 @@
 {
   "name": "aursu-lsys",
-  "version": "0.68.0",
+  "version": "0.69.0",
   "author": "aursu",
   "summary": "Different puppet resources for basic system management",
   "license": "Apache-2.0",
@@ -54,7 +54,7 @@
     },
     {
       "name": "aursu/nginx",
-      "version_requirement": ">= 6.0.2 < 7.0.0"
+      "version_requirement": ">= 8.2.1 < 9.0.0"
     },
     {
       "name": "puppet/nodejs",
@@ -99,6 +99,14 @@
     {
       "name": "aursu/lsys_postgresql",
       "version_requirement": ">= 0.54.0 < 1.0.0"
+    },
+    {
+      "name": "aursu/tlsinfo",
+      "version_requirement": ">= 0.12.3 < 1.0.0"
+    },
+    {
+      "name": "aursu/lsys_nginx",
+      "version_requirement": ">= 0.50.0 < 1.0.0"
     },
     {
       "name": "aursu/bsys",

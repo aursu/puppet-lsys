@@ -112,6 +112,33 @@
 # @param extra_configs
 #   Further `keycloak.conf` options (strings, booleans or arrays), merged last.
 #
+# @param server_name
+#   Public host name of the nginx front. When set, an nginx server block
+#   publishes Keycloak over HTTPS (and redirects HTTP); when undef, no nginx
+#   resources are declared. nginx itself must be declared on the node, or set
+#   `manage_nginx_core`.
+#
+# @param listen_ip
+#   Address(es) nginx listens on for this server. All addresses when undef.
+#
+# @param cert_identity
+#   tlsinfo identity of the certificate for `server_name` (required with it).
+#
+# @param manage_certificate
+#   Declare `tlsinfo::certpair` for `cert_identity`. Set false when the node
+#   already declares that certificate pair.
+#
+# @param manage_nginx_core
+#   `include lsys_nginx` from this class.
+#
+# @param ssl_stapling
+#   OCSP stapling. Off by default: Let's Encrypt certificates carry no OCSP
+#   responder URL any more, and nginx would only log a warning.
+#
+# @param management_allow
+#   Addresses (CIDR) allowed to reach `/health` and `/metrics` of the management
+#   interface through nginx. Empty: these paths are not published.
+#
 class lsys::keycloak (
   Pattern[/\A[0-9a-f]{64}\z/] $archive_sha256,
   Variant[String[1], Sensitive[String[1]]] $admin_password,
@@ -160,6 +187,13 @@ class lsys::keycloak (
     'UMask'                   => '0027',
   },
   Hash[String[1], Variant[String[1], Boolean, Array]] $extra_configs = {},
+  Optional[Stdlib::Fqdn] $server_name = undef,
+  Optional[Variant[Stdlib::IP::Address::Nosubnet, Array[Stdlib::IP::Address::Nosubnet, 1]]] $listen_ip = undef,
+  Optional[String[1]] $cert_identity = undef,
+  Boolean $manage_certificate = true,
+  Boolean $manage_nginx_core = false,
+  Boolean $ssl_stapling = false,
+  Array[Stdlib::IP::Address] $management_allow = [],
 ) {
   # the keycloak module takes these as plain strings
   $_admin_password = $admin_password ? {
@@ -262,5 +296,90 @@ class lsys::keycloak (
     ensure  => $hardening_ensure,
     unit    => 'keycloak.service',
     content => epp('lsys/keycloak/hardening.conf.epp', { 'settings' => $service_hardening }),
+  }
+
+  # nginx front: TLS ends here, Keycloak stays on loopback
+  if $server_name {
+    unless $cert_identity {
+      fail('lsys::keycloak: cert_identity is required when server_name is set')
+    }
+
+    if $manage_nginx_core {
+      include lsys_nginx
+    }
+
+    include lsys::webserver::params
+
+    if $manage_certificate {
+      tlsinfo::certpair { $cert_identity:
+        identity => true,
+        notify   => Class['nginx::service'],
+      }
+    }
+
+    $certdata = tlsinfo::lookup($cert_identity)
+    $stapling = $ssl_stapling ? {
+      true    => 'on',
+      default => 'off',
+    }
+    $ssl_settings = $lsys::webserver::params::ssl_settings + {
+      'ssl_cert'            => tlsinfo::certpath($certdata),
+      'ssl_key'             => tlsinfo::keypath($certdata),
+      'ssl_stapling'        => $stapling,
+      'ssl_stapling_verify' => $stapling,
+    }
+
+    nginx::resource::server { 'keycloak':
+      *                    => $ssl_settings,
+      listen_ip            => $listen_ip,
+      listen_port          => 80,
+      ssl_port             => 443,
+      ssl_redirect         => true,
+      server_name          => [$server_name],
+      use_default_location => false,
+      access_log           => "/var/log/nginx/${server_name}.access_log",
+      error_log            => "/var/log/nginx/${server_name}.error_log",
+    }
+
+    # Keycloak behind a proxy: forwarded host, proto and port (proxy-headers
+    # xforwarded); larger buffers for its token-heavy responses and cookies
+    $proxy_headers_set = [
+      'Host $host',
+      'X-Real-IP $remote_addr',
+      'X-Forwarded-For $proxy_add_x_forwarded_for',
+      'X-Forwarded-Proto $scheme',
+      'X-Forwarded-Host $host',
+      'X-Forwarded-Port $server_port',
+    ]
+    $proxy_buffers = {
+      'proxy_buffer_size'       => '128k',
+      'proxy_buffers'           => '4 256k',
+      'proxy_busy_buffers_size' => '256k',
+    }
+
+    nginx::resource::location { 'keycloak-root':
+      server              => 'keycloak',
+      location            => '/',
+      ssl                 => true,
+      ssl_only            => true,
+      proxy               => "http://${http_host}:${http_port}",
+      proxy_set_header    => $proxy_headers_set,
+      location_cfg_append => $proxy_buffers,
+    }
+
+    unless $management_allow.empty {
+      ['/health', '/metrics'].each |$path| {
+        nginx::resource::location { "keycloak-management${regsubst($path, '/', '-', 'G')}":
+          server           => 'keycloak',
+          location         => $path,
+          ssl              => true,
+          ssl_only         => true,
+          proxy            => "http://${http_host}:${management_port}",
+          proxy_set_header => $proxy_headers_set,
+          location_allow   => $management_allow,
+          location_deny    => ['all'],
+        }
+      }
+    }
   }
 }
